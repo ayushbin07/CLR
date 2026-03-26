@@ -82,13 +82,14 @@ bottomNav('habits');
 </div>
 
 <script>
+const BASE = <?= json_encode(BASE_URL) ?>;
 const CSRF = <?= json_encode($csrf) ?>;
 
 // -----------------------------------------------
 async function loadHabits() {
     const [habitsRes, overallRes] = await Promise.all([
-        fetch('/sanctuary/api/habits.php?action=list'),
-        fetch('/sanctuary/api/habits.php?action=overall'),
+        fetch(`${BASE}/api/habits.php?action=list`),
+        fetch(`${BASE}/api/habits.php?action=overall`),
     ]);
     const habits  = await habitsRes.json();
     const overall = await overallRes.json();
@@ -99,7 +100,7 @@ async function loadHabits() {
 
 // -----------------------------------------------
 async function loadHabitHeatmap(habitId) {
-    const res  = await fetch(`/sanctuary/api/habits.php?action=heatmap&habit_id=${habitId}&days=30`);
+    const res  = await fetch(`${BASE}/api/habits.php?action=heatmap&habit_id=${habitId}&days=30`);
     return await res.json();
 }
 
@@ -153,7 +154,7 @@ function renderHabitGrid(habits) {
             fd.append('habit_id', h.id);
             fd.append('date', todayStr());
             fd.append('csrf_token', CSRF);
-            await fetch('/sanctuary/api/habits.php?action=log', { method:'POST', body:fd });
+            await fetch(`${BASE}/api/habits.php?action=log`, { method:'POST', body:fd });
             loadHabits();
         });
 
@@ -161,7 +162,7 @@ function renderHabitGrid(habits) {
         card.querySelector('.delete-habit-btn').addEventListener('click', async () => {
             if (!confirm(`Delete habit "${h.name}"?`)) return;
             const fd = new FormData(); fd.append('id', h.id); fd.append('csrf_token', CSRF);
-            await fetch('/sanctuary/api/habits.php?action=delete', { method:'POST', body:fd });
+            await fetch(`${BASE}/api/habits.php?action=delete`, { method:'POST', body:fd });
             loadHabits();
         });
 
@@ -209,7 +210,7 @@ document.getElementById('close-habit-modal').addEventListener('click', () => {
 document.getElementById('habit-form').addEventListener('submit', async e => {
     e.preventDefault();
     const fd = new FormData(e.target);
-    const res = await fetch('/sanctuary/api/habits.php?action=create', { method:'POST', body:fd });
+    const res = await fetch(`${BASE}/api/habits.php?action=create`, { method:'POST', body:fd });
     const d   = await res.json();
     if (d.success) {
         document.getElementById('habit-modal').classList.add('hidden');

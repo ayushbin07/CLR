@@ -34,13 +34,14 @@ bottomNav('mess');
 </main>
 
 <script>
+const BASE = <?= json_encode(BASE_URL) ?>;
 const CSRF = <?= json_encode($csrf) ?>;
 
 const mealIcons = { breakfast: 'wb_twilight', lunch: 'light_mode', dinner: 'dark_mode' };
 const mealLabels = { breakfast: 'Breakfast', lunch: 'Lunch', dinner: 'Dinner' };
 
 async function loadMess() {
-    const res  = await fetch('/sanctuary/api/mess.php?action=today');
+    const res  = await fetch(`${BASE}/api/mess.php?action=today`);
     const menu = await res.json();
     const container = document.getElementById('mess-container');
 
@@ -105,7 +106,7 @@ async function loadMess() {
             fd.append('mess_id',  btn.dataset.mealId);
             fd.append('reaction', btn.dataset.reaction);
             fd.append('csrf_token', CSRF);
-            await fetch('/sanctuary/api/mess.php?action=react', { method:'POST', body:fd });
+            await fetch(`${BASE}/api/mess.php?action=react`, { method:'POST', body:fd });
             loadMess();
         });
     });

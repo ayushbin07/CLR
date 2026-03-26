@@ -125,7 +125,8 @@ bottomNav('assignment');
 </div>
 
 <script>
-const CSRF = <?= json_encode($csrf) ?>;
+const BASE   = <?= json_encode(BASE_URL) ?>;
+const CSRF   = <?= json_encode($csrf) ?>;
 const USER_ID = <?= json_encode($user['id']) ?>;
 let currentFilter = 'all';
 
@@ -133,7 +134,7 @@ let currentFilter = 'all';
 // Load list
 async function loadAssignments(filter = 'all') {
     currentFilter = filter;
-    const res  = await fetch(`/sanctuary/api/assignments.php?action=list&filter=${filter}`);
+    const res  = await fetch(`${BASE}/api/assignments.php?action=list&filter=${filter}`);
     const list = await res.json();
     const container = document.getElementById('assignment-list');
 
@@ -181,7 +182,7 @@ async function loadAssignments(filter = 'all') {
     container.querySelectorAll('.toggle-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
             const fd = new FormData(); fd.append('id', btn.dataset.id); fd.append('csrf_token', CSRF);
-            await fetch('/sanctuary/api/assignments.php?action=toggle', { method:'POST', body:fd });
+            await fetch(`${BASE}/api/assignments.php?action=toggle`, { method:'POST', body:fd });
             loadAssignments(currentFilter);
         });
     });
@@ -189,7 +190,7 @@ async function loadAssignments(filter = 'all') {
         btn.addEventListener('click', async () => {
             if (!confirm('Delete this assignment?')) return;
             const fd = new FormData(); fd.append('id', btn.dataset.id); fd.append('csrf_token', CSRF);
-            await fetch('/sanctuary/api/assignments.php?action=delete', { method:'POST', body:fd });
+            await fetch(`${BASE}/api/assignments.php?action=delete`, { method:'POST', body:fd });
             loadAssignments(currentFilter);
         });
     });
@@ -248,7 +249,7 @@ document.getElementById('assignment-form').addEventListener('submit', async e =>
     btn.disabled = true; btn.textContent = 'Saving…';
 
     const fd = new FormData(form);
-    const res = await fetch(`/sanctuary/api/assignments.php?action=${action}`, { method:'POST', body:fd });
+    const res = await fetch(`${BASE}/api/assignments.php?action=${action}`, { method:'POST', body:fd });
     const d   = await res.json();
 
     if (d.success) {

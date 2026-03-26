@@ -13,7 +13,7 @@ $csrf = csrfToken();
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="/sanctuary/assets/css/styles.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/styles.css">
 </head>
 <body class="min-h-screen">
 
@@ -23,16 +23,16 @@ $csrf = csrfToken();
             <span class="text-xl font-bold tracking-tighter text-white">Sanctuary</span>
         </div>
         <div class="flex items-center space-x-8">
-            <a class="text-[var(--accent-purple)] font-semibold border-b-2 border-[var(--accent-purple)] pb-1" href="/sanctuary/index.php">Home</a>
-            <a class="text-[var(--text-muted)] hover:text-white transition-colors" href="/sanctuary/assignment.php">Assignments</a>
-            <a class="text-[var(--text-muted)] hover:text-white transition-colors" href="/sanctuary/habits.php">Habits</a>
-            <a class="text-[var(--text-muted)] hover:text-white transition-colors" href="/sanctuary/mess.php">Mess</a>
+            <a class="text-[var(--accent-purple)] font-semibold border-b-2 border-[var(--accent-purple)] pb-1" href="<?= BASE_URL ?>/index.php">Home</a>
+            <a class="text-[var(--text-muted)] hover:text-white transition-colors" href="<?= BASE_URL ?>/assignment.php">Assignments</a>
+            <a class="text-[var(--text-muted)] hover:text-white transition-colors" href="<?= BASE_URL ?>/habits.php">Habits</a>
+            <a class="text-[var(--text-muted)] hover:text-white transition-colors" href="<?= BASE_URL ?>/mess.php">Mess</a>
         </div>
         <div class="flex items-center space-x-4">
             <button class="p-2 hover:bg-[var(--card-dark)] rounded-lg transition-all">
                 <span class="material-symbols-outlined text-[var(--text-muted)]">notifications</span>
             </button>
-            <a href="/sanctuary/settings.php" class="p-2 hover:bg-[var(--card-dark)] rounded-lg transition-all">
+            <a href="<?= BASE_URL ?>/settings.php" class="p-2 hover:bg-[var(--card-dark)] rounded-lg transition-all">
                 <span class="material-symbols-outlined text-[var(--text-muted)]">settings</span>
             </a>
             <div class="w-8 h-8 rounded-full bg-[var(--card-dark)] overflow-hidden">
@@ -48,19 +48,19 @@ $csrf = csrfToken();
             <p class="text-xs text-[var(--text-muted)] opacity-60">Deep Work Mode</p>
         </div>
         <nav class="flex-1 space-y-2">
-            <a href="/sanctuary/index.php" class="flex items-center space-x-3 px-4 py-3 bg-[rgba(168,162,255,0.15)] text-[var(--accent-purple)] rounded-xl shadow-lg shadow-[#8E5CF6]/10 transition-transform duration-300">
+            <a href="<?= BASE_URL ?>/index.php" class="flex items-center space-x-3 px-4 py-3 bg-[rgba(168,162,255,0.15)] text-[var(--accent-purple)] rounded-xl shadow-lg shadow-[#8E5CF6]/10 transition-transform duration-300">
                 <span class="material-symbols-outlined">home</span>
                 <span class="font-medium text-sm">Home</span>
             </a>
-            <a href="/sanctuary/assignment.php" class="flex items-center space-x-3 px-4 py-3 text-[var(--text-muted)] hover:bg-[rgba(255,255,255,0.05)] hover:translate-x-1 rounded-xl transition-all duration-300">
+            <a href="<?= BASE_URL ?>/assignment.php" class="flex items-center space-x-3 px-4 py-3 text-[var(--text-muted)] hover:bg-[rgba(255,255,255,0.05)] hover:translate-x-1 rounded-xl transition-all duration-300">
                 <span class="material-symbols-outlined">assignment</span>
                 <span class="font-medium text-sm">Assignments</span>
             </a>
-            <a href="/sanctuary/habits.php" class="flex items-center space-x-3 px-4 py-3 text-[var(--text-muted)] hover:bg-[rgba(255,255,255,0.05)] hover:translate-x-1 rounded-xl transition-all duration-300">
+            <a href="<?= BASE_URL ?>/habits.php" class="flex items-center space-x-3 px-4 py-3 text-[var(--text-muted)] hover:bg-[rgba(255,255,255,0.05)] hover:translate-x-1 rounded-xl transition-all duration-300">
                 <span class="material-symbols-outlined">auto_awesome</span>
                 <span class="font-medium text-sm">Habits</span>
             </a>
-            <a href="/sanctuary/mess.php" class="flex items-center space-x-3 px-4 py-3 text-[var(--text-muted)] hover:bg-[rgba(255,255,255,0.05)] hover:translate-x-1 rounded-xl transition-all duration-300">
+            <a href="<?= BASE_URL ?>/mess.php" class="flex items-center space-x-3 px-4 py-3 text-[var(--text-muted)] hover:bg-[rgba(255,255,255,0.05)] hover:translate-x-1 rounded-xl transition-all duration-300">
                 <span class="material-symbols-outlined">restaurant</span>
                 <span class="font-medium text-sm">Mess</span>
             </a>
@@ -69,11 +69,11 @@ $csrf = csrfToken();
             <button class="w-full py-3 px-4 bg-[rgba(168,162,255,0.15)] text-[var(--accent-purple)] rounded-xl font-bold text-sm hover:bg-[rgba(168,162,255,0.25)] transition-all mb-4">
                 Start Study Session
             </button>
-            <a href="/sanctuary/settings.php" class="flex items-center space-x-3 px-4 py-2 text-[var(--text-muted)] hover:text-white transition-colors">
+            <a href="<?= BASE_URL ?>/settings.php" class="flex items-center space-x-3 px-4 py-2 text-[var(--text-muted)] hover:text-white transition-colors">
                 <span class="material-symbols-outlined text-sm">settings</span>
                 <span class="text-xs">Settings</span>
             </a>
-            <a href="/sanctuary/api/auth.php?action=logout" class="flex items-center space-x-3 px-4 py-2 text-[var(--text-muted)] hover:text-[#ffb4ab] transition-colors">
+            <a href="<?= BASE_URL ?>/api/auth.php?action=logout" class="flex items-center space-x-3 px-4 py-2 text-[var(--text-muted)] hover:text-[#ffb4ab] transition-colors">
                 <span class="material-symbols-outlined text-sm">logout</span>
                 <span class="text-xs">Logout</span>
             </a>
@@ -82,24 +82,24 @@ $csrf = csrfToken();
 
     <!-- Mobile Bottom Nav -->
     <nav class="bottom-nav lg:hidden">
-        <a href="/sanctuary/index.php" class="flex flex-col items-center gap-0.5 group">
+        <a href="<?= BASE_URL ?>/index.php" class="flex flex-col items-center gap-0.5 group">
             <span class="material-symbols-outlined text-[var(--accent-purple)] active-glow">home</span>
             <span class="text-[10px] font-medium text-[var(--accent-purple)]">Home</span>
             <div class="w-6 h-[2px] bg-[var(--accent-purple)] rounded-full mt-0.5 shadow-[0_0_8px_var(--accent-purple)]"></div>
         </a>
-        <a href="/sanctuary/assignment.php" class="flex flex-col items-center gap-0.5 text-[var(--text-muted)]">
+        <a href="<?= BASE_URL ?>/assignment.php" class="flex flex-col items-center gap-0.5 text-[var(--text-muted)]">
             <span class="material-symbols-outlined">assignment</span>
             <span class="text-[10px] font-medium">Assignments</span>
         </a>
-        <a href="/sanctuary/habits.php" class="flex flex-col items-center gap-0.5 text-[var(--text-muted)]">
+        <a href="<?= BASE_URL ?>/habits.php" class="flex flex-col items-center gap-0.5 text-[var(--text-muted)]">
             <span class="material-symbols-outlined">auto_awesome</span>
             <span class="text-[10px] font-medium">Habits</span>
         </a>
-        <a href="/sanctuary/mess.php" class="flex flex-col items-center gap-0.5 text-[var(--text-muted)]">
+        <a href="<?= BASE_URL ?>/mess.php" class="flex flex-col items-center gap-0.5 text-[var(--text-muted)]">
             <span class="material-symbols-outlined">restaurant</span>
             <span class="text-[10px] font-medium">Mess</span>
         </a>
-        <a href="/sanctuary/settings.php" class="flex flex-col items-center gap-0.5 text-[var(--text-muted)]">
+        <a href="<?= BASE_URL ?>/settings.php" class="flex flex-col items-center gap-0.5 text-[var(--text-muted)]">
             <span class="material-symbols-outlined">settings</span>
             <span class="text-[10px] font-medium">Settings</span>
         </a>
@@ -210,7 +210,7 @@ $csrf = csrfToken();
         </div>
     </main>
 
-    <script src="/sanctuary/assets/js/app.js"></script>
+    <script src="<?= BASE_URL ?>/assets/js/app.js"></script>
     <script>
     const BASE = <?= json_encode(BASE_URL) ?>;
     const CSRF = <?= json_encode($csrf) ?>;

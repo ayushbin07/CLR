@@ -14,14 +14,14 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="/sanctuary/assets/css/styles.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/styles.css">
 </head>
 <body class="min-h-screen">
 <nav class="hidden lg:flex fixed top-0 w-full z-50 bg-[var(--bg-dark)]/80 backdrop-blur-xl items-center justify-between px-8 h-16 border-b border-[var(--border-subtle)]">
     <span class="text-xl font-bold tracking-tighter text-white">Sanctuary <span class="text-[var(--accent-purple)] text-sm font-normal ml-2">Admin</span></span>
     <div class="flex items-center gap-4">
-        <a href="/sanctuary/index.php" class="text-sm text-[var(--text-muted)] hover:text-white">← Back to App</a>
-        <a href="/sanctuary/api/auth.php?action=logout" class="text-sm text-[var(--text-muted)] hover:text-[#ffb4ab]">Logout</a>
+        <a href="<?= BASE_URL ?>/index.php" class="text-sm text-[var(--text-muted)] hover:text-white">← Back to App</a>
+        <a href="<?= BASE_URL ?>/api/auth.php?action=logout" class="text-sm text-[var(--text-muted)] hover:text-[#ffb4ab]">Logout</a>
     </div>
 </nav>
 
@@ -138,6 +138,7 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
 </main>
 
 <script>
+const BASE = <?= json_encode(BASE_URL) ?>;
 const CSRF = <?= json_encode($csrf) ?>;
 
 function flash(msg, isError = false) {
@@ -151,14 +152,14 @@ function flash(msg, isError = false) {
 
 document.getElementById('mess-form').addEventListener('submit', async e => {
     e.preventDefault();
-    const res = await fetch('/sanctuary/api/mess.php?action=menu', { method:'POST', body:new FormData(e.target) });
+    const res = await fetch(`${BASE}/api/mess.php?action=menu`, { method:'POST', body:new FormData(e.target) });
     const d   = await res.json();
     d.success ? flash('Menu saved!') : flash(d.error || 'Error', true);
 });
 
 document.getElementById('timetable-form').addEventListener('submit', async e => {
     e.preventDefault();
-    const res = await fetch('/sanctuary/api/timetable.php?action=add', { method:'POST', body:new FormData(e.target) });
+    const res = await fetch(`${BASE}/api/timetable.php?action=add`, { method:'POST', body:new FormData(e.target) });
     const d   = await res.json();
     d.success ? (flash('Slot added!'), e.target.reset()) : flash(d.error || 'Error', true);
 });
@@ -172,7 +173,7 @@ document.getElementById('json-import-btn').addEventListener('click', async () =>
     const fd = new FormData();
     fd.append('csrf_token', CSRF);
     fd.append('slots', JSON.stringify(data));
-    const res = await fetch('/sanctuary/api/timetable.php?action=import', { method:'POST', body:fd });
+    const res = await fetch(`${BASE}/api/timetable.php?action=import`, { method:'POST', body:fd });
     const d   = await res.json();
     d.success ? flash(`Imported ${d.count} slots!`) : flash(d.error || 'Error', true);
 });

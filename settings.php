@@ -123,7 +123,7 @@ bottomNav('settings');
 
             <!-- Danger zone -->
             <section class="pt-4 text-center lg:text-left pb-8">
-                <a href="/sanctuary/api/auth.php?action=logout"
+                <a href="<?= BASE_URL ?>/api/auth.php?action=logout"
                    class="inline-block text-[#FF453A] font-semibold text-base px-8 py-2 hover:opacity-80 active:scale-95 transition-all bg-[#FF453A]/10 rounded-xl">
                     Log Out
                 </a>
@@ -147,7 +147,7 @@ function showMsg(msg, isError = true) {
 document.getElementById('profile-form').addEventListener('submit', async e => {
     e.preventDefault();
     const fd = new FormData(e.target);
-    const res = await fetch('/sanctuary/api/settings.php?action=update_profile', { method:'POST', body:fd });
+    const res = await fetch('<?= BASE_URL ?>/api/settings.php?action=update_profile', { method:'POST', body:fd });
     const d   = await res.json();
     d.success ? showMsg('Profile updated!', false) : showMsg(d.error || 'Error');
 });
@@ -155,7 +155,7 @@ document.getElementById('profile-form').addEventListener('submit', async e => {
 document.getElementById('password-form').addEventListener('submit', async e => {
     e.preventDefault();
     const fd = new FormData(e.target);
-    const res = await fetch('/sanctuary/api/settings.php?action=change_password', { method:'POST', body:fd });
+    const res = await fetch('<?= BASE_URL ?>/api/settings.php?action=change_password', { method:'POST', body:fd });
     const d   = await res.json();
     if (d.success) {
         showMsg('Password changed!', false);

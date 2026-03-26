@@ -10,7 +10,15 @@ define('DB_NAME', 'sanctuary');
 define('DB_PORT', 3306);
 
 define('APP_NAME', 'Sanctuary');
-define('BASE_URL', 'http://localhost/sanctuary'); // Adjust to your XAMPP path
+
+// Derive BASE_URL from the project folder under the webroot so links work even if the folder name changes.
+$scheme   = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$host     = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$docRoot  = rtrim(str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT'] ?? ''), '/');
+$project  = str_replace('\\', '/', realpath(__DIR__ . '/..'));
+$basePath = $docRoot ? trim(str_replace($docRoot, '', $project), '/') : '';
+$baseUrl  = $basePath ? "$scheme://$host/$basePath" : "$scheme://$host";
+define('BASE_URL', $baseUrl);
 
 // -----------------------------------------------
 // PDO connection (singleton)
