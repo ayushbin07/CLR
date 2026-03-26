@@ -2,6 +2,8 @@
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/layout.php';
 requireAuth();
+$user    = auth();
+$isAdmin = $user && ($user['role'] ?? '') === 'admin';
 $csrf    = csrfToken();
 $today   = date('l, F j');
 
@@ -30,12 +32,14 @@ bottomNav('mess');
                 <div class="h-4 bg-white/5 rounded-xl animate-pulse w-2/3"></div>
             </div>
         </div>
+
     </div>
 </main>
 
 <script>
 const BASE = <?= json_encode(BASE_URL) ?>;
 const CSRF = <?= json_encode($csrf) ?>;
+const IS_ADMIN = false; // Admin-only import moved to admin panel
 
 const mealIcons = { breakfast: 'wb_twilight', lunch: 'light_mode', dinner: 'dark_mode' };
 const mealLabels = { breakfast: 'Breakfast', lunch: 'Lunch', dinner: 'Dinner' };
@@ -56,11 +60,11 @@ async function loadMess() {
     const sections = menu.map((meal, i) => {
         const icon  = mealIcons[meal.meal_type]  || 'restaurant';
         const label = mealLabels[meal.meal_type] || meal.meal_type;
-        const divider = i < menu.length - 1 ? '<div class="h-px bg-white/5 w-full"></div>' : '';
+        const divider = i < menu.length - 1 ? '<div class="h-px bg-white/10 w-full"></div>' : '';
         return `<section class="relative z-10" data-meal-id="${meal.id}">
             <div class="flex items-center gap-3 mb-2">
                 <span class="material-symbols-outlined text-[var(--accent-purple)] text-xl">${icon}</span>
-                <h2 class="text-lg font-bold tracking-wide uppercase text-white/90 text-sm">${label}</h2>
+                <h2 class="text-lg font-semibold tracking-wide uppercase text-[var(--text-soft)]">${label}</h2>
             </div>
             <p class="text-[var(--text-soft)] text-lg leading-relaxed pl-8">${escHtml(meal.items)}</p>
         </section>${divider}`;
@@ -75,7 +79,7 @@ async function loadMess() {
     const lastMeal   = menu[menu.length - 1];
     const myReaction = lastMeal.my_reaction;
 
-    container.innerHTML = `<div class="meal-card rounded-[32px] border border-white/5 p-8 lg:p-12 flex flex-col gap-10" style="background:var(--card-dark);position:relative;overflow:hidden;">
+    container.innerHTML = `<div class="meal-card rounded-[28px] border border-white/8 p-6 lg:p-12 flex flex-col gap-8 sm:gap-10" style="background:var(--card-dark);position:relative;overflow:hidden;">
         <span class="material-symbols-outlined watermark-icon hidden sm:block">restaurant</span>
         ${sections}
         <div class="mt-4 pt-4 border-t border-white/5">
@@ -117,5 +121,6 @@ function escHtml(s) {
 }
 
 loadMess();
+
 </script>
 <?php pageFooter(); ?>

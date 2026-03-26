@@ -1,14 +1,15 @@
-# Project Gaps Report
+# Project Gaps Report (updated)
 
-- Missing includes path: several pages call `require_once __DIR__ . '/includes/...';` but the repo has no `includes/` directory. Affected files: [assignment.php](assignment.php#L1), [habits.php](habits.php#L1), [mess.php](mess.php#L1), [login.php](login.php#L1). Current `config.php` and `layout.php` sit at root, so these requires will fatal.
-- Missing /api folder and endpoints: frontend requests `/sanctuary/api/...` but files live at root and many do not exist. Calls that will 404 or fail: `/sanctuary/api/auth.php`, `/sanctuary/api/assignments.php`, `/sanctuary/api/todos.php`, `/sanctuary/api/mess.php`, `/sanctuary/api/habits.php`, `/sanctuary/api/timetable.php`, `/sanctuary/api/settings.php`, `/sanctuary/api/home.php`. Only some backend scripts exist at root; none are under an `api/` path.
-- Unimplemented APIs despite UI/PRD:
-  - Habits: UI hits `/sanctuary/api/habits.php?action=list|create|log|heatmap|overall` but no such file exists.
-  - Mess: UI hits `/sanctuary/api/mess.php?action=today|react|menu` but no such file exists.
-  - Timetable: Admin UI posts to `/sanctuary/api/timetable.php?action=add|import`; file missing.
-  - Settings: Settings page posts to `/sanctuary/api/settings.php?action=update_profile|change_password`; file missing.
-  - Home dashboard: PRD and UI expect `/sanctuary/api/home.php` for assignments/classes/todos; file missing.
-- Asset path mismatch: templates load `/sanctuary/assets/css/styles.css` and `/sanctuary/assets/js/app.js` (see [layout.php](layout.php#L12) and [login.php](login.php#L17)) but only [styles.css](styles.css) and [scripts.js](scripts.js) exist at project root; `app.js` is absent.
-- Post-login landing is wrong: `auth.php` redirects to `/index.php`, but [index.php](index.php#L1) is an admin-only panel requiring `requireAdmin();`. There is no PHP home/dashboard for normal users (UI lives in [index.html](index.html)).
-- DB config still uses local defaults and no environment overrides: [config.php](config.php#L1-L22) hardcodes host/user/password/db and lacks `.env` or runtime configuration.
-- CSRF/session helpers exist but endpoints missing: [config.php](config.php#L39-L63) defines CSRF helpers; missing API files cannot verify tokens, leaving forms without backend protection until those endpoints are implemented.
+- Core structure now present: `includes/` folder and all referenced APIs exist under [api/](api), and assets are resolved (`assets/js/app.js` and `assets/css/styles.css`). Login now routes to a user dashboard, not an admin-only page.
+- Database configuration is still hardcoded for local defaults in [includes/config.php](includes/config.php#L4-L22); add environment-based overrides (.env) for deployment and secrets management.
+- New hero cards feature requires the `hero_cards` table (see [schema.sql](schema.sql)); ensure the migration is applied in deployed databases.
+- Session cookie `secure` flag is disabled in [includes/config.php](includes/config.php#L36-L45); set to true when serving over HTTPS in production.
+
+## Habits Debug Report (latest)
+
+- Fixed the inline JS syntax error in [habits.php](habits.php) by removing stray HTML in the script, restoring modal open/close/submit handlers, and removing the old "Habits interactions are disabled" stub.
+- Wrapped habits JS in DOMContentLoaded, added `fetchJson` helper with invalid-JSON logging, and load-time error UI if API calls fail.
+- Added `credentials: 'same-origin'` to all habit fetches (list/overall/heatmap/create/log/delete) and defensive JSON parsing + alerts for create/log/delete; toggle clicks now log `Toggle click <id>` before POST.
+- Tailwind CDN warning is informational only; not a blocker for habits.
+
+Current status: GET heatmap returns 200 OK, but POST create/log/delete still do not reflect changes (likely redirect/CSRF/server error). Need Network+console capture of those POST responses (status + body) after clicking a habit or creating one.

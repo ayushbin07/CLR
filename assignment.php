@@ -19,7 +19,7 @@ bottomNav('assignment');
                     <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-1">Assignments</h1>
                     <p class="text-[var(--text-muted)] text-sm lg:text-base">All your tasks in one place</p>
                 </div>
-                <button id="open-modal-btn" class="w-10 h-10 rounded-full bg-[var(--accent-purple)] text-[#0F0F12] flex items-center justify-center shadow-lg shadow-[var(--accent-purple)]/20 active:scale-95 transition-transform">
+                <button id="open-modal-btn" class="glassy-plus" aria-label="Add assignment">
                     <span class="material-symbols-outlined font-bold">add</span>
                 </button>
             </div>
@@ -36,15 +36,15 @@ bottomNav('assignment');
 
         <!-- Assignment list -->
         <section class="px-6 lg:px-10">
-            <div id="assignment-list" class="bg-[var(--card-dark)] rounded-[28px] overflow-hidden border border-white/5 min-h-[100px]">
-                <div class="p-8 text-center text-[var(--text-muted)] animate-pulse text-sm">Loading…</div>
+            <div id="assignment-list" class="space-y-3 min-h-[100px]">
+                <div class="neo-card p-8 text-center text-[var(--text-muted)] animate-pulse text-sm">Loading…</div>
             </div>
         </section>
     </div>
 </main>
 
 <!-- Floating Add (mobile) -->
-<button id="open-modal-btn-mob" class="lg:hidden fixed bottom-32 right-6 w-14 h-14 rounded-2xl bg-[var(--accent-purple)] text-[#0F0F12] flex items-center justify-center shadow-[0_8px_24px_rgba(168,162,255,0.3)] z-40 active:scale-95 transition-all">
+<button id="open-modal-btn-mob" class="lg:hidden fixed bottom-32 right-6 glassy-plus glassy-plus-lg z-40">
     <span class="material-symbols-outlined text-3xl font-semibold">add</span>
 </button>
 
@@ -112,11 +112,11 @@ bottomNav('assignment');
 
             <div class="flex gap-3 pt-2">
                 <button type="button" id="close-modal-btn2"
-                    class="flex-1 py-3 bg-white/5 border border-white/10 rounded-xl text-sm font-semibold text-[var(--text-muted)] hover:bg-white/10 transition-all">
+                    class="flex-1 glassy-cta ghost text-sm">
                     Cancel
                 </button>
                 <button type="submit" id="modal-submit-btn"
-                    class="flex-1 py-3 bg-[var(--accent-purple)] text-[#0F0F12] rounded-xl text-sm font-bold hover:opacity-90 active:scale-[0.98] transition-all">
+                    class="flex-1 glassy-cta text-sm">
                     Save Assignment
                 </button>
             </div>
@@ -140,39 +140,32 @@ async function loadAssignments(filter = 'all') {
     const container = document.getElementById('assignment-list');
 
     if (!list.length) {
-        container.innerHTML = '<div class="p-10 text-center text-[var(--text-muted)] text-sm">Nothing here yet.</div>';
+        container.innerHTML = '<div class="neo-card p-10 text-center text-[var(--text-muted)] text-sm">Nothing here yet.</div>';
         return;
     }
 
-    container.innerHTML = list.map((a, i) => {
+    container.innerHTML = list.map((a) => {
         const dl = deadlineLabel(a.deadline);
-        const isLast = i === list.length - 1;
-        const border = isLast ? '' : 'border-b border-[var(--border-subtle)]';
-        const dimmed = a.status === 'completed' ? 'opacity-40' : '';
-        const strike = a.status === 'completed' ? 'line-through' : '';
-        const dotCol = a.status === 'completed' ? 'bg-emerald-400'
-                     : dl.cls.includes('warm')  ? 'bg-[var(--accent-warm)]'
-                     : 'bg-[var(--accent-purple)]';
+        const isDone = a.status === 'completed';
+        const strike = isDone ? 'line-through' : '';
         const canEdit = IS_ADMIN || a.created_by == USER_ID;
-        return `<div class="${border} px-5 py-4 flex items-center gap-3 hover:bg-white/5 transition-colors ${dimmed}">
-            <div class="w-2 h-2 rounded-full flex-shrink-0 ${dotCol}"></div>
-            <div class="flex-1 min-w-0">
-                <h4 class="text-[var(--text-soft)] font-semibold text-[15px] truncate ${strike}">${escHtml(a.title)}</h4>
-                ${a.link ? `<a href="${escHtml(a.link)}" target="_blank" class="text-[var(--accent-purple)] text-xs hover:underline">View link</a>` : ''}
+        const subjectLine = [escHtml(a.subject || 'General'), dl.text].filter(Boolean).join(' • ');
+        const linkLine = a.link ? `<a href="${escHtml(a.link)}" target="_blank" class="text-[var(--accent-strong)] text-[11px] underline underline-offset-2">View link</a>` : '';
+        return `<div class="assignment-row neo-card flex items-center justify-between gap-3" data-id="${a.id}">
+            <div class="flex items-center gap-4 pl-1 min-w-0">
+                <button class="custom-checkbox assignment-check ${isDone ? 'checked' : ''}" aria-label="${isDone ? 'Mark pending' : 'Mark complete'}" data-id="${a.id}">${isDone ? '<span class="material-symbols-outlined text-xs font-bold text-[#0F0F12]">check</span>' : ''}</button>
+                <div class="min-w-0 space-y-0.5">
+                    <h4 class="assignment-title truncate ${strike}">${escHtml(a.title)}</h4>
+                    <p class="assignment-sub truncate">${subjectLine}</p>
+                    ${linkLine}
+                </div>
             </div>
-            <div class="flex flex-col items-end shrink-0 pl-4 gap-1">
-                <span class="text-[var(--text-muted)] text-[11px] uppercase tracking-wider font-medium">${escHtml(a.subject || '')}</span>
-                <span class="${dl.cls} text-xs font-medium">${dl.text}</span>
-            </div>
-            <div class="flex items-center gap-1 shrink-0 pl-2">
-                <button class="toggle-btn p-1.5 rounded-lg hover:bg-white/10 text-[var(--text-muted)] hover:text-emerald-400 transition-colors" data-id="${a.id}" title="${a.status === 'pending' ? 'Mark complete' : 'Mark pending'}">
-                    <span class="material-symbols-outlined text-sm">${a.status === 'completed' ? 'undo' : 'check_circle'}</span>
-                </button>
+            <div class="flex items-center gap-1.5 shrink-0 pl-2">
                 ${canEdit ? `
-                <button class="edit-btn p-1.5 rounded-lg hover:bg-white/10 text-[var(--text-muted)] hover:text-white transition-colors" data-assignment='${JSON.stringify(a)}'>
+                <button class="edit-btn action-btn" data-assignment='${JSON.stringify(a)}'>
                     <span class="material-symbols-outlined text-sm">edit</span>
                 </button>
-                <button class="delete-btn p-1.5 rounded-lg hover:bg-white/10 text-[var(--text-muted)] hover:text-red-400 transition-colors" data-id="${a.id}">
+                <button class="delete-btn action-btn delete" data-id="${a.id}">
                     <span class="material-symbols-outlined text-sm">delete</span>
                 </button>` : ''}
             </div>
@@ -180,7 +173,7 @@ async function loadAssignments(filter = 'all') {
     }).join('');
 
     // Bind actions
-    container.querySelectorAll('.toggle-btn').forEach(btn => {
+    container.querySelectorAll('.assignment-check').forEach(btn => {
         btn.addEventListener('click', async () => {
             const fd = new FormData(); fd.append('id', btn.dataset.id); fd.append('csrf_token', CSRF);
             await fetch(`${BASE}/api/assignments.php?action=toggle`, { method:'POST', body:fd });

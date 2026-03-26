@@ -9,6 +9,9 @@ define('DB_PASS', '');            // XAMPP default (empty)
 define('DB_NAME', 'sanctuary');
 define('DB_PORT', 3306);
 
+// Use a consistent timezone so date-based features (habits, daily cards) align with the user's day.
+date_default_timezone_set('Asia/Kolkata');
+
 define('APP_NAME', 'Sanctuary');
 
 // Derive BASE_URL from the project folder under the webroot so links work even if the folder name changes.
@@ -17,7 +20,9 @@ $host     = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $docRoot  = rtrim(str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT'] ?? ''), '/');
 $project  = str_replace('\\', '/', realpath(__DIR__ . '/..'));
 $basePath = $docRoot ? trim(str_replace($docRoot, '', $project), '/') : '';
-$baseUrl  = $basePath ? "$scheme://$host/$basePath" : "$scheme://$host";
+// Encode each path segment so spaces/special chars in folder names yield a valid URL.
+$encodedPath = $basePath ? implode('/', array_map('rawurlencode', explode('/', $basePath))) : '';
+$baseUrl  = $encodedPath ? "$scheme://$host/$encodedPath" : "$scheme://$host";
 define('BASE_URL', $baseUrl);
 
 // -----------------------------------------------

@@ -1,0 +1,17 @@
+[
+  {
+    "date": "2026-03-27",
+    "meal_type": "breakfast",
+    "items": "Masala Dosa, Sambar, Coconut Chutney, Seasonal Fruit & Milk"
+  },
+  {
+    "date": "2026-03-27",
+    "meal_type": "lunch",
+    "items": "Paneer Butter Masala, Jeera Rice, Dal Tadka, Butter Naan & Roasted Papad"
+  },
+  {
+    "date": "2026-03-27",
+    "meal_type": "dinner",
+    "items": "Home-style Chicken Curry, Veg Pulao, Chapati, Fresh Green Salad & Gulab Jamun"
+  }
+]

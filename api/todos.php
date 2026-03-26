@@ -9,6 +9,7 @@ $action = $_GET['action'] ?? '';
 match (true) {
     $method === 'GET'  && $action === 'list'   => listTodos(),
     $method === 'POST' && $action === 'create' => createTodo(),
+    $method === 'POST' && $action === 'update' => updateTodo(),
     $method === 'POST' && $action === 'toggle' => toggleTodo(),
     $method === 'POST' && $action === 'delete' => deleteTodo(),
     default => jsonResponse(['error' => 'Unknown action'], 400),
@@ -32,6 +33,21 @@ function createTodo(): void {
     $stmt = db()->prepare('INSERT INTO todos (user_id, title) VALUES (?, ?)');
     $stmt->execute([$user['id'], $title]);
     jsonResponse(['success' => true, 'id' => db()->lastInsertId(), 'title' => $title]);
+}
+
+function updateTodo(): void {
+    verifyCsrf();
+    $user  = auth();
+    $id    = (int)($_POST['id'] ?? 0);
+    $title = trim($_POST['title'] ?? '');
+    if (!$title) jsonResponse(['error' => 'Title required'], 422);
+
+    $stmt = db()->prepare('SELECT id FROM todos WHERE id = ? AND user_id = ?');
+    $stmt->execute([$id, $user['id']]);
+    if (!$stmt->fetch()) jsonResponse(['error' => 'Not found'], 404);
+
+    db()->prepare('UPDATE todos SET title = ? WHERE id = ?')->execute([$title, $id]);
+    jsonResponse(['success' => true]);
 }
 
 function toggleTodo(): void {

@@ -17,32 +17,10 @@ $csrf = csrfToken();
 </head>
 <body class="min-h-screen">
 
-    <!-- Desktop Top Navbar -->
-    <nav class="hidden lg:flex fixed top-0 w-full z-50 bg-[var(--bg-dark)]/80 backdrop-blur-xl items-center justify-between px-8 h-16 border-b border-[var(--border-subtle)]">
-        <div class="flex items-center gap-4">
-            <span class="text-xl font-bold tracking-tighter text-white">Sanctuary</span>
-        </div>
-        <div class="flex items-center space-x-8">
-            <a class="text-[var(--accent-purple)] font-semibold border-b-2 border-[var(--accent-purple)] pb-1" href="<?= BASE_URL ?>/index.php">Home</a>
-            <a class="text-[var(--text-muted)] hover:text-white transition-colors" href="<?= BASE_URL ?>/assignment.php">Assignments</a>
-            <a class="text-[var(--text-muted)] hover:text-white transition-colors" href="<?= BASE_URL ?>/habits.php">Habits</a>
-            <a class="text-[var(--text-muted)] hover:text-white transition-colors" href="<?= BASE_URL ?>/mess.php">Mess</a>
-        </div>
-        <div class="flex items-center space-x-4">
-            <button class="p-2 hover:bg-[var(--card-dark)] rounded-lg transition-all">
-                <span class="material-symbols-outlined text-[var(--text-muted)]">notifications</span>
-            </button>
-            <a href="<?= BASE_URL ?>/settings.php" class="p-2 hover:bg-[var(--card-dark)] rounded-lg transition-all">
-                <span class="material-symbols-outlined text-[var(--text-muted)]">settings</span>
-            </a>
-            <div class="w-8 h-8 rounded-full bg-[var(--card-dark)] overflow-hidden">
-                <img alt="Profile" class="w-full h-full object-cover" src="https://api.dicebear.com/7.x/avataaars/svg?seed=<?= urlencode($user['avatar_seed'] ?? $user['name']) ?>"/>
-            </div>
-        </div>
-    </nav>
+    <!-- Desktop Top Navbar removed per design request; sidebar handles desktop nav -->
 
     <!-- Desktop Sidebar -->
-    <aside class="sidebar w-64 fixed left-0 top-0 h-screen bg-[var(--card-dark)] border-r border-[var(--border-subtle)] p-6 flex-col hidden lg:flex z-40 pt-24">
+    <aside class="sidebar w-64 fixed left-0 top-0 h-screen bg-[var(--card-dark)] border-r border-[var(--border-subtle)] p-6 flex-col hidden lg:flex z-40">
         <div class="mb-8 px-2">
             <h2 class="text-lg font-black tracking-widest text-white uppercase">The Sanctuary</h2>
             <p class="text-xs text-[var(--text-muted)] opacity-60">Deep Work Mode</p>
@@ -65,17 +43,14 @@ $csrf = csrfToken();
                 <span class="font-medium text-sm">Mess</span>
             </a>
         </nav>
-        <div class="mt-auto space-y-2 pt-6">
-            <button class="w-full py-3 px-4 bg-[rgba(168,162,255,0.15)] text-[var(--accent-purple)] rounded-xl font-bold text-sm hover:bg-[rgba(168,162,255,0.25)] transition-all mb-4">
-                Start Study Session
-            </button>
-            <a href="<?= BASE_URL ?>/settings.php" class="flex items-center space-x-3 px-4 py-2 text-[var(--text-muted)] hover:text-white transition-colors">
+        <div class="mt-auto space-y-3 pt-6">
+            <a href="<?= BASE_URL ?>/settings.php" class="neo-nav-pill">
                 <span class="material-symbols-outlined text-sm">settings</span>
-                <span class="text-xs">Settings</span>
+                <span class="text-xs font-semibold">Settings</span>
             </a>
-            <a href="<?= BASE_URL ?>/api/auth.php?action=logout" class="flex items-center space-x-3 px-4 py-2 text-[var(--text-muted)] hover:text-[#ffb4ab] transition-colors">
+            <a href="<?= BASE_URL ?>/api/auth.php?action=logout" class="neo-nav-pill neo-nav-pill--danger">
                 <span class="material-symbols-outlined text-sm">logout</span>
-                <span class="text-xs">Logout</span>
+                <span class="text-xs font-semibold">Logout</span>
             </a>
         </div>
     </aside>
@@ -108,23 +83,28 @@ $csrf = csrfToken();
     <!-- Main Content -->
     <main class="main-content">
         <div class="max-w-5xl mx-auto">
-            <header class="px-6 pt-12 pb-6 lg:pt-16 lg:px-10">
-                <h1 class="text-4xl font-bold tracking-tight mb-1">Hello, <?= htmlspecialchars($user['name']) ?></h1>
+            <header class="px-6 pt-6 pb-4 lg:pt-8 lg:px-10">
+                <h1 class="text-4xl font-bold tracking-tight mb-1">Hello, <span class="text-[var(--accent-purple)]"><?= htmlspecialchars($user['name']) ?></span></h1>
                 <p class="text-[var(--text-muted)] text-lg">Here’s what you need to focus on today</p>
             </header>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 px-6 lg:px-10 mb-8">
                 <!-- Hero Section -->
                 <section class="lg:col-span-12">
-                    <div id="hero-card" class="relative w-full aspect-[16/9] lg:aspect-[21/9] rounded-[32px] overflow-hidden bg-[var(--card-dark)] p-8 flex items-end transition-opacity duration-300">
-                        <img id="hero-image" alt="Hero visual" class="absolute inset-0 w-full h-full object-cover opacity-80" src="" loading="lazy" />
-                        <div class="absolute inset-0 bg-gradient-to-r from-[#13112b] via-[#0d0c1a]/80 to-transparent"></div>
-                        <div class="z-10 max-w-[60%]">
-                            <p class="text-[11px] uppercase tracking-[0.2em] text-white/60 mb-2">Weekly Spotlight</p>
-                            <h2 id="hero-title" class="text-2xl lg:text-3xl font-semibold mb-2">Loading…</h2>
-                            <p id="hero-subtitle" class="text-white/70 text-sm lg:text-base">Fetching your focus.</p>
+                    <div class="card hero-frame">
+                        <div class="card-overlay"></div>
+                        <div class="card-inner">
+                            <div id="hero-card" class="neo-image-card relative w-full aspect-[16/10] lg:aspect-[5/2] max-h-[320px] lg:max-h-[360px] p-8 flex items-end transition-opacity duration-300">
+                                <img id="hero-image" alt="Hero visual" class="absolute inset-0 w-full h-full object-cover opacity-80" src="" loading="lazy" />
+                                <div class="absolute inset-0 bg-gradient-to-r from-[#13112b] via-[#0d0c1a]/80 to-transparent"></div>
+                                <div class="z-10 max-w-[60%] hero-text">
+                                    <p class="text-[11px] uppercase tracking-[0.2em] text-white/60 mb-2">Weekly Spotlight</p>
+                                    <h2 id="hero-title" class="text-2xl lg:text-3xl font-semibold mb-2">Loading…</h2>
+                                    <p id="hero-subtitle" class="text-white/70 text-sm lg:text-base">Fetching your focus.</p>
+                                </div>
+                                <div id="hero-dots" class="absolute top-4 right-4 flex items-center gap-2 z-10"></div>
+                            </div>
                         </div>
-                        <div id="hero-dots" class="absolute top-4 right-4 flex items-center gap-2 z-10"></div>
                     </div>
                 </section>
 
@@ -133,13 +113,15 @@ $csrf = csrfToken();
                     <div class="flex items-center justify-between mb-4 px-1">
                         <h3 class="text-xl font-semibold">Todo List</h3>
                         <div class="flex items-center gap-2">
-                            <button id="add-todo" class="text-sm bg-[var(--accent-purple)] text-[#0F0F12] px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1 shadow-lg shadow-[#8E5CF6]/30 hover:translate-y-[-1px] transition-transform">
-                                <span class="material-symbols-outlined text-sm leading-none">add</span>
-                                Add Task
-                            </button>
-                            <button id="refresh-todos" class="text-sm text-[var(--text-muted)] hover:text-[var(--accent-purple)] transition-colors flex items-center gap-1">
-                                Refresh
-                                <span class="material-symbols-outlined text-sm leading-none">refresh</span>
+                            <button id="add-todo" class="button neo-press">
+                                <div class="button-outer">
+                                    <div class="button-inner">
+                                        <span class="flex items-center text-sm">
+                                        
+                                            <span>Add</span>
+                                        </span>
+                                    </div>
+                                </div>
                             </button>
                         </div>
                     </div>
@@ -150,13 +132,7 @@ $csrf = csrfToken();
                 <section class="lg:col-span-7">
                     <h3 class="text-xl font-semibold mb-4 px-1">Today's Classes</h3>
                     <div class="relative">
-                        <button id="classes-left" class="hidden md:flex items-center justify-center absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-9 h-9 rounded-full bg-[var(--card-dark)] border border-white/10 text-white/70 hover:text-white hover:border-white/30 shadow-lg shadow-black/30 backdrop-blur-sm">
-                            <span class="material-symbols-outlined text-lg">chevron_left</span>
-                        </button>
-                        <div id="classes-container" class="flex gap-3 overflow-x-auto pb-4 no-scrollbar snap-x snap-mandatory flex-nowrap min-w-0 cursor-grab active:cursor-grabbing scroll-smooth"></div>
-                        <button id="classes-right" class="hidden md:flex items-center justify-center absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-9 h-9 rounded-full bg-[var(--card-dark)] border border-white/10 text-white/70 hover:text-white hover:border-white/30 shadow-lg shadow-black/30 backdrop-blur-sm">
-                            <span class="material-symbols-outlined text-lg">chevron_right</span>
-                        </button>
+                        <div id="classes-container" class="no-scrollbar flex gap-4 overflow-x-auto px-1 pb-4 lg:grid lg:grid-cols-3 lg:auto-rows-fr lg:gap-6 lg:gap-y-8 lg:overflow-visible lg:px-1 lg:pb-2"></div>
                     </div>
                 </section>
             </div>
@@ -261,7 +237,7 @@ $csrf = csrfToken();
                 const checked = t.is_completed ? 'checked' : '';
                 const titleCls = t.is_completed ? 'line-through text-[var(--text-muted)]' : 'text-[var(--text-soft)]';
                 return `
-                    <div class="todo-row flex items-center justify-between p-4 bg-[var(--card-dark)] rounded-2xl border border-white/5 hover:border-white/10 transition-colors" data-id="${t.id}">
+                    <div class="todo-row neo-card flex items-center justify-between p-4" data-id="${t.id}">
                         <div class="flex items-center gap-4 pl-1">
                             <button class="custom-checkbox ${checked}" aria-label="Toggle todo" data-id="${t.id}">${checked ? '<span class="material-symbols-outlined text-xs font-bold text-[#0F0F12]">check</span>' : ''}</button>
                             <div>
@@ -269,9 +245,14 @@ $csrf = csrfToken();
                                 <p class="text-[var(--text-muted)] text-[11px]">Created ${new Date(t.created_at).toLocaleDateString()}</p>
                             </div>
                         </div>
-                        <button class="delete-todo p-2 text-[var(--text-muted)] hover:text-red-400" title="Delete" data-id="${t.id}">
-                            <span class="material-symbols-outlined text-sm">delete</span>
-                        </button>
+                        <div class="flex items-center gap-1">
+                            <button class="edit-todo p-2 text-[var(--text-muted)] hover:text-[var(--text)]" title="Edit" data-id="${t.id}" data-title="${escapeHtml(t.title)}">
+                                <span class="material-symbols-outlined text-sm">edit</span>
+                            </button>
+                            <button class="delete-todo p-2 text-[var(--text-muted)] hover:text-red-400" title="Delete" data-id="${t.id}">
+                                <span class="material-symbols-outlined text-sm">delete</span>
+                            </button>
+                        </div>
                     </div>`;
             }).join('');
 
@@ -281,28 +262,38 @@ $csrf = csrfToken();
             container.querySelectorAll('.delete-todo').forEach(btn => {
                 btn.addEventListener('click', () => deleteTodo(btn.dataset.id));
             });
+            container.querySelectorAll('.edit-todo').forEach(btn => {
+                btn.addEventListener('click', () => editTodo(btn.dataset.id, btn.dataset.title));
+            });
         } catch (e) {
             container.innerHTML = '<div class="p-6 text-center text-red-400 text-sm bg-[var(--card-dark)] rounded-2xl border border-red-500/30">Failed to load todos.</div>';
         }
     }
 
     async function addTodo() {
-        const title = prompt('Add a task');
-        if (!title) return;
-        const trimmed = title.trim();
-        if (!trimmed) return;
+        const modal = createPromptModal({
+            title: 'Add a task',
+            placeholder: 'Type your task…',
+            confirmLabel: 'Add',
+            onConfirm: async (value) => {
+                const trimmed = (value || '').trim();
+                if (!trimmed) return;
 
-        const fd = new FormData();
-        fd.append('title', trimmed);
-        fd.append('csrf_token', CSRF);
+                const fd = new FormData();
+                fd.append('title', trimmed);
+                fd.append('csrf_token', CSRF);
 
-        const res = await fetch(`${BASE}/api/todos.php?action=create`, { method:'POST', body: fd });
-        const data = await res.json();
-        if (data.error) {
-            alert(data.error);
-            return;
-        }
-        loadTodos();
+                const res = await fetch(`${BASE}/api/todos.php?action=create`, { method:'POST', body: fd });
+                const data = await res.json();
+                if (data.error) {
+                    showToast(data.error, true);
+                    return;
+                }
+                loadTodos();
+            },
+        });
+        document.body.appendChild(modal);
+        modal.querySelector('input')?.focus();
     }
 
     async function loadClasses() {
@@ -319,13 +310,15 @@ $csrf = csrfToken();
                 const icon = CLASS_ICONS[idx % CLASS_ICONS.length];
                 const room = c.room ? `<p class="text-[var(--text-muted)] text-[11px] flex items-center gap-1 mt-2"><span class="material-symbols-outlined text-[14px]">location_on</span>${escapeHtml(c.room)}</p>` : '';
                 return `
-                <div class="flex-none w-[220px] h-[200px] p-5 bg-[var(--card-dark)] rounded-[20px] border border-white/5 hover:border-white/10 transition-transform transition-colors duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/20 shadow-sm shadow-black/10 snap-start">
-                    <div class="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center mb-3">
-                        <span class="material-symbols-outlined text-white/80">${icon}</span>
+                <div class="neo-card class-card flex-shrink-0 w-[220px] lg:w-full h-full p-4 rounded-[18px] flex flex-col">
+                    <div class="class-card-icon w-9 h-9 rounded-2xl flex items-center justify-center mb-2">
+                        <span class="material-symbols-outlined text-[18px]">${icon}</span>
                     </div>
-                    <h4 class="text-[var(--text-soft)] font-semibold text-sm leading-tight mb-1">${escapeHtml(c.subject)}</h4>
-                    <p class="text-[var(--text-muted)] text-[11px]">${escapeHtml(c.day_of_week)} • ${formatTime(c.start_time)} - ${formatTime(c.end_time)}</p>
-                    ${room}
+                    <div class="mt-auto space-y-1">
+                        <h4 class="text-[var(--text-soft)] font-semibold text-sm leading-tight">${escapeHtml(c.subject)}</h4>
+                        <p class="text-[var(--text-muted)] text-[11px]">${escapeHtml(c.day_of_week)} • ${formatTime(c.start_time)} - ${formatTime(c.end_time)}</p>
+                        ${room}
+                    </div>
                 </div>`;
             }).join('');
         } catch (e) {
@@ -349,8 +342,82 @@ $csrf = csrfToken();
         loadTodos();
     }
 
+    async function editTodo(id, currentTitle = '') {
+        const modal = createPromptModal({
+            title: 'Edit task',
+            value: currentTitle,
+            placeholder: 'Update your task…',
+            confirmLabel: 'Save',
+            onConfirm: async (value) => {
+                const trimmed = (value || '').trim();
+                if (!trimmed) return;
+
+                const fd = new FormData();
+                fd.append('id', id);
+                fd.append('title', trimmed);
+                fd.append('csrf_token', CSRF);
+                await fetch(`${BASE}/api/todos.php?action=update`, { method:'POST', body:fd });
+                loadTodos();
+            },
+        });
+        document.body.appendChild(modal);
+        modal.querySelector('input')?.focus();
+    }
+
     function escapeHtml(s) {
         return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    // Custom prompt modal (matches skeuo theme)
+    function createPromptModal({ title = 'Prompt', value = '', placeholder = '', confirmLabel = 'OK', cancelLabel = 'Cancel', onConfirm }) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md';
+        wrapper.innerHTML = `
+            <div class="max-w-sm w-full bg-[var(--surface-2)] border border-[var(--border-subtle)] rounded-2xl shadow-[0_24px_50px_rgba(15,23,42,0.2)] overflow-hidden">
+                <div class="px-5 pt-5 pb-3">
+                    <h3 class="text-base font-semibold text-[var(--text-soft)] mb-2">${escapeHtml(title)}</h3>
+                    <input type="text" value="${escapeHtml(value)}" placeholder="${escapeHtml(placeholder)}"
+                        class="w-full bg-white/70 border border-[var(--border-subtle)] rounded-xl px-4 py-3 text-sm text-[var(--text)] outline-none focus:border-[var(--accent-strong)]/60 focus:ring-2 focus:ring-[var(--accent)]/20" />
+                </div>
+                <div class="flex justify-end gap-2 px-5 pb-4">
+                    <button class="glassy-cta ghost w-auto text-sm px-4 py-2" data-action="cancel">${escapeHtml(cancelLabel)}</button>
+                    <button class="glassy-cta w-auto text-sm px-4 py-2" data-action="confirm">${escapeHtml(confirmLabel)}</button>
+                </div>
+            </div>`;
+
+        const input = wrapper.querySelector('input');
+        const close = () => wrapper.remove();
+
+        wrapper.addEventListener('click', (e) => {
+            if (e.target === wrapper) close();
+        });
+
+        wrapper.querySelector('[data-action="cancel"]').addEventListener('click', close);
+        wrapper.querySelector('[data-action="confirm"]').addEventListener('click', async () => {
+            if (typeof onConfirm === 'function') await onConfirm(input.value);
+            close();
+        });
+
+        input.addEventListener('keydown', async (e) => {
+            if (e.key === 'Enter') {
+                if (typeof onConfirm === 'function') await onConfirm(input.value);
+                close();
+            }
+            if (e.key === 'Escape') close();
+        });
+
+        return wrapper;
+    }
+
+    function showToast(message, isError = false) {
+        const existing = document.getElementById('toast');
+        if (existing) existing.remove();
+        const toast = document.createElement('div');
+        toast.id = 'toast';
+        toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 px-4 py-3 rounded-xl text-sm font-semibold border shadow-lg ${isError ? 'bg-red-500/20 border-red-400 text-red-200' : 'bg-[var(--accent)]/15 border-[var(--accent-strong)] text-[var(--text)]'}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2800);
     }
 
     function formatTime(t) {
@@ -363,7 +430,6 @@ $csrf = csrfToken();
     }
 
     document.getElementById('add-todo').addEventListener('click', addTodo);
-    document.getElementById('refresh-todos').addEventListener('click', loadTodos);
     loadTodos();
     loadClasses();
     loadHeroCards();
@@ -400,6 +466,7 @@ $csrf = csrfToken();
         const leftBtn = document.getElementById('classes-left');
         const rightBtn = document.getElementById('classes-right');
         const updateBtns = () => {
+            if (!leftBtn || !rightBtn) return;
             const max = scroller.scrollWidth - scroller.clientWidth;
             leftBtn.style.display = scroller.scrollLeft > 4 ? 'flex' : 'none';
             rightBtn.style.display = scroller.scrollLeft < max - 4 ? 'flex' : 'none';

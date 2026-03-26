@@ -16,31 +16,25 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/styles.css">
 </head>
-<body class="min-h-screen">
-<nav class="hidden lg:flex fixed top-0 w-full z-50 bg-[var(--bg-dark)]/80 backdrop-blur-xl items-center justify-between px-8 h-16 border-b border-[var(--border-subtle)]">
-    <span class="text-xl font-bold tracking-tighter text-white">Sanctuary <span class="text-[var(--accent-purple)] text-sm font-normal ml-2">Admin</span></span>
-    <div class="flex items-center gap-4">
-        <a href="<?= BASE_URL ?>/index.php" class="text-sm text-[var(--text-muted)] hover:text-white">← Back to App</a>
-        <a href="<?= BASE_URL ?>/api/auth.php?action=logout" class="text-sm text-[var(--text-muted)] hover:text-[#ffb4ab]">Logout</a>
-    </div>
-</nav>
+<body class="min-h-screen admin-page">
 
 <div id="flash" class="hidden fixed top-20 right-6 z-50 px-5 py-3 rounded-xl text-sm font-medium shadow-xl"></div>
 
-<main class="pt-24 px-6 lg:px-12 pb-16 max-w-5xl mx-auto">
+<main class="pt-24 px-6 lg:px-12 pb-28 lg:pb-16 max-w-5xl mx-auto">
     <h1 class="text-3xl font-bold mb-10">Admin Panel</h1>
 
     <div class="grid lg:grid-cols-2 gap-8">
 
         <!-- ===== HERO CARDS ===== -->
         <section class="lg:col-span-2">
-            <div class="flex items-center justify-between mb-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
                 <h2 class="text-xl font-semibold">Home Hero Cards</h2>
-                <div class="flex items-center gap-2">
-                    <button id="hero-add" class="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-[var(--text-soft)] hover:bg-white/10 flex items-center gap-1">
-                        <span class="material-symbols-outlined text-[16px]">add</span> Add Card
+                <div class="flex flex-wrap items-center gap-2">
+                    <button id="hero-add" class="glassy-plus glassy-plus-pill text-sm flex items-center" aria-label="Add card">
+                        <span class="material-symbols-outlined text-[18px]">add</span>
+                        <span>Add Card</span>
                     </button>
-                    <button id="hero-refresh" class="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-[var(--text-muted)] hover:bg-white/10 flex items-center gap-1">
+                    <button id="hero-refresh" class="glassy-cta ghost text-sm w-auto">
                         <span class="material-symbols-outlined text-[16px]">refresh</span> Refresh
                     </button>
                 </div>
@@ -82,8 +76,8 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                             </label>
                         </div>
                         <div class="flex justify-end gap-2 pt-2">
-                            <button type="button" id="hero-cancel" class="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-[var(--text-muted)] hover:bg-white/10">Reset</button>
-                            <button type="submit" class="px-4 py-2 rounded-xl bg-[var(--accent-purple)] text-[#0F0F12] font-semibold text-sm shadow-lg shadow-[#8E5CF6]/20">Save Card</button>
+                            <button type="button" id="hero-cancel" class="glassy-cta ghost text-sm w-auto">Reset</button>
+                            <button type="submit" class="glassy-cta text-sm w-auto">Save Card</button>
                         </div>
                     </form>
                 </div>
@@ -114,11 +108,28 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                         class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[var(--accent-purple)]/50 resize-none"
                         placeholder="Idli, Sambar, Coconut Chutney…"></textarea>
                 </div>
-                <button type="submit"
-                    class="w-full py-3 bg-[var(--accent-purple)] text-[#0F0F12] rounded-xl font-bold text-sm hover:opacity-90">
-                    Save Menu
-                </button>
+                <button type="submit" class="glassy-cta text-sm">Save Menu</button>
             </form>
+        </section>
+
+        <!-- ===== MESS BULK IMPORT ===== -->
+        <section>
+            <h2 class="text-xl font-semibold mb-4">Bulk Import Mess Menu</h2>
+            <div class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-6 space-y-4">
+                <p class="text-[var(--text-muted)] text-sm">
+                    Paste a JSON array of meals. Existing entries for the same date/meal overwrite.
+                </p>
+                <div class="flex items-center gap-3 text-sm">
+                    <a href="<?= BASE_URL ?>/mess-template.json" class="text-[var(--accent-purple)] font-semibold hover:underline" target="_blank" rel="noopener">Download template</a>
+                    <button id="mess-load-template" type="button" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-[var(--text-soft)] hover:bg-white/10">Load into editor</button>
+                </div>
+                <textarea id="mess-import-json" rows="6" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white placeholder:text-[var(--text-muted)] outline-none focus:border-[var(--accent-purple)]/50" placeholder='[{"date":"2026-03-27","meal_type":"breakfast","items":"..."}]'></textarea>
+                <div class="flex gap-3">
+                    <button id="mess-import-submit" type="button" class="flex-1 py-3 rounded-xl bg-[var(--accent-purple)] text-[#0F0F12] font-semibold text-sm hover:opacity-90">Import</button>
+                    <button id="mess-import-clear" type="button" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-[var(--text-soft)] text-sm hover:bg-white/10">Clear</button>
+                </div>
+                <p class="text-[var(--text-muted)] text-xs">Fields: date (YYYY-MM-DD), meal_type (breakfast|lunch|dinner), items (text).</p>
+            </div>
         </section>
 
         <!-- ===== TIMETABLE ===== -->
@@ -168,10 +179,7 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                             class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none"/>
                     </div>
                 </div>
-                <button type="submit"
-                    class="w-full py-3 bg-[var(--accent-purple)] text-[#0F0F12] rounded-xl font-bold text-sm hover:opacity-90">
-                    Add Slot
-                </button>
+                <button type="submit" class="glassy-cta text-sm">Add Slot</button>
             </form>
         </section>
 
@@ -187,16 +195,13 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                 <textarea id="json-import" rows="6"
                     class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white font-mono outline-none focus:border-[var(--accent-purple)]/50 resize-y"
                     placeholder='[{"class_id":1,"subject":"Math","room":"101","day_of_week":"Mon","start_time":"09:00","end_time":"10:30"}]'></textarea>
-                <button id="json-import-btn"
-                    class="mt-4 px-6 py-3 bg-[var(--accent-purple)] text-[#0F0F12] rounded-xl font-bold text-sm hover:opacity-90">
-                    Import JSON
-                </button>
+                <button id="json-import-btn" class="mt-4 glassy-cta text-sm w-auto">Import JSON</button>
                 <div class="mt-4 bg-white/5 border border-white/10 rounded-xl p-4 text-[12px] text-[var(--text-muted)] space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="font-semibold text-[var(--text-soft)]">Copy-ready sample</span>
                         <button id="copy-tt-sample" class="text-[var(--accent-purple)] text-xs hover:underline">Copy</button>
                     </div>
-                    <pre id="tt-sample" class="whitespace-pre-wrap break-words">[
+                    <pre id="tt-sample" class="whitespace-pre-wrap break-words text-[11px]">[
   {"class_id":1,"subject":"Math","room":"101","day_of_week":"Mon","start_time":"09:00","end_time":"09:50"},
   {"class_id":1,"subject":"Physics","room":"102","day_of_week":"Mon","start_time":"10:00","end_time":"10:50"},
   {"class_id":1,"subject":"Lab","room":"201","day_of_week":"Tue","start_time":"11:00","end_time":"12:30"}
@@ -228,8 +233,8 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                         </select>
                     </div>
                     <div class="flex items-end gap-2">
-                        <button id="tt-load" class="flex-1 py-3 bg-white/5 border border-white/10 rounded-xl text-sm font-semibold text-[var(--text-muted)] hover:bg-white/10">Load Slots</button>
-                        <button id="tt-clear-day" class="py-3 px-4 bg-[var(--accent-purple)] text-[#0F0F12] rounded-xl text-sm font-bold hover:opacity-90" title="Replace slots for selected scope">Replace</button>
+                        <button id="tt-load" class="glassy-cta ghost text-sm flex-1">Load Slots</button>
+                        <button id="tt-clear-day" class="glassy-cta text-sm w-auto" title="Replace slots for selected scope">Replace</button>
                     </div>
                 </div>
 
@@ -253,9 +258,45 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
     </div>
 </main>
 
+<!-- Mobile bottom nav for admin -->
+<nav class="bottom-nav lg:hidden mt-10">
+    <a href="<?= BASE_URL ?>/index.php" class="flex flex-col items-center gap-0.5 text-[var(--text-muted)]">
+        <span class="material-symbols-outlined">home</span>
+        <span class="text-[10px] font-medium">Home</span>
+    </a>
+    <a href="<?= BASE_URL ?>/assignment.php" class="flex flex-col items-center gap-0.5 text-[var(--text-muted)]">
+        <span class="material-symbols-outlined">assignment</span>
+        <span class="text-[10px] font-medium">Assignments</span>
+    </a>
+    <a href="<?= BASE_URL ?>/habits.php" class="flex flex-col items-center gap-0.5 text-[var(--text-muted)]">
+        <span class="material-symbols-outlined">auto_awesome</span>
+        <span class="text-[10px] font-medium">Habits</span>
+    </a>
+    <a href="<?= BASE_URL ?>/mess.php" class="flex flex-col items-center gap-0.5 text-[var(--text-muted)]">
+        <span class="material-symbols-outlined">restaurant</span>
+        <span class="text-[10px] font-medium">Mess</span>
+    </a>
+    <a href="<?= BASE_URL ?>/admin.php" class="flex flex-col items-center gap-0.5">
+        <span class="material-symbols-outlined text-[var(--accent-purple)] active-glow">shield_person</span>
+        <span class="text-[10px] font-medium text-[var(--accent-purple)]">Admin</span>
+        <div class="w-6 h-[2px] bg-[var(--accent-purple)] rounded-full mt-0.5 shadow-[0_0_8px_var(--accent-purple)]"></div>
+    </a>
+</nav>
+
 <script>
 const BASE = <?= json_encode(BASE_URL) ?>;
 const CSRF = <?= json_encode($csrf) ?>;
+
+async function fetchJsonSafe(url, options = {}) {
+    const res = await fetch(url, { credentials:'same-origin', ...options });
+    const text = await res.text();
+    try {
+        return { res, data: JSON.parse(text), raw: text };
+    } catch (err) {
+        console.error('Invalid JSON', { url, status: res.status, body: text });
+        throw new Error(`Bad JSON response (${res.status})`);
+    }
+}
 
 function flash(msg, isError = false) {
     const el = document.getElementById('flash');
@@ -268,16 +309,68 @@ function flash(msg, isError = false) {
 
 document.getElementById('mess-form').addEventListener('submit', async e => {
     e.preventDefault();
-    const res = await fetch(`${BASE}/api/mess.php?action=menu`, { method:'POST', body:new FormData(e.target) });
-    const d   = await res.json();
-    d.success ? flash('Menu saved!') : flash(d.error || 'Error', true);
+    try {
+        const { data } = await fetchJsonSafe(`${BASE}/api/mess.php?action=menu`, { method:'POST', body:new FormData(e.target) });
+        data.success ? flash('Menu saved!') : flash(data.error || 'Error', true);
+    } catch (err) {
+        flash('Menu save failed (see console)', true);
+        console.error('Menu save failed', err);
+    }
+});
+
+// Mess bulk import (JSON)
+const messImportField  = document.getElementById('mess-import-json');
+const messImportSubmit = document.getElementById('mess-import-submit');
+const messImportClear  = document.getElementById('mess-import-clear');
+const messLoadTemplate = document.getElementById('mess-load-template');
+
+messLoadTemplate?.addEventListener('click', async () => {
+    try {
+        const res  = await fetch(`${BASE}/mess-template.json`, { credentials:'same-origin' });
+        messImportField.value = (await res.text()).trim();
+    } catch (err) {
+        flash('Could not load template', true);
+    }
+});
+
+messImportClear?.addEventListener('click', () => {
+    messImportField.value = '';
+});
+
+messImportSubmit?.addEventListener('click', async () => {
+    const raw = messImportField.value.trim();
+    if (!raw) return flash('Paste JSON to import', true);
+    let parsed;
+    try { parsed = JSON.parse(raw); } catch { return flash('Invalid JSON', true); }
+    if (!Array.isArray(parsed)) return flash('JSON must be an array', true);
+
+    const fd = new FormData();
+    fd.append('menus', JSON.stringify(parsed));
+    fd.append('csrf_token', CSRF);
+    const res = await fetch(`${BASE}/api/mess.php?action=import`, { method:'POST', credentials:'same-origin', body: fd });
+    const text = await res.text();
+    try {
+        const d = JSON.parse(text);
+        if (d.success) {
+            flash(`Imported ${d.count} entries`);
+        } else {
+            flash(d.error || 'Import failed', true);
+        }
+    } catch (err) {
+        console.error('Import parse error', { status: res.status, body: text });
+        flash('Server error during import', true);
+    }
 });
 
 document.getElementById('timetable-form').addEventListener('submit', async e => {
     e.preventDefault();
-    const res = await fetch(`${BASE}/api/timetable.php?action=add`, { method:'POST', body:new FormData(e.target) });
-    const d   = await res.json();
-    d.success ? (flash('Slot added!'), e.target.reset()) : flash(d.error || 'Error', true);
+    try {
+        const { data } = await fetchJsonSafe(`${BASE}/api/timetable.php?action=add`, { method:'POST', body:new FormData(e.target) });
+        data.success ? (flash('Slot added!'), e.target.reset()) : flash(data.error || 'Error', true);
+    } catch (err) {
+        flash('Add slot failed (see console)', true);
+        console.error('Timetable add failed', err);
+    }
 });
 
 document.getElementById('json-import-btn').addEventListener('click', async () => {
@@ -289,9 +382,13 @@ document.getElementById('json-import-btn').addEventListener('click', async () =>
     const fd = new FormData();
     fd.append('csrf_token', CSRF);
     fd.append('slots', JSON.stringify(data));
-    const res = await fetch(`${BASE}/api/timetable.php?action=import`, { method:'POST', body:fd });
-    const d   = await res.json();
-    d.success ? flash(`Imported ${d.count} slots!`) : flash(d.error || 'Error', true);
+    try {
+        const { data } = await fetchJsonSafe(`${BASE}/api/timetable.php?action=import`, { method:'POST', body:fd });
+        data.success ? flash(`Imported ${data.count} slots!`) : flash(data.error || 'Error', true);
+    } catch (err) {
+        flash('Import failed (see console)', true);
+        console.error('Timetable import failed', err);
+    }
 });
 
 document.getElementById('copy-tt-sample').addEventListener('click', async () => {
@@ -336,8 +433,7 @@ function setHeroForm(card = null) {
 async function loadHeroCardsAdmin() {
     heroCardsWrap.innerHTML = '<div class="p-4 text-sm text-[var(--text-muted)] bg-white/5 border border-white/10 rounded-xl">Loading…</div>';
     try {
-        const res = await fetch(`${BASE}/api/hero_cards.php?action=list&all=1`);
-        const data = await res.json();
+        const { data } = await fetchJsonSafe(`${BASE}/api/hero_cards.php?action=list&all=1`);
         heroCardsData = Array.isArray(data) ? data : [];
         if (!heroCardsData.length) {
             heroCardsWrap.innerHTML = '<div class="p-4 text-sm text-[var(--text-muted)] bg-white/5 border border-white/10 rounded-xl">No hero cards yet. Add one to start.</div>';
@@ -353,12 +449,18 @@ async function loadHeroCardsAdmin() {
                         <h4 class="text-lg font-semibold text-white leading-tight mb-1">${esc(c.title)}</h4>
                         <p class="text-white/70 text-sm">${esc(c.subtitle)}</p>
                     </div>
-                    <div class="flex items-center justify-between mt-3">
+                    <div class="flex items-center justify-between mt-3 gap-2">
                         <span class="text-[11px] text-white/60">#${c.id}</span>
-                        <button type="button" data-edit="${idx}" class="px-3 py-1.5 rounded-lg bg-white/10 text-white text-xs font-semibold flex items-center gap-1 hover:bg-white/20">
-                            <span class="material-symbols-outlined text-sm">edit</span>
-                            Edit
-                        </button>
+                        <div class="flex items-center gap-1">
+                            <button type="button" data-edit="${idx}" class="px-3 py-1.5 rounded-lg bg-white/10 text-white text-xs font-semibold flex items-center gap-1 hover:bg-white/20">
+                                <span class="material-symbols-outlined text-sm">edit</span>
+                                Edit
+                            </button>
+                            <button type="button" data-delete="${c.id}" class="px-3 py-1.5 rounded-lg bg-red-500/15 text-red-200 text-xs font-semibold flex items-center gap-1 hover:bg-red-500/30">
+                                <span class="material-symbols-outlined text-sm">delete</span>
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -371,8 +473,22 @@ async function loadHeroCardsAdmin() {
                 if (card) setHeroForm(card);
             });
         });
+
+        heroCardsWrap.querySelectorAll('[data-delete]').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id = btn.dataset.delete;
+                if (!id) return;
+                if (!confirm('Delete this hero card?')) return;
+                const fd = new FormData(); fd.append('id', id); fd.append('csrf_token', CSRF);
+                const res = await fetch(`${BASE}/api/hero_cards.php?action=delete`, { method:'POST', body: fd });
+                const d = await res.json();
+                d.success ? flash('Hero card deleted') : flash(d.error || 'Error deleting card', true);
+                loadHeroCardsAdmin();
+            });
+        });
     } catch (e) {
         heroCardsWrap.innerHTML = '<div class="p-4 text-sm text-red-400 bg-red-500/10 border border-red-500/30 rounded-xl">Failed to load hero cards.</div>';
+        console.error('Hero cards load failed', e);
     }
 }
 
@@ -381,14 +497,18 @@ heroForm.addEventListener('submit', async e => {
     const fd = new FormData(heroForm);
     if (!heroActiveInput.checked) fd.set('is_active', '0');
     fd.append('csrf_token', CSRF);
-    const res = await fetch(`${BASE}/api/hero_cards.php?action=save`, { method:'POST', body: fd });
-    const d   = await res.json();
-    if (d.success) {
-        flash('Hero card saved');
-        setHeroForm(null);
-        loadHeroCardsAdmin();
-    } else {
-        flash(d.error || 'Error saving card', true);
+    try {
+        const { data } = await fetchJsonSafe(`${BASE}/api/hero_cards.php?action=save`, { method:'POST', body: fd });
+        if (data.success) {
+            flash('Hero card saved');
+            setHeroForm(null);
+            loadHeroCardsAdmin();
+        } else {
+            flash(data.error || 'Error saving card', true);
+        }
+    } catch (err) {
+        flash('Save failed (see console)', true);
+        console.error('Hero save failed', err);
     }
 });
 
@@ -450,8 +570,13 @@ document.getElementById('tt-clear-day').addEventListener('click', async e => {
     if (day) fd.append('day_of_week', day);
     fd.append('slots', JSON.stringify(slots));
     const res = await fetch(`${BASE}/api/timetable.php?action=replace`, { method:'POST', body:fd });
-    const d   = await res.json();
-    d.success ? flash(`Replaced ${d.count} slots`) : flash(d.error || 'Error', true);
+    try {
+        const { data } = await fetchJsonSafe(`${BASE}/api/timetable.php?action=replace`, { method:'POST', body:fd });
+        data.success ? flash(`Replaced ${data.count} slots`) : flash(data.error || 'Error', true);
+    } catch (err) {
+        flash('Replace failed (see console)', true);
+        console.error('Timetable replace failed', err);
+    }
     loadTimetable();
 });
 </script>

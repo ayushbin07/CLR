@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Checkbox toggles
   const checkboxes = document.querySelectorAll('.custom-checkbox');
   checkboxes.forEach((cb) => {
+    // Habits page manages its own checkbox state; skip there to avoid double toggles
+    if (cb.dataset.habitId) return;
     cb.addEventListener('click', () => {
       cb.classList.toggle('checked');
       if (cb.classList.contains('checked')) {

@@ -75,8 +75,7 @@ bottomNav('settings');
                             <?php endforeach ?>
                         </select>
                     </div>
-                    <button type="submit"
-                        class="w-full py-3 bg-[var(--accent-purple)] text-[#0F0F12] rounded-xl font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all">
+                    <button type="submit" class="glassy-cta text-sm">
                         Save Profile
                     </button>
                 </form>

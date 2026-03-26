@@ -22,41 +22,8 @@ HTML;
 }
 
 function topNav(string $activePage): void {
-    $user = auth();
-    $name  = htmlspecialchars($user['name'] ?? 'User');
-    $seed  = htmlspecialchars($user['avatar_seed'] ?? $name);
-    $base  = BASE_URL;
-    $pages = [
-        'index'      => ['Home',        'index.php'],
-        'assignment' => ['Assignments', 'assignment.php'],
-        'habits'     => ['Habits',      'habits.php'],
-        'mess'       => ['Mess',        'mess.php'],
-    ];
-    $links = '';
-    foreach ($pages as $key => [$label, $href]) {
-        $active = $key === $activePage
-            ? 'text-[var(--accent-purple)] font-semibold border-b-2 border-[var(--accent-purple)] pb-1'
-            : 'text-[var(--text-muted)] hover:text-white transition-colors';
-        $links .= "<a class=\"{$active}\" href=\"" . BASE_URL . "/{$href}\">{$label}</a>\n";
-    }
-    echo <<<HTML
-<nav class="hidden lg:flex fixed top-0 w-full z-50 bg-[var(--bg-dark)]/80 backdrop-blur-xl items-center justify-between px-8 h-16 border-b border-[var(--border-subtle)]">
-    <div class="flex items-center gap-4">
-        <span class="text-xl font-bold tracking-tighter text-white">Sanctuary</span>
-    </div>
-    <div class="flex items-center space-x-8">
-        {$links}
-    </div>
-    <div class="flex items-center space-x-4">
-        <a href="{$base}/settings.php" class="p-2 hover:bg-[var(--card-dark)] rounded-lg transition-all">
-            <span class="material-symbols-outlined text-[var(--text-muted)]">settings</span>
-        </a>
-        <div class="w-8 h-8 rounded-full bg-[var(--card-dark)] overflow-hidden">
-            <img alt="Profile" class="w-full h-full object-cover" src="https://api.dicebear.com/7.x/avataaars/svg?seed={$seed}"/>
-        </div>
-    </div>
-</nav>
-HTML;
+    // Desktop top nav intentionally omitted (sidebar handles navigation)
+    return;
 }
 
 function sidebar(string $activePage): void {
@@ -77,20 +44,20 @@ function sidebar(string $activePage): void {
         $links .= "<a href=\"" . BASE_URL . "/{$href}\" class=\"{$active}\"><span class=\"material-symbols-outlined\">{$icon}</span><span class=\"font-medium text-sm\">{$label}</span></a>\n";
     }
     echo <<<HTML
-<aside class="sidebar w-64 fixed left-0 top-0 h-screen bg-[var(--card-dark)] border-r border-[var(--border-subtle)] p-6 flex-col hidden lg:flex z-40 pt-24">
+<aside class="sidebar w-64 fixed left-0 top-0 h-screen bg-[var(--card-dark)] border-r border-[var(--border-subtle)] p-6 flex-col hidden lg:flex z-40">
     <div class="mb-8 px-2">
         <h2 class="text-lg font-black tracking-widest text-white uppercase">The Sanctuary</h2>
         <p class="text-xs text-[var(--text-muted)] opacity-60">Deep Work Mode</p>
     </div>
     <nav class="flex-1 space-y-2">{$links}</nav>
-    <div class="mt-auto space-y-2 pt-6">
-        <a href="{$base}/settings.php" class="flex items-center space-x-3 px-4 py-2 text-[var(--text-muted)] hover:text-white transition-colors">
+    <div class="mt-auto space-y-3 pt-6">
+        <a href="{$base}/settings.php" class="neo-nav-pill">
             <span class="material-symbols-outlined text-sm">settings</span>
-            <span class="text-xs">Settings</span>
+            <span class="text-xs font-semibold">Settings</span>
         </a>
-        <a href="{$base}/api/auth.php?action=logout" class="flex items-center space-x-3 px-4 py-2 text-[var(--text-muted)] hover:text-[#ffb4ab] transition-colors">
+        <a href="{$base}/api/auth.php?action=logout" class="neo-nav-pill neo-nav-pill--danger">
             <span class="material-symbols-outlined text-sm">logout</span>
-            <span class="text-xs">Logout</span>
+            <span class="text-xs font-semibold">Logout</span>
         </a>
     </div>
 </aside>

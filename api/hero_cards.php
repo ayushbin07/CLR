@@ -6,9 +6,10 @@ requireAuth();
 $action = $_GET['action'] ?? 'list';
 
 match ($action) {
-    'list' => listCards(),
-    'save' => saveCard(),
-    default => jsonResponse(['error' => 'Unknown action'], 400),
+    'list'   => listCards(),
+    'save'   => saveCard(),
+    'delete' => deleteCard(),
+    default  => jsonResponse(['error' => 'Unknown action'], 400),
 };
 
 function listCards(): void {
@@ -59,4 +60,19 @@ function saveCard(): void {
     }
 
     jsonResponse(['success' => true, 'id' => $id]);
+}
+
+function deleteCard(): void {
+    requireAdmin();
+    verifyCsrf();
+
+    $id = (int)($_POST['id'] ?? 0);
+    if (!$id) {
+        jsonResponse(['error' => 'Missing id'], 422);
+    }
+
+    $stmt = db()->prepare('DELETE FROM hero_cards WHERE id = ?');
+    $stmt->execute([$id]);
+
+    jsonResponse(['success' => true]);
 }
