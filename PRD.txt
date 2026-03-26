@@ -1,0 +1,449 @@
+# 📄 **PRD — Student Daily Focus System**
+
+---
+
+## ## 1. Product Overview
+
+A **mobile-first web application** that reduces student cognitive load by showing only **relevant daily information** and enabling quick actions.
+
+The system focuses on:
+
+* Urgent academic work
+* Daily context (classes, mess)
+* Personal consistency (habits, todos)
+
+👉 Core Philosophy:
+**“Show only what matters now. Hide everything else.”**
+
+---
+
+## ## 2. Objectives
+
+* Reduce decision fatigue
+* Improve task awareness
+* Provide quick interaction (≤ 2 taps)
+* Maintain minimal and premium UX
+
+---
+
+## ## 3. Target Users
+
+* College students
+* Small group usage (same class)
+* Mobile-first users
+
+---
+
+## ## 4. User Roles
+
+### 👤 User
+
+* Manage personal data (todos, habits)
+* View assignments (class/public)
+* React to mess
+* View timetable
+
+### 🛠️ Admin
+
+* Upload timetable (JSON → DB)
+* Add mess menu
+* Manage shared assignments
+
+---
+
+# ## 5. Core Modules
+
+---
+
+## 🏠 5.1 Home Dashboard
+
+### Purpose:
+
+Show only **today’s relevant information**
+
+### Displays:
+
+* Top 3 assignments (filtered + sorted)
+* Today’s classes
+* User todos
+
+---
+
+## 📚 5.2 Assignments Module
+
+### Features:
+
+* Create / edit / delete
+* Class-based sharing
+* Status tracking
+
+### Rules:
+
+* Deadline mandatory
+* Sorted by deadline
+* Only pending shown on home
+
+---
+
+## 📅 5.3 Timetable Module
+
+### Features:
+
+* Admin uploads JSON
+* Stored in structured format
+* Filtered by:
+
+  * class_id
+  * day_of_week
+
+---
+
+## 🍽️ 5.4 Mess Module
+
+### Features:
+
+* Daily menu
+* Like / Dislike reaction
+
+### Constraints:
+
+* Only today’s data shown
+* No history
+
+---
+
+## ✅ 5.5 Todo Module
+
+### Features:
+
+* Personal tasks
+* Toggle complete/incomplete
+
+---
+
+## 🔁 5.6 Habits Module
+
+### Features:
+
+* Create habits
+* Daily tracking
+* Heatmap visualization
+
+---
+
+## ⚙️ 5.7 Settings Module
+
+### Features:
+
+* Update user info
+* Logout
+* Minimal account controls
+
+---
+
+# ## 6. Functional Requirements
+
+---
+
+## 🔐 Authentication
+
+* Email/password login
+* Session-based
+
+---
+
+## 🧠 Home Logic
+
+Fetch and combine:
+
+* Assignments:
+
+  * class-based OR public
+  * status = pending
+  * sorted by deadline ASC
+  * limit 3
+
+* Timetable:
+
+  * class_id match
+  * current day
+
+* Todos:
+
+  * user_id match
+  * not completed
+
+---
+
+## 🔄 Filtering Types
+
+* User-based
+* Class-based
+* Date-based
+
+---
+
+# ## 7. Data Flow
+
+---
+
+## 🔐 Login Flow
+
+1. User submits credentials
+2. Backend validates
+3. Returns session
+4. Stores:
+
+   * user_id
+   * class_id
+   * role
+
+---
+
+## 🏠 Home Flow
+
+1. Request:
+
+```id="8hsm1c"
+GET /home
+```
+
+2. Backend:
+
+* Fetch assignments
+* Fetch today classes
+* Fetch todos
+
+3. Merge response:
+
+```json
+{
+  "assignments": [],
+  "classes_today": [],
+  "todos": []
+}
+```
+
+---
+
+## 📚 Assignment Flow
+
+### Create:
+
+```id="b4l9sp"
+POST /assignment
+```
+
+* Validate
+* Insert with created_by + class_id
+
+---
+
+### Fetch:
+
+* Filter:
+
+  * class_id OR public
+
+---
+
+### Update/Delete:
+
+* Only creator or admin
+
+---
+
+## 📅 Timetable Flow
+
+* Admin uploads JSON
+* Backend parses
+* Stores structured rows
+
+---
+
+## 🍽️ Mess Flow
+
+* Admin inserts daily menu
+* User fetches today’s menu
+* User reacts (like/dislike)
+
+---
+
+## 🔁 Habit Flow
+
+* Create habit
+* Mark complete → store (habit_id, date)
+* Fetch history → render heatmap
+
+---
+
+# ## 8. Database Design
+
+---
+
+## USERS
+
+```sql
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    email VARCHAR(150) UNIQUE,
+    password VARCHAR(255),
+    class_id INT,
+    role ENUM('admin','user') DEFAULT 'user',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+## CLASSES
+
+```sql
+CREATE TABLE classes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) UNIQUE
+);
+```
+
+---
+
+## ASSIGNMENTS
+
+```sql
+CREATE TABLE assignments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255),
+    subject VARCHAR(100),
+    deadline DATETIME NOT NULL,
+    type ENUM('assignment','presentation','project'),
+    link TEXT,
+    visibility ENUM('public','class'),
+    class_id INT,
+    created_by INT,
+    status ENUM('pending','completed') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+## TODOS
+
+```sql
+CREATE TABLE todos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    title VARCHAR(255),
+    is_completed BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+## TIMETABLE
+
+```sql
+CREATE TABLE timetable (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    class_id INT,
+    subject VARCHAR(100),
+    room VARCHAR(50),
+    day_of_week ENUM('Mon','Tue','Wed','Thu','Fri','Sat','Sun'),
+    start_time TIME,
+    end_time TIME
+);
+```
+
+---
+
+## MESS MENU
+
+```sql
+CREATE TABLE mess_menu (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    date DATE,
+    meal_type ENUM('breakfast','lunch','dinner'),
+    items TEXT
+);
+```
+
+---
+
+## MESS REACTIONS
+
+```sql
+CREATE TABLE mess_reactions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    mess_id INT,
+    reaction ENUM('like','dislike'),
+    UNIQUE(user_id, mess_id)
+);
+```
+
+---
+
+## HABITS
+
+```sql
+CREATE TABLE habits (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    name VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+## HABIT LOGS
+
+```sql
+CREATE TABLE habit_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    habit_id INT,
+    date DATE,
+    completed BOOLEAN DEFAULT TRUE,
+    UNIQUE(habit_id, date)
+);
+```
+
+---
+
+# ## 9. Non-Functional Requirements
+
+* Mobile-first responsive design
+* Fast API response (<500ms target)
+* Minimal UI rendering
+* Clean code structure
+
+---
+
+# ## 10. Constraints
+
+* No feature overload
+* No complex analytics
+* No unnecessary modules
+
+---
+
+# ## 11. Future Scope
+
+* Wishlist (impulse delay system)
+* Notifications
+* Basic analytics
+
+---
+
+# ## 12. Conclusion
+
+This system is designed to:
+
+* Demonstrate backend understanding
+* Maintain clean architecture
+* Solve a real usability problem
+
+👉 Focus is on:
+**clarity, simplicity, and strong data flow**
