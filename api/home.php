@@ -32,12 +32,13 @@ function getDashboard(): void {
     $stmt->execute([$classId]);
     $assignments = $stmt->fetchAll();
 
-    $stmt = db()->prepare(
-        "SELECT * FROM timetable
-         WHERE class_id = ? AND day_of_week = ?
-         ORDER BY start_time ASC"
-    );
-    $stmt->execute([$classId, $dayAbbr]);
+        $stmt = db()->prepare(
+                "SELECT * FROM timetable
+                 WHERE class_id = ?
+                     AND LOWER(day_of_week) LIKE LOWER(CONCAT(?, '%'))
+                 ORDER BY start_time ASC"
+        );
+        $stmt->execute([$classId, $dayAbbr]);
     $classes = $stmt->fetchAll();
 
     $stmt = db()->prepare(
@@ -56,7 +57,10 @@ function getTimetable(): void {
     $day     = $_GET['day'] ?? date('D');
 
     $stmt = db()->prepare(
-        "SELECT * FROM timetable WHERE class_id = ? AND day_of_week = ? ORDER BY start_time ASC"
+        "SELECT * FROM timetable
+         WHERE class_id = ?
+           AND LOWER(day_of_week) LIKE LOWER(CONCAT(?, '%'))
+         ORDER BY start_time ASC"
     );
     $stmt->execute([$classId, $day]);
     jsonResponse($stmt->fetchAll());

@@ -125,9 +125,10 @@ bottomNav('assignment');
 </div>
 
 <script>
-const BASE   = <?= json_encode(BASE_URL) ?>;
-const CSRF   = <?= json_encode($csrf) ?>;
-const USER_ID = <?= json_encode($user['id']) ?>;
+const BASE     = <?= json_encode(BASE_URL) ?>;
+const CSRF     = <?= json_encode($csrf) ?>;
+const USER_ID  = <?= json_encode($user['id']) ?>;
+const IS_ADMIN = <?= json_encode($user['role'] === 'admin') ?>;
 let currentFilter = 'all';
 
 // -----------------------------------------------
@@ -152,7 +153,7 @@ async function loadAssignments(filter = 'all') {
         const dotCol = a.status === 'completed' ? 'bg-emerald-400'
                      : dl.cls.includes('warm')  ? 'bg-[var(--accent-warm)]'
                      : 'bg-[var(--accent-purple)]';
-        const canEdit = a.created_by == USER_ID;
+        const canEdit = IS_ADMIN || a.created_by == USER_ID;
         return `<div class="${border} px-5 py-4 flex items-center gap-3 hover:bg-white/5 transition-colors ${dimmed}">
             <div class="w-2 h-2 rounded-full flex-shrink-0 ${dotCol}"></div>
             <div class="flex-1 min-w-0">

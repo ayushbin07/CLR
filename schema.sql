@@ -101,6 +101,17 @@ CREATE TABLE IF NOT EXISTS habit_logs (
     FOREIGN KEY (habit_id) REFERENCES habits(id) ON DELETE CASCADE
 );
 
+-- Home Hero Cards
+CREATE TABLE IF NOT EXISTS hero_cards (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(150) NOT NULL,
+    subtitle VARCHAR(255) NOT NULL,
+    image_url TEXT NOT NULL,
+    sort_order INT DEFAULT 1,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- -----------------------------------------------
 -- Seed data
 -- -----------------------------------------------
@@ -133,3 +144,8 @@ INSERT IGNORE INTO mess_menu (date, meal_type, items) VALUES
 (CURDATE(), 'breakfast', 'Masala Dosa, Sambar, Coconut Chutney, Seasonal Fruit & Milk'),
 (CURDATE(), 'lunch', 'Paneer Butter Masala, Jeera Rice, Dal Tadka, Butter Naan & Roasted Papad'),
 (CURDATE(), 'dinner', 'Home-style Chicken Curry, Veg Pulao, Chapati, Fresh Green Salad & Gulab Jamun');
+
+-- Seed hero cards
+INSERT IGNORE INTO hero_cards (id, title, subtitle, image_url, sort_order) VALUES
+    (1, "This Week's Focus", 'Lock in your priorities and stay on schedule.', 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=1200&q=80', 1),
+    (2, 'Keep Your Momentum', 'Plan your next deep work block and protect it.', 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1200&q=80', 2);

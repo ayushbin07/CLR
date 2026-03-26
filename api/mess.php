@@ -10,6 +10,7 @@ match (true) {
     $method === 'GET'  && $action === 'today'  => todayMenu(),
     $method === 'POST' && $action === 'react'  => reactMenu(),
     $method === 'POST' && $action === 'menu'   => saveMenu(),
+    $method === 'POST' && $action === 'import' => importMenu(),
     default => jsonResponse(['error' => 'Unknown action'], 400),
 };
 
@@ -68,4 +69,34 @@ function saveMenu(): void {
     );
     $stmt->execute([$date, $mealType, $items]);
     jsonResponse(['success' => true]);
+}
+
+function importMenu(): void {
+    verifyCsrf();
+    requireAdmin();
+
+    $payload = $_POST['menus'] ?? '[]';
+    $data = json_decode($payload, true);
+    if (!is_array($data)) {
+        jsonResponse(['error' => 'Invalid JSON'], 422);
+    }
+
+    $stmt = db()->prepare(
+        'INSERT INTO mess_menu (date, meal_type, items) VALUES (?, ?, ?)
+         ON DUPLICATE KEY UPDATE items = VALUES(items)'
+    );
+
+    $count = 0;
+    foreach ($data as $row) {
+        $date     = $row['date'] ?? null;
+        $mealType = $row['meal_type'] ?? '';
+        $items    = trim($row['items'] ?? '');
+        if (!$date || !in_array($mealType, ['breakfast','lunch','dinner'], true) || !$items) {
+            continue;
+        }
+        $stmt->execute([$date, $mealType, $items]);
+        $count++;
+    }
+
+    jsonResponse(['success' => true, 'count' => $count]);
 }

@@ -40,9 +40,16 @@ bottomNav('settings');
                         <span class="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold tracking-widest text-[var(--text-muted)]">
                             <?= htmlspecialchars($className ?: 'No class') ?>
                         </span>
+                        <?php if (($user['role'] ?? '') === 'admin'): ?>
+                        <a href="<?= BASE_URL ?>/admin.php"
+                           class="px-2 py-0.5 rounded bg-[rgba(168,162,255,0.15)] text-[10px] uppercase font-bold tracking-widest text-[var(--accent-purple)] hover:bg-[rgba(168,162,255,0.25)] transition-colors">
+                            <?= htmlspecialchars($user['role']) ?>
+                        </a>
+                        <?php else: ?>
                         <span class="px-2 py-0.5 rounded bg-[rgba(168,162,255,0.15)] text-[10px] uppercase font-bold tracking-widest text-[var(--accent-purple)]">
                             <?= htmlspecialchars($user['role']) ?>
                         </span>
+                        <?php endif; ?>
                     </div>
                 </div>
             </section>

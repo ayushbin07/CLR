@@ -116,12 +116,15 @@ $csrf = csrfToken();
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 px-6 lg:px-10 mb-8">
                 <!-- Hero Section -->
                 <section class="lg:col-span-12">
-                    <div class="relative w-full aspect-[16/9] lg:aspect-[21/9] rounded-[32px] overflow-hidden bg-gradient-to-br from-[#2D2B4A] to-[#161524] p-8 flex items-end">
+                    <div id="hero-card" class="relative w-full aspect-[16/9] lg:aspect-[21/9] rounded-[32px] overflow-hidden bg-[var(--card-dark)] p-8 flex items-end transition-opacity duration-300">
+                        <img id="hero-image" alt="Hero visual" class="absolute inset-0 w-full h-full object-cover opacity-80" src="" loading="lazy" />
+                        <div class="absolute inset-0 bg-gradient-to-r from-[#13112b] via-[#0d0c1a]/80 to-transparent"></div>
                         <div class="z-10 max-w-[60%]">
-                            <h2 class="text-2xl lg:text-3xl font-semibold mb-2">Final Exams approaching</h2>
-                            <p class="text-white/60 text-sm lg:text-base">Review your semester roadmap and start preparing.</p>
+                            <p class="text-[11px] uppercase tracking-[0.2em] text-white/60 mb-2">Weekly Spotlight</p>
+                            <h2 id="hero-title" class="text-2xl lg:text-3xl font-semibold mb-2">Loading…</h2>
+                            <p id="hero-subtitle" class="text-white/70 text-sm lg:text-base">Fetching your focus.</p>
                         </div>
-                        <img alt="Education illustration" class="absolute right-0 bottom-0 h-full object-contain opacity-80 mix-blend-lighten pointer-events-none" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADnUwrAOX47yJnj2qf4hgN-RNYR5yoFx8HMa_BKueAaDPd9og1w06Osedtn3Q2ACVCgzvmaqVMW1gA1jDKQ_4vqLOAOm1Dvgs1t5RRWpKEK3nu4ueioc82FHqF8q8Y_eYIrWHFu543VrdK8-JCqqqnLFYJy_89XHRpFKD4C1xbi6gLj_bxDz3w5a_ia49t1xpPc0NI_Aj4iZz8DsAhqJ8bLMnuKEwhOOJ6Ux-_GbUe10E4lBdki1JFPuKeHiRi309rDTU8rTRWxRv_"/>
+                        <div id="hero-dots" class="absolute top-4 right-4 flex items-center gap-2 z-10"></div>
                     </div>
                 </section>
 
@@ -146,64 +149,14 @@ $csrf = csrfToken();
                 <!-- Today's Classes -->
                 <section class="lg:col-span-7">
                     <h3 class="text-xl font-semibold mb-4 px-1">Today's Classes</h3>
-                    <div class="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
-                        <div class="flex-none w-[220px] bg-[var(--card-dark)] rounded-[24px] p-5 border border-white/5 hover:border-white/10 transition-colors">
-                            <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mb-6">
-                                <span class="material-symbols-outlined text-white/80">memory</span>
-                            </div>
-                            <h4 class="text-[var(--text-soft)] font-medium mb-1">Data Structures</h4>
-                            <div class="h-[2px] w-full bg-white/10 rounded-full mb-4 overflow-hidden">
-                                <div class="h-full bg-[var(--accent-purple)] w-1/3"></div>
-                            </div>
-                            <div class="space-y-1">
-                                <p class="text-[var(--text-muted)] text-xs flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-[14px]">timer</span>
-                                    10:30 AM - 12:00 PM
-                                </p>
-                                <p class="text-[var(--text-muted)] text-xs flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-[14px]">location_on</span>
-                                    Room 302
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex-none w-[220px] bg-[var(--card-dark)] rounded-[24px] p-5 border border-white/5 hover:border-white/10 transition-colors">
-                            <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mb-6">
-                                <span class="material-symbols-outlined text-white/80">biotech</span>
-                            </div>
-                            <h4 class="text-[var(--text-soft)] font-medium mb-1">Organic Chemistry</h4>
-                            <div class="h-[2px] w-full bg-white/10 rounded-full mb-4 overflow-hidden">
-                                <div class="h-full bg-[var(--accent-purple)] w-0"></div>
-                            </div>
-                            <div class="space-y-1">
-                                <p class="text-[var(--text-muted)] text-xs flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-[14px]">timer</span>
-                                    1:00 PM - 2:30 PM
-                                </p>
-                                <p class="text-[var(--text-muted)] text-xs flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-[14px]">location_on</span>
-                                    Lab 101
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex-none w-[220px] bg-[var(--card-dark)] rounded-[24px] p-5 border border-white/5 hover:border-white/10 transition-colors">
-                            <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mb-6">
-                                <span class="material-symbols-outlined text-white/80">public</span>
-                            </div>
-                            <h4 class="text-[var(--text-soft)] font-medium mb-1 truncate">Business Management</h4>
-                            <div class="h-[2px] w-full bg-white/10 rounded-full mb-4 overflow-hidden">
-                                <div class="h-full bg-[var(--accent-purple)] w-0"></div>
-                            </div>
-                            <div class="space-y-1">
-                                <p class="text-[var(--text-muted)] text-xs flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-[14px]">timer</span>
-                                    3:00 PM - 4:30 PM
-                                </p>
-                                <p class="text-[var(--text-muted)] text-xs flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-[14px]">location_on</span>
-                                    Hall B
-                                </p>
-                            </div>
-                        </div>
+                    <div class="relative">
+                        <button id="classes-left" class="hidden md:flex items-center justify-center absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-9 h-9 rounded-full bg-[var(--card-dark)] border border-white/10 text-white/70 hover:text-white hover:border-white/30 shadow-lg shadow-black/30 backdrop-blur-sm">
+                            <span class="material-symbols-outlined text-lg">chevron_left</span>
+                        </button>
+                        <div id="classes-container" class="flex gap-3 overflow-x-auto pb-4 no-scrollbar snap-x snap-mandatory flex-nowrap min-w-0 cursor-grab active:cursor-grabbing scroll-smooth"></div>
+                        <button id="classes-right" class="hidden md:flex items-center justify-center absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-9 h-9 rounded-full bg-[var(--card-dark)] border border-white/10 text-white/70 hover:text-white hover:border-white/30 shadow-lg shadow-black/30 backdrop-blur-sm">
+                            <span class="material-symbols-outlined text-lg">chevron_right</span>
+                        </button>
                     </div>
                 </section>
             </div>
@@ -214,6 +167,85 @@ $csrf = csrfToken();
     <script>
     const BASE = <?= json_encode(BASE_URL) ?>;
     const CSRF = <?= json_encode($csrf) ?>;
+    const CLASS_ICONS = ['book','science','public','code','architecture','stadia_controller','psychology','experiment','school'];
+    const HERO_DEFAULTS = [
+        {
+            title: "This Week's Focus",
+            subtitle: 'Lock in your priorities and stay on schedule.',
+            image_url: 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=1400&q=80'
+        },
+        {
+            title: 'Keep Your Momentum',
+            subtitle: 'Plan your next deep work block and protect it.',
+            image_url: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1400&q=80'
+        }
+    ];
+
+    const heroCardEl = document.getElementById('hero-card');
+    const heroTitleEl = document.getElementById('hero-title');
+    const heroSubtitleEl = document.getElementById('hero-subtitle');
+    const heroImageEl = document.getElementById('hero-image');
+    const heroDotsEl = document.getElementById('hero-dots');
+    let heroCards = [];
+    let heroIdx = 0;
+    let heroTimer = null;
+
+    async function loadHeroCards() {
+        try {
+            const res = await fetch(`${BASE}/api/hero_cards.php?action=list`);
+            const data = await res.json();
+            heroCards = Array.isArray(data) && data.length ? data : HERO_DEFAULTS;
+        } catch (e) {
+            heroCards = HERO_DEFAULTS;
+        }
+        heroIdx = 0;
+        renderHeroCard(true);
+        startHeroRotation();
+    }
+
+    function renderHeroCard(initial = false) {
+        const card = heroCards[heroIdx];
+        if (!card) return;
+        heroCardEl.classList.add('opacity-0');
+        setTimeout(() => {
+            heroTitleEl.textContent = card.title || '';
+            heroSubtitleEl.textContent = card.subtitle || '';
+            heroImageEl.src = card.image_url || '';
+            heroCardEl.classList.remove('opacity-0');
+            renderHeroDots();
+        }, initial ? 0 : 160);
+    }
+
+    function renderHeroDots() {
+        if (heroCards.length <= 1) {
+            heroDotsEl.innerHTML = '';
+            return;
+        }
+        heroDotsEl.innerHTML = heroCards.map((_, i) =>
+            `<button data-hero="${i}" class="w-2.5 h-2.5 rounded-full ${i === heroIdx ? 'bg-white' : 'bg-white/40'}"></button>`
+        ).join('');
+        heroDotsEl.querySelectorAll('[data-hero]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                heroIdx = Number(btn.dataset.hero) || 0;
+                renderHeroCard();
+                resetHeroRotation();
+            });
+        });
+    }
+
+    function startHeroRotation() {
+        clearInterval(heroTimer);
+        if (heroCards.length <= 1) return;
+        heroTimer = setInterval(() => {
+            heroIdx = (heroIdx + 1) % heroCards.length;
+            renderHeroCard();
+        }, 5000);
+    }
+
+    function resetHeroRotation() {
+        clearInterval(heroTimer);
+        startHeroRotation();
+    }
 
     async function loadTodos() {
         const container = document.getElementById('todo-list');
@@ -273,6 +305,34 @@ $csrf = csrfToken();
         loadTodos();
     }
 
+    async function loadClasses() {
+        const container = document.getElementById('classes-container');
+        container.innerHTML = '<div class="flex-none w-[200px] h-[200px] p-5 rounded-[20px] border border-white/5 bg-[var(--card-dark)] text-[var(--text-muted)] text-sm">Loading today\'s classes…</div>';
+        try {
+            const res = await fetch(`${BASE}/api/home.php?action=timetable`);
+            const classes = await res.json();
+            if (!Array.isArray(classes) || !classes.length) {
+                container.innerHTML = '<div class="flex-none w-[200px] h-[200px] p-5 rounded-[20px] border border-white/5 bg-[var(--card-dark)] text-[var(--text-muted)] text-sm">No classes scheduled for today.</div>';
+                return;
+            }
+            container.innerHTML = classes.map((c, idx) => {
+                const icon = CLASS_ICONS[idx % CLASS_ICONS.length];
+                const room = c.room ? `<p class="text-[var(--text-muted)] text-[11px] flex items-center gap-1 mt-2"><span class="material-symbols-outlined text-[14px]">location_on</span>${escapeHtml(c.room)}</p>` : '';
+                return `
+                <div class="flex-none w-[220px] h-[200px] p-5 bg-[var(--card-dark)] rounded-[20px] border border-white/5 hover:border-white/10 transition-transform transition-colors duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-black/20 shadow-sm shadow-black/10 snap-start">
+                    <div class="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center mb-3">
+                        <span class="material-symbols-outlined text-white/80">${icon}</span>
+                    </div>
+                    <h4 class="text-[var(--text-soft)] font-semibold text-sm leading-tight mb-1">${escapeHtml(c.subject)}</h4>
+                    <p class="text-[var(--text-muted)] text-[11px]">${escapeHtml(c.day_of_week)} • ${formatTime(c.start_time)} - ${formatTime(c.end_time)}</p>
+                    ${room}
+                </div>`;
+            }).join('');
+        } catch (e) {
+            container.innerHTML = '<div class="flex-none w-[200px] h-[200px] p-5 rounded-[20px] border border-red-500/30 bg-[var(--card-dark)] text-red-400 text-sm">Failed to load classes.</div>';
+        }
+    }
+
     async function toggleTodo(id) {
         const fd = new FormData();
         fd.append('id', id);
@@ -293,9 +353,62 @@ $csrf = csrfToken();
         return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }
 
+    function formatTime(t) {
+        if (!t) return '';
+        const [h, m] = t.split(':');
+        const hour = parseInt(h, 10);
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        const hr12 = hour % 12 === 0 ? 12 : hour % 12;
+        return `${hr12}:${m} ${ampm}`;
+    }
+
     document.getElementById('add-todo').addEventListener('click', addTodo);
     document.getElementById('refresh-todos').addEventListener('click', loadTodos);
     loadTodos();
+    loadClasses();
+    loadHeroCards();
+
+    // Enable drag-to-scroll on classes container
+    (() => {
+        const scroller = document.getElementById('classes-container');
+        let isDown = false;
+        let startX = 0;
+        let scrollLeft = 0;
+
+        const start = (clientX) => {
+            isDown = true;
+            startX = clientX;
+            scrollLeft = scroller.scrollLeft;
+        };
+        const move = (clientX, evt) => {
+            if (!isDown) return;
+            evt.preventDefault();
+            const walk = clientX - startX;
+            scroller.scrollLeft = scrollLeft - walk;
+        };
+        const end = () => { isDown = false; };
+
+        scroller.addEventListener('mousedown', (e) => start(e.clientX));
+        scroller.addEventListener('mousemove', (e) => move(e.clientX, e));
+        ['mouseleave','mouseup'].forEach(ev => scroller.addEventListener(ev, end));
+
+        scroller.addEventListener('touchstart', (e) => start(e.touches[0].clientX), { passive:true });
+        scroller.addEventListener('touchmove', (e) => move(e.touches[0].clientX, e), { passive:false });
+        ['touchend','touchcancel'].forEach(ev => scroller.addEventListener(ev, end));
+
+        const scrollBy = 220;
+        const leftBtn = document.getElementById('classes-left');
+        const rightBtn = document.getElementById('classes-right');
+        const updateBtns = () => {
+            const max = scroller.scrollWidth - scroller.clientWidth;
+            leftBtn.style.display = scroller.scrollLeft > 4 ? 'flex' : 'none';
+            rightBtn.style.display = scroller.scrollLeft < max - 4 ? 'flex' : 'none';
+        };
+        leftBtn?.addEventListener('click', () => { scroller.scrollBy({ left: -scrollBy, behavior: 'smooth' }); setTimeout(updateBtns, 200); });
+        rightBtn?.addEventListener('click', () => { scroller.scrollBy({ left: scrollBy, behavior: 'smooth' }); setTimeout(updateBtns, 200); });
+        scroller.addEventListener('scroll', updateBtns, { passive:true });
+        setTimeout(updateBtns, 300);
+    })();
     </script>
 </body>
 </html>
