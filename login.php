@@ -25,20 +25,24 @@ $csrf    = csrfToken();
         .auth-glow { box-shadow: 0 0 80px rgba(168,162,255,0.08); }
         .input-field {
             width: 100%;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: #eef1f6;
+            border: 1px solid rgba(0,0,0,0.06);
             border-radius: 12px;
             padding: 12px 16px;
-            color: white;
+            color: var(--text-soft);
             font-size: 14px;
             outline: none;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 10px 22px rgba(17, 24, 39, 0.08), inset 0 1px 0 rgba(255,255,255,0.8);
         }
-        .input-field:focus { border-color: rgba(168,162,255,0.5); }
+        .input-field:focus {
+            border-color: rgba(46,193,106,0.35);
+            box-shadow: 0 12px 26px rgba(17, 24, 39, 0.12), 0 0 0 3px rgba(46,193,106,0.08);
+        }
         .input-field::placeholder { color: var(--text-muted); }
-        select.input-field option { background: #1A1A1F; }
+        select.input-field option { background: #eef1f6; color: var(--text-soft); }
         .tab-btn { transition: all 0.2s; }
-        .tab-btn.active { color: white; border-bottom: 2px solid var(--accent-purple); }
+        .tab-btn.active { color: var(--text-soft); border-bottom: 2px solid var(--accent-purple); }
         .tab-btn:not(.active) { color: var(--text-muted); border-bottom: 2px solid transparent; }
     </style>
 </head>
@@ -46,7 +50,7 @@ $csrf    = csrfToken();
     <div class="w-full max-w-md">
         <!-- Logo -->
         <div class="text-center mb-10">
-            <h1 class="text-3xl font-bold tracking-tighter text-white mb-1">Sanctuary</h1>
+            <h1 class="text-3xl font-bold tracking-tighter text-[var(--text-soft)] mb-1">Sanctuary</h1>
             <p class="text-[var(--text-muted)] text-sm">Your student focus system</p>
         </div>
 
@@ -72,11 +76,11 @@ $csrf    = csrfToken();
                     <label class="block text-xs text-[var(--text-muted)] uppercase tracking-widest mb-2">Password</label>
                     <input type="password" name="password" class="input-field" placeholder="••••••••" required autocomplete="current-password"/>
                 </div>
-                <button type="submit" class="w-full py-3 bg-[var(--accent-purple)] text-[#0F0F12] rounded-xl font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all mt-2">
+                <button type="submit" class="glassy-cta text-sm mt-2">
                     Sign In
                 </button>
                 <p class="text-center text-[var(--text-muted)] text-xs pt-1">
-                    Demo: <span class="text-white/60">ayush@sanctuary.dev</span> / <span class="text-white/60">student123</span>
+                    Demo: <span class="text-[var(--text-soft)]">ayush@sanctuary.dev</span> / <span class="text-[var(--text-soft)]">student123</span>
                 </p>
             </form>
 
@@ -105,7 +109,7 @@ $csrf    = csrfToken();
                     <label class="block text-xs text-[var(--text-muted)] uppercase tracking-widest mb-2">Password</label>
                     <input type="password" name="password" class="input-field" placeholder="Min. 6 characters" required/>
                 </div>
-                <button type="submit" class="w-full py-3 bg-[var(--accent-purple)] text-[#0F0F12] rounded-xl font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all mt-2">
+                <button type="submit" class="glassy-cta text-sm mt-2">
                     Create Account
                 </button>
             </form>

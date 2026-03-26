@@ -111,22 +111,6 @@ bottomNav('settings');
                 </form>
             </section>
 
-            <!-- Dark mode (cosmetic toggle) + logout -->
-            <section>
-                <h3 class="text-[11px] uppercase tracking-[0.2em] text-[var(--text-muted)] font-semibold mb-3 ml-1">Preferences</h3>
-                <div class="flex flex-col bg-[var(--card-dark)] rounded-[24px] border border-white/5 overflow-hidden">
-                    <div class="settings-row px-5">
-                        <div class="flex items-center gap-3">
-                            <span class="material-symbols-outlined text-[var(--text-muted)]">dark_mode</span>
-                            <span class="text-[var(--text-soft)] font-normal">Dark Mode</span>
-                        </div>
-                        <div class="w-10 h-5 bg-[var(--accent-purple)] rounded-full relative flex items-center px-1">
-                            <div class="w-3.5 h-3.5 bg-white rounded-full ml-auto"></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <!-- Danger zone -->
             <section class="pt-4 text-center lg:text-left pb-8">
                 <a href="<?= BASE_URL ?>/api/auth.php?action=logout"
