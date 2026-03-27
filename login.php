@@ -20,6 +20,8 @@ $csrf    = csrfToken();
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="manifest" href="<?= BASE_URL ?>/manifest.json">
+    <link rel="apple-touch-icon" href="<?= BASE_URL ?>/assets/icons/app-icon.png">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/styles.css">
     <style>
         .auth-glow { box-shadow: 0 0 80px rgba(168,162,255,0.08); }
@@ -162,6 +164,7 @@ $csrf    = csrfToken();
             const data = await res.json();
             if (data.success) {
                 showMsg('Success! Redirecting…', false);
+                sessionStorage.setItem('pwaPrompt', '1');
                 window.location.href = data.redirect;
             } else {
                 showMsg(data.error || 'Something went wrong');
@@ -177,5 +180,6 @@ $csrf    = csrfToken();
     forms.login.addEventListener('submit', e => { e.preventDefault(); submitForm(forms.login, '<?= BASE_URL ?>/api/auth.php?action=login'); });
     forms.register.addEventListener('submit', e => { e.preventDefault(); submitForm(forms.register, '<?= BASE_URL ?>/api/auth.php?action=register'); });
     </script>
+    <script src="<?= BASE_URL ?>/assets/js/app.js"></script>
 </body>
 </html>

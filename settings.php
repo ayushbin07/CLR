@@ -25,6 +25,8 @@ bottomNav('settings');
         <div id="settings-msg" class="hidden mx-6 lg:mx-10 mb-6 px-4 py-3 rounded-xl text-sm font-medium"></div>
 
         <div class="px-6 lg:px-10 space-y-12">
+
+
             <!-- Profile section -->
             <section id="avatar" class="flex items-center gap-5">
                 <div class="w-20 h-20 rounded-full overflow-hidden shrink-0 avatar-glow relative group">
@@ -141,6 +143,18 @@ bottomNav('settings');
                         Change Password
                     </button>
                 </form>
+            </section>
+
+                        <!-- PWA install -->
+            <section>
+                <h3 class="text-[11px] uppercase tracking-[0.2em] text-[var(--text-muted)] font-semibold mb-3 ml-1">App</h3>
+                <div class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-5 flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-white font-semibold">Install Sanctuary</p>
+                        <p class="text-[var(--text-muted)] text-xs">Add the app to your device for a fullscreen experience.</p>
+                    </div>
+                    <button type="button" id="pwa-install-trigger" class="glassy-cta text-sm">Install</button>
+                </div>
             </section>
 
             <!-- Danger zone -->

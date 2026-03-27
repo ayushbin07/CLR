@@ -9,6 +9,12 @@ define('DB_PASS', '');            // XAMPP default (empty)
 define('DB_NAME', 'sanctuary');
 define('DB_PORT', 3306);
 
+// define('DB_HOST', 'sql306.byetcluster.com');
+// define('DB_USER', 'if0_41486798');
+// define('DB_PASS', 'R33mGx4D29pxnv2');
+// define('DB_NAME', 'if0_41486798_Sanctuary');
+// define('DB_PORT', 3306);
+
 // Use a consistent timezone so date-based features (habits, daily cards) align with the user's day.
 date_default_timezone_set('Asia/Kolkata');
 

@@ -17,10 +17,14 @@ let deferredPrompt = null;
 let installBanner = null;
 let installBtn = null;
 let installDismiss = null;
+let manualInstallBtn = null;
+let manualRequestPending = false;
+let manualWaitTimer = null;
 
 function showInstallBanner() {
   if (!deferredPrompt || !installBanner) return;
   installBanner.classList.remove('hidden');
+  sessionStorage.removeItem('pwaPrompt');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -70,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
   installBanner = document.getElementById('pwa-install-banner');
   installBtn = document.getElementById('pwa-install-btn');
   installDismiss = document.getElementById('pwa-install-dismiss');
+  manualInstallBtn = document.getElementById('pwa-install-trigger');
 
   installBtn?.addEventListener('click', async () => {
     if (!deferredPrompt) return;
@@ -77,11 +82,37 @@ document.addEventListener('DOMContentLoaded', () => {
     deferredPrompt.prompt();
     await deferredPrompt.userChoice;
     deferredPrompt = null;
+    sessionStorage.removeItem('pwaPrompt');
   });
 
   installDismiss?.addEventListener('click', () => {
     installBanner?.classList.add('hidden');
     deferredPrompt = null;
+    sessionStorage.removeItem('pwaPrompt');
+  });
+
+  manualInstallBtn?.addEventListener('click', async () => {
+    if (!deferredPrompt) {
+      manualRequestPending = true; // queue until the prompt event arrives
+      if (manualWaitTimer) clearTimeout(manualWaitTimer);
+      manualWaitTimer = setTimeout(() => {
+        alert(
+          'Still waiting for the install prompt. If it does not appear, reload and try again.'
+        );
+      }, 3000);
+      return;
+    }
+    try {
+      installBanner?.classList.add('hidden');
+      deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      if (choice?.outcome === 'accepted') {
+        sessionStorage.removeItem('pwaPrompt');
+      }
+      deferredPrompt = null;
+    } catch (err) {
+      alert('Install failed. Please try again.');
+    }
   });
 
   showInstallBanner();
@@ -90,7 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // PWA: register service worker and capture install prompt
 window.addEventListener('load', () => {
   if ('serviceWorker' in navigator) {
-    const swUrl = new URL('service-worker.js', document.baseURI).href;
+    const swUrl =
+      new URL(document.baseURI).pathname.replace(/\/[^\/]*$/, '') +
+      '/service-worker.js';
     navigator.serviceWorker.register(swUrl).catch((err) => {
       console.error('SW registration failed', err);
     });
@@ -99,7 +132,17 @@ window.addEventListener('load', () => {
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  showInstallBanner();
+  if (manualWaitTimer) {
+    clearTimeout(manualWaitTimer);
+    manualWaitTimer = null;
+  }
+  if (manualRequestPending) {
+    manualRequestPending = false;
+    installBanner?.classList.add('hidden');
+    deferredPrompt.prompt();
+  } else {
+    showInstallBanner();
+  }
 });
 
 window.addEventListener('appinstalled', () => {
