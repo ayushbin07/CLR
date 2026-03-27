@@ -5,11 +5,8 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'),
-        assignment: resolve(__dirname, 'assignment.html'),
-        habits: resolve(__dirname, 'habits.html'),
-        mess: resolve(__dirname, 'mess.html'),
-        settings: resolve(__dirname, 'settings.html')
+        main: resolve(__dirname, 'scripts.js'),
+        styles: resolve(__dirname, 'styles.css')
       }
     }
   }
