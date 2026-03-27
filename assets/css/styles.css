@@ -55,6 +55,16 @@ a {
   scrollbar-width: none;
 }
 
+@media (max-width: 1023px) {
+  #classes-container {
+    scroll-snap-type: x proximity;
+    scroll-behavior: smooth;
+  }
+  #classes-container .class-card {
+    scroll-snap-align: start;
+  }
+}
+
 /* Layout shells */
 .sidebar {
   display: none;
@@ -477,6 +487,8 @@ h6 {
     inset 0 1px 0 rgba(255, 255, 255, 0.65),
     inset 0 -1px 0 rgba(15, 23, 42, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.8);
+  touch-action: pan-y;
+  cursor: pointer;
 }
 .neo-card:hover,
 .neo-image-card:hover,
@@ -604,6 +616,33 @@ h6 {
 }
 .reaction-btn span {
   color: inherit;
+}
+
+/* Class card reveal on scroll */
+.class-anim {
+  opacity: 0;
+  transform: translateY(22px) scale(0.985);
+  filter: blur(6px);
+  transition:
+    opacity 420ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 520ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    filter 420ms ease;
+  will-change: transform, opacity;
+}
+.class-anim.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .class-anim,
+  .class-anim.is-visible {
+    transition: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
 }
 
 /* Sidebar skeuo pills */

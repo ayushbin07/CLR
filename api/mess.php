@@ -16,15 +16,16 @@ match (true) {
 
 function todayMenu(): void {
     $userId = auth()['id'];
+    $today = date('Y-m-d');
     $sql = "SELECT mm.*,
             (SELECT COUNT(*) FROM mess_reactions mr WHERE mr.mess_id = mm.id AND mr.reaction = 'like')    AS likes,
             (SELECT COUNT(*) FROM mess_reactions mr WHERE mr.mess_id = mm.id AND mr.reaction = 'dislike') AS dislikes,
             (SELECT mr.reaction FROM mess_reactions mr WHERE mr.mess_id = mm.id AND mr.user_id = ? LIMIT 1) AS my_reaction
         FROM mess_menu mm
-        WHERE mm.date = CURDATE()
+        WHERE mm.date = ?
         ORDER BY FIELD(meal_type, 'breakfast','lunch','dinner')";
     $stmt = db()->prepare($sql);
-    $stmt->execute([$userId]);
+    $stmt->execute([$userId, $today]);
     jsonResponse($stmt->fetchAll());
 }
 

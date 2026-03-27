@@ -9,10 +9,13 @@ $csrf = csrfToken();
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta name="theme-color" content="#0F1F1A" />
     <title>Sanctuary | Home</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="manifest" href="<?= BASE_URL ?>/manifest.json">
+    <link rel="apple-touch-icon" href="<?= BASE_URL ?>/assets/icons/app-icon.png">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/styles.css">
 </head>
 <body class="min-h-screen">
@@ -96,17 +99,22 @@ $csrf = csrfToken();
                         <div class="card-inner">
                             <div id="hero-card" class="neo-image-card relative w-full aspect-[16/10] lg:aspect-[5/2] max-h-[320px] lg:max-h-[360px] p-8 flex items-end transition-opacity duration-300">
                                 <img id="hero-image" alt="Hero visual" class="absolute inset-0 w-full h-full object-cover opacity-80" src="" loading="lazy" />
-                                <div class="absolute inset-0 bg-gradient-to-r from-[#13112b] via-[#0d0c1a]/80 to-transparent"></div>
                                 <div class="z-10 max-w-[60%] hero-text">
                                     <p class="text-[11px] uppercase tracking-[0.2em] text-white/60 mb-2">Weekly Spotlight</p>
-                                    <h2 id="hero-title" class="text-2xl lg:text-3xl font-semibold mb-2">Loading…</h2>
-                                    <p id="hero-subtitle" class="text-white/70 text-sm lg:text-base">Fetching your focus.</p>
+                                    <h2 id="hero-title" class="text-2xl lg:text-3xl font-bold tracking-tight mb-2">Loading…</h2>
+                                    <p id="hero-subtitle" class="text-white/85 text-sm lg:text-base font-semibold">Fetching your focus.</p>
                                 </div>
                                 <div id="hero-dots" class="absolute top-4 right-4 flex items-center gap-2 z-10"></div>
                             </div>
                         </div>
                     </div>
                 </section>
+                                <section class="lg:col-span-5">
+                                    <div class="flex items-center justify-between mb-4 px-1">
+                                        <h3 class="text-xl font-semibold">Important</h3>
+                                    </div>
+                                    <div id="important-list" class="space-y-3 px-1"></div>
+                                </section>
 
                 <!-- Todo List -->
                 <section class="lg:col-span-5">
@@ -128,6 +136,9 @@ $csrf = csrfToken();
                     <div id="todo-list" class="space-y-3 px-1"></div>
                 </section>
 
+                <!-- Todo List (2) -->
+
+
                 <!-- Today's Classes -->
                 <section class="lg:col-span-7">
                     <h3 class="text-xl font-semibold mb-4 px-1">Today's Classes</h3>
@@ -138,6 +149,17 @@ $csrf = csrfToken();
             </div>
         </div>
     </main>
+
+    <!-- PWA install banner for standalone pages -->
+    <div id="pwa-install-banner" class="fixed bottom-4 right-4 z-50 hidden">
+        <div class="rounded-2xl bg-[var(--card-dark)] border border-[var(--border-subtle)] shadow-2xl shadow-black/40 px-4 py-3 flex items-center gap-3 max-w-xs">
+            <div class="text-sm text-white font-semibold">Install Sanctuary?</div>
+            <div class="flex items-center gap-2 ml-auto">
+                <button id="pwa-install-dismiss" class="text-[var(--text-muted)] text-xs hover:text-white transition">Later</button>
+                <button id="pwa-install-btn" class="px-3 py-1.5 rounded-lg bg-[var(--accent-purple)] text-[var(--text-dark)] text-xs font-semibold shadow-lg shadow-[var(--accent-purple)]/40">Install</button>
+            </div>
+        </div>
+    </div>
 
     <script src="<?= BASE_URL ?>/assets/js/app.js"></script>
     <script>
@@ -157,6 +179,8 @@ $csrf = csrfToken();
         }
     ];
 
+    let classObserver = null;
+
     const heroCardEl = document.getElementById('hero-card');
     const heroTitleEl = document.getElementById('hero-title');
     const heroSubtitleEl = document.getElementById('hero-subtitle');
@@ -165,6 +189,9 @@ $csrf = csrfToken();
     let heroCards = [];
     let heroIdx = 0;
     let heroTimer = null;
+    let heroDragStartX = null;
+    let heroDragging = false;
+    let heroDragCurrentX = null;
 
     async function loadHeroCards() {
         try {
@@ -223,6 +250,64 @@ $csrf = csrfToken();
         startHeroRotation();
     }
 
+    function changeHero(step) {
+        if (!heroCards.length) return;
+        heroIdx = (heroIdx + step + heroCards.length) % heroCards.length;
+        renderHeroCard();
+    }
+
+    function bindHeroDrag() {
+        if (!heroCardEl) return;
+
+        const getClientX = (evt) => {
+            if (evt.touches && evt.touches[0]) return evt.touches[0].clientX;
+            if (evt.changedTouches && evt.changedTouches[0]) return evt.changedTouches[0].clientX;
+            return evt.clientX;
+        };
+
+        const onDown = (clientX) => {
+            if (heroCards.length <= 1) return;
+            heroDragging = true;
+            heroDragStartX = clientX;
+            heroDragCurrentX = clientX;
+            clearInterval(heroTimer);
+        };
+
+        const onMove = (clientX) => {
+            if (!heroDragging) return;
+            heroDragCurrentX = clientX;
+        };
+
+        const onUp = (clientX) => {
+            if (!heroDragging || heroDragStartX === null) return;
+            const endX = heroDragCurrentX ?? clientX;
+            const deltaX = endX - heroDragStartX;
+            heroDragging = false;
+            heroDragStartX = null;
+            heroDragCurrentX = null;
+            if (Math.abs(deltaX) > 40) {
+                changeHero(deltaX < 0 ? 1 : -1);
+            } else {
+                const card = heroCards[heroIdx];
+                if (card && card.link) {
+                    window.location.href = card.link;
+                }
+            }
+            resetHeroRotation();
+        };
+
+        heroCardEl.addEventListener('pointerdown', (e) => onDown(getClientX(e)));
+        heroCardEl.addEventListener('pointermove', (e) => onMove(getClientX(e)));
+        heroCardEl.addEventListener('pointerup', (e) => onUp(getClientX(e)));
+        heroCardEl.addEventListener('pointercancel', () => { heroDragging = false; });
+        heroCardEl.addEventListener('pointerleave', (e) => { if (heroDragging) onUp(getClientX(e) || 0); });
+
+        heroCardEl.addEventListener('touchstart', (e) => onDown(getClientX(e)), { passive: true });
+        heroCardEl.addEventListener('touchmove', (e) => onMove(getClientX(e)), { passive: true });
+        heroCardEl.addEventListener('touchend', (e) => onUp(getClientX(e)), { passive: true });
+        heroCardEl.addEventListener('touchcancel', () => { heroDragging = false; }, { passive: true });
+    }
+
     async function loadTodos() {
         const container = document.getElementById('todo-list');
         container.innerHTML = '<div class="p-6 text-center text-[var(--text-muted)] text-sm">Loading…</div>';
@@ -270,6 +355,10 @@ $csrf = csrfToken();
         }
     }
 
+    function refreshTodos() {
+        loadTodos();
+    }
+
     async function addTodo() {
         const modal = createPromptModal({
             title: 'Add a task',
@@ -289,11 +378,35 @@ $csrf = csrfToken();
                     showToast(data.error, true);
                     return;
                 }
-                loadTodos();
+                refreshTodos();
             },
         });
         document.body.appendChild(modal);
         modal.querySelector('input')?.focus();
+    }
+
+    function setupClassAnimations(cards) {
+        if (!cards || !cards.length) return;
+        if ('IntersectionObserver' in window) {
+            if (!classObserver) {
+                classObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            classObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.12 });
+            }
+            cards.forEach((card, idx) => {
+                card.classList.add('class-anim');
+                card.style.transitionDelay = `${Math.min(idx, 6) * 90}ms`;
+                card.style.transitionDuration = '520ms';
+                classObserver.observe(card);
+            });
+        } else {
+            cards.forEach((card) => card.classList.add('is-visible'));
+        }
     }
 
     async function loadClasses() {
@@ -321,6 +434,7 @@ $csrf = csrfToken();
                     </div>
                 </div>`;
             }).join('');
+            setupClassAnimations(container.querySelectorAll('.class-card'));
         } catch (e) {
             container.innerHTML = '<div class="flex-none w-[200px] h-[200px] p-5 rounded-[20px] border border-red-500/30 bg-[var(--card-dark)] text-red-400 text-sm">Failed to load classes.</div>';
         }
@@ -331,7 +445,7 @@ $csrf = csrfToken();
         fd.append('id', id);
         fd.append('csrf_token', CSRF);
         await fetch(`${BASE}/api/todos.php?action=toggle`, { method:'POST', body:fd });
-        loadTodos();
+        refreshTodos();
     }
 
     async function deleteTodo(id) {
@@ -339,7 +453,7 @@ $csrf = csrfToken();
         fd.append('id', id);
         fd.append('csrf_token', CSRF);
         await fetch(`${BASE}/api/todos.php?action=delete`, { method:'POST', body:fd });
-        loadTodos();
+        refreshTodos();
     }
 
     async function editTodo(id, currentTitle = '') {
@@ -357,7 +471,7 @@ $csrf = csrfToken();
                 fd.append('title', trimmed);
                 fd.append('csrf_token', CSRF);
                 await fetch(`${BASE}/api/todos.php?action=update`, { method:'POST', body:fd });
-                loadTodos();
+                refreshTodos();
             },
         });
         document.body.appendChild(modal);
@@ -429,8 +543,92 @@ $csrf = csrfToken();
         return `${hr12}:${m} ${ampm}`;
     }
 
+    async function loadImportant() {
+        const container = document.getElementById('important-list');
+        container.innerHTML = '<div class="p-6 text-center text-[var(--text-muted)] text-sm">Loading…</div>';
+
+        try {
+            const [assignRes, messRes] = await Promise.all([
+                fetch(`${BASE}/api/assignments.php?action=list&filter=pending`),
+                fetch(`${BASE}/api/mess.php?action=today`)
+            ]);
+
+            const assignments = await assignRes.json();
+            const messMenu = await messRes.json();
+
+            const now = new Date();
+            const sixHoursAhead = now.getTime() + 6 * 60 * 60 * 1000;
+
+            const assignmentItems = Array.isArray(assignments) ? assignments.filter(a => {
+                const deadline = new Date(a.deadline).getTime();
+                return deadline >= now.getTime() && deadline <= sixHoursAhead;
+            }).map(a => {
+                const due = new Date(a.deadline);
+                const dueLabel = `${due.toLocaleDateString(undefined, { month:'short', day:'numeric' })} ${due.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`;
+                return {
+                    kind: 'assignment',
+                    title: a.title,
+                    detail: a.subject || 'Assignment',
+                    meta: `Due ${dueLabel}`
+                };
+            }) : [];
+
+            const mealWindows = {
+                breakfast: { label: '07:00 AM - 08:50 AM', start: '07:00', end: '08:50' },
+                lunch: { label: '12:00 PM - 02:00 PM', start: '12:00', end: '14:00' },
+                dinner: { label: '07:00 PM - 08:30 PM', start: '19:00', end: '20:30' }
+            };
+
+            const nowMinutes = now.getHours() * 60 + now.getMinutes();
+            const activeMeal = Object.entries(mealWindows).find(([_, win]) => {
+                const [sH, sM] = win.start.split(':').map(Number);
+                const [eH, eM] = win.end.split(':').map(Number);
+                const startMin = sH * 60 + sM;
+                const endMin = eH * 60 + eM;
+                return nowMinutes >= startMin && nowMinutes <= endMin;
+            });
+            const activeMealType = activeMeal ? activeMeal[0] : null;
+
+            const messItems = Array.isArray(messMenu) && activeMealType
+                ? messMenu.filter(m => m.meal_type === activeMealType).map(m => ({
+                    kind: 'mess',
+                    title: m.meal_type ? m.meal_type.charAt(0).toUpperCase() + m.meal_type.slice(1) : 'Meal',
+                    detail: m.items,
+                    meta: mealWindows[m.meal_type]?.label || ''
+                }))
+                : [];
+
+            const items = [...assignmentItems, ...messItems];
+
+            if (!items.length) {
+                container.innerHTML = '<div class="neo-card p-6 text-center text-[var(--text-muted)] text-sm">Nothing important right now.</div>';
+                return;
+            }
+
+            container.innerHTML = items.map(item => `
+                <div class="todo-row neo-card flex items-center justify-between p-4">
+                    <div class="flex items-center gap-4 pl-1">
+                        <span class="pill-icon ${item.kind === 'assignment' ? 'done' : 'warm'}">
+                            <span class="material-symbols-outlined text-[16px]">${item.kind === 'assignment' ? 'assignment' : 'restaurant'}</span>
+                        </span>
+                        <div>
+                            <h4 class="text-[var(--text-soft)] font-semibold text-sm leading-tight">${escapeHtml(item.title || '')}</h4>
+                            <p class="text-[var(--text-muted)] text-[11px]">${escapeHtml(item.meta || '')}</p>
+                            ${item.detail ? `<p class="text-[var(--text-muted)] text-[12px] mt-1">${escapeHtml(item.detail)}</p>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        } catch (err) {
+            container.innerHTML = '<div class="neo-card p-6 text-center text-red-400 text-sm">Failed to load important items.</div>';
+            console.error('Important load failed', err);
+        }
+    }
+
     document.getElementById('add-todo').addEventListener('click', addTodo);
-    loadTodos();
+    bindHeroDrag();
+    refreshTodos();
+    loadImportant();
     loadClasses();
     loadHeroCards();
 
@@ -448,7 +646,7 @@ $csrf = csrfToken();
         };
         const move = (clientX, evt) => {
             if (!isDown) return;
-            evt.preventDefault();
+            if (evt?.type === 'mousemove') evt.preventDefault();
             const walk = clientX - startX;
             scroller.scrollLeft = scrollLeft - walk;
         };
@@ -457,10 +655,6 @@ $csrf = csrfToken();
         scroller.addEventListener('mousedown', (e) => start(e.clientX));
         scroller.addEventListener('mousemove', (e) => move(e.clientX, e));
         ['mouseleave','mouseup'].forEach(ev => scroller.addEventListener(ev, end));
-
-        scroller.addEventListener('touchstart', (e) => start(e.touches[0].clientX), { passive:true });
-        scroller.addEventListener('touchmove', (e) => move(e.touches[0].clientX, e), { passive:false });
-        ['touchend','touchcancel'].forEach(ev => scroller.addEventListener(ev, end));
 
         const scrollBy = 220;
         const leftBtn = document.getElementById('classes-left');

@@ -14,6 +14,8 @@ CREATE TABLE IF NOT EXISTS users (
     class_id INT DEFAULT NULL,
     role ENUM('admin','user') DEFAULT 'user',
     avatar_seed VARCHAR(50) DEFAULT NULL,
+    avatar_style VARCHAR(40) NOT NULL DEFAULT 'avataaars',
+    avatar_text VARCHAR(100) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -38,6 +40,18 @@ CREATE TABLE IF NOT EXISTS assignments (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE SET NULL
+);
+
+-- Assignment Statuses (per user)
+CREATE TABLE IF NOT EXISTS assignment_statuses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    assignment_id INT NOT NULL,
+    user_id INT NOT NULL,
+    status ENUM('pending','completed') DEFAULT 'pending',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY assignment_user (assignment_id, user_id),
+    FOREIGN KEY (assignment_id) REFERENCES assignments(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 -- Todos
@@ -106,6 +120,7 @@ CREATE TABLE IF NOT EXISTS hero_cards (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(150) NOT NULL,
     subtitle VARCHAR(255) NOT NULL,
+    link TEXT DEFAULT NULL,
     image_url TEXT NOT NULL,
     sort_order INT DEFAULT 1,
     is_active BOOLEAN DEFAULT TRUE,
@@ -119,12 +134,12 @@ CREATE TABLE IF NOT EXISTS hero_cards (
 INSERT IGNORE INTO classes (name) VALUES ('CSE-A'), ('CSE-B'), ('ECE-A'), ('MECH-A');
 
 -- Admin user  (password: admin123)
-INSERT IGNORE INTO users (name, email, password, class_id, role, avatar_seed)
-VALUES ('Admin', 'admin@sanctuary.dev', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uye29MVSW', 1, 'admin', 'Admin');
+INSERT IGNORE INTO users (name, email, password, class_id, role, avatar_seed, avatar_style, avatar_text)
+VALUES ('Admin', 'admin@sanctuary.dev', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uye29MVSW', 1, 'admin', 'Admin', 'avataaars', 'Admin');
 
 -- Demo student (password: student123)
-INSERT IGNORE INTO users (name, email, password, class_id, role, avatar_seed)
-VALUES ('Ayush', 'ayush@sanctuary.dev', '$2y$10$TKh8H1.PFfHiYMDC6pUa.uXsNYCEWfUf8opF5e8a/y1WH3.D1kPpC', 1, 'user', 'Ayush');
+INSERT IGNORE INTO users (name, email, password, class_id, role, avatar_seed, avatar_style, avatar_text)
+VALUES ('Ayush', 'ayush@sanctuary.dev', '$2y$10$TKh8H1.PFfHiYMDC6pUa.uXsNYCEWfUf8opF5e8a/y1WH3.D1kPpC', 1, 'user', 'Ayush', 'avataaars', 'Ayush');
 
 -- Seed timetable for CSE-A
 INSERT IGNORE INTO timetable (class_id, subject, room, day_of_week, start_time, end_time) VALUES

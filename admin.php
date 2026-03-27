@@ -59,6 +59,12 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                                    placeholder="Lock in your priorities" />
                         </div>
                         <div>
+                            <label class="block text-xs text-[var(--text-muted)] uppercase tracking-widest mb-1">Link (optional)</label>
+                            <input id="hero-link" name="link" type="url"
+                                   class="w-full bg-[var(--bg-dark)] border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white outline-none focus:border-[var(--accent-purple)]/50"
+                                   placeholder="https://example.com" />
+                        </div>
+                        <div>
                             <label class="block text-xs text-[var(--text-muted)] uppercase tracking-widest mb-1">Image URL</label>
                             <input id="hero-image" name="image_url" type="url" required
                                    class="w-full bg-[var(--bg-dark)] border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white outline-none focus:border-[var(--accent-purple)]/50"
@@ -407,6 +413,7 @@ const heroForm        = document.getElementById('hero-form');
 const heroIdInput     = document.getElementById('hero-id');
 const heroTitleInput  = document.getElementById('hero-title');
 const heroSubInput    = document.getElementById('hero-subtitle');
+const heroLinkInput   = document.getElementById('hero-link');
 const heroImgInput    = document.getElementById('hero-image');
 const heroOrderInput  = document.getElementById('hero-order');
 const heroActiveInput = document.getElementById('hero-active');
@@ -419,6 +426,7 @@ function setHeroForm(card = null) {
         heroIdInput.value    = card.id || '';
         heroTitleInput.value = card.title || '';
         heroSubInput.value   = card.subtitle || '';
+        heroLinkInput.value  = card.link || '';
         heroImgInput.value   = card.image_url || '';
         heroOrderInput.value = card.sort_order || 1;
         heroActiveInput.checked = !!card.is_active;
@@ -427,6 +435,7 @@ function setHeroForm(card = null) {
         heroIdInput.value = '';
         heroOrderInput.value = 1;
         heroActiveInput.checked = true;
+        heroLinkInput.value = '';
     }
 }
 
@@ -448,6 +457,7 @@ async function loadHeroCardsAdmin() {
                         <p class="text-[11px] uppercase tracking-[0.2em] text-white/60 mb-1">Order ${c.sort_order ?? 1}${c.is_active ? '' : ' • Inactive'}</p>
                         <h4 class="text-lg font-semibold text-white leading-tight mb-1">${esc(c.title)}</h4>
                         <p class="text-white/70 text-sm">${esc(c.subtitle)}</p>
+                        ${c.link ? `<p class="text-[11px] text-white/70 mt-1 break-all">${esc(c.link)}</p>` : ''}
                     </div>
                     <div class="flex items-center justify-between mt-3 gap-2">
                         <span class="text-[11px] text-white/60">#${c.id}</span>

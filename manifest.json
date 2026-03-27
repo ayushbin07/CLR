@@ -1,0 +1,23 @@
+{
+  "name": "Sanctuary",
+  "short_name": "Sanctuary",
+  "id": "/WT%20Project/CLR/index.php",
+  "start_url": "/WT%20Project/CLR/index.php",
+  "scope": "/WT%20Project/CLR/",
+  "display": "standalone",
+  "theme_color": "#0F1F1A",
+  "background_color": "#0F1F1A",
+  "icons": [
+    {
+      "src": "/WT%20Project/CLR/assets/icons/app-icon2.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/WT%20Project/CLR/assets/icons/app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

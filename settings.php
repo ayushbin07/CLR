@@ -5,6 +5,10 @@ requireAuth();
 $user    = auth();
 $csrf    = csrfToken();
 $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
+$avatarStyle = $user['avatar_style'] ?? 'avataaars';
+$avatarText  = $user['avatar_text'] ?? $user['avatar_seed'] ?? $user['name'];
+$dicebear  = 'https://api.dicebear.com/7.x/' . rawurlencode($avatarStyle) . '/svg?seed=' . urlencode($avatarText);
+$avatarSrc = $dicebear;
 
 pageHead('Settings');
 topNav('settings');
@@ -22,10 +26,13 @@ bottomNav('settings');
 
         <div class="px-6 lg:px-10 space-y-12">
             <!-- Profile section -->
-            <section class="flex items-center gap-5">
-                <div class="w-20 h-20 rounded-full overflow-hidden shrink-0 avatar-glow">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=<?= urlencode($user['avatar_seed'] ?? $user['name']) ?>"
+            <section id="avatar" class="flex items-center gap-5">
+                <div class="w-20 h-20 rounded-full overflow-hidden shrink-0 avatar-glow relative group">
+                    <img id="avatar-hero" src="<?= htmlspecialchars($avatarSrc) ?>"
                          alt="Profile" class="w-full h-full object-cover">
+                    <button type="button" id="avatar-pencil" class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition">
+                        <span class="material-symbols-outlined text-white text-xl">edit</span>
+                    </button>
                 </div>
                 <div>
                     <h2 class="text-xl font-medium tracking-tight"><?= htmlspecialchars($user['name']) ?></h2>
@@ -59,6 +66,31 @@ bottomNav('settings');
                 <h3 class="text-[11px] uppercase tracking-[0.2em] text-[var(--text-muted)] font-semibold mb-3 ml-1">Profile</h3>
                 <form id="profile-form" class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-5 space-y-4">
                     <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
+                    <div id="avatar-controls" class="space-y-3 hidden">
+                        <div>
+                            <label class="block text-xs text-[var(--text-muted)] uppercase tracking-widest mb-2">Avatar Text</label>
+                            <div class="flex gap-3 items-center flex-wrap">
+                                <input type="text" name="avatar_text" id="avatar-text" value="<?= htmlspecialchars($avatarText) ?>" maxlength="100"
+                                    class="flex-1 min-w-[180px] bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[var(--accent-purple)]/50" disabled/>
+                                <button type="button" class="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-sm hover:bg-white/10 transition-all" id="avatar-random" disabled>
+                                    Shuffle
+                                </button>
+                            </div>
+                            <p class="text-[var(--text-muted)] text-[11px] mt-1">Use any short text to set your avatar. Shuffle gives you a quick random seed.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <label class="text-[var(--text-muted)] text-[11px] uppercase tracking-[0.2em] font-semibold">Style</label>
+                            <select name="avatar_style" id="avatar-style" class="bg-[var(--bg-dark)] border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-[var(--accent-purple)]/50" disabled>
+                                <?php $styles = ['avataaars' => 'Avatars', 'bottts-neutral' => 'Bottts', 'pixel-art' => 'Pixel Art', 'thumbs' => 'Thumbs', 'identicon' => 'Identicon', 'fun-emoji' => 'Fun Emoji'];
+                                foreach ($styles as $value => $label): ?>
+                                    <option value="<?= $value ?>" <?= ($avatarStyle === $value) ? 'selected' : '' ?>><?= $label ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="mt-1 w-16 h-16 rounded-full overflow-hidden avatar-glow border border-white/5">
+                            <img id="avatar-preview" src="<?= htmlspecialchars($avatarSrc) ?>" alt="Avatar preview" class="w-full h-full object-cover" />
+                        </div>
+                    </div>
                     <div>
                         <label class="block text-xs text-[var(--text-muted)] uppercase tracking-widest mb-2">Display Name</label>
                         <input type="text" name="name" value="<?= htmlspecialchars($user['name']) ?>" required
@@ -124,6 +156,41 @@ bottomNav('settings');
 
 <script>
 const CSRF = <?= json_encode($csrf) ?>;
+const avatarInput = document.getElementById('avatar-text');
+const avatarPreview = document.getElementById('avatar-preview');
+const avatarHero = document.getElementById('avatar-hero');
+const shuffleBtn = document.getElementById('avatar-random');
+const avatarStyle = document.getElementById('avatar-style');
+const avatarPencil = document.getElementById('avatar-pencil');
+const avatarControls = document.getElementById('avatar-controls');
+const avatarFields = [avatarInput, avatarStyle, shuffleBtn];
+
+function avatarUrl(seed, style) {
+    const safeSeed = seed || '<?= addslashes($user['name']) ?>';
+    const chosenStyle = style || avatarStyle.value || 'avataaars';
+    return `https://api.dicebear.com/7.x/${encodeURIComponent(chosenStyle)}/svg?seed=${encodeURIComponent(safeSeed)}`;
+}
+
+function updateAvatar(seed = avatarInput.value.trim(), style = avatarStyle.value) {
+    const url = avatarUrl(seed, style);
+    avatarPreview.src = url;
+    avatarHero.src = url;
+}
+
+avatarInput.addEventListener('input', () => updateAvatar());
+avatarStyle.addEventListener('change', () => updateAvatar());
+shuffleBtn.addEventListener('click', () => {
+    const seed = 'user-' + Math.random().toString(36).slice(2, 8);
+    avatarInput.value = seed;
+    updateAvatar(seed, avatarStyle.value);
+});
+function unlockAvatar() {
+    avatarControls.classList.remove('hidden');
+    avatarFields.forEach(el => { el.disabled = false; });
+    avatarInput.focus();
+}
+
+avatarPencil.addEventListener('click', unlockAvatar);
 
 function showMsg(msg, isError = true) {
     const box = document.getElementById('settings-msg');

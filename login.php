@@ -109,6 +109,22 @@ $csrf    = csrfToken();
                     <label class="block text-xs text-[var(--text-muted)] uppercase tracking-widest mb-2">Password</label>
                     <input type="password" name="password" class="input-field" placeholder="Min. 6 characters" required/>
                 </div>
+                <div>
+                    <label class="block text-xs text-[var(--text-muted)] uppercase tracking-widest mb-2">Avatar Text (optional)</label>
+                    <input type="text" name="avatar_text" class="input-field" placeholder="e.g. chill-fox" maxlength="100"/>
+                    <p class="text-[var(--text-muted)] text-[11px] mt-1">We use Dicebear avatars. Leave empty to use your name, or enter a short word to change the look.</p>
+                </div>
+                <div>
+                    <label class="block text-xs text-[var(--text-muted)] uppercase tracking-widest mb-2">Avatar Style</label>
+                    <select name="avatar_style" class="input-field">
+                        <option value="avataaars">Avatars</option>
+                        <option value="bottts-neutral">Bottts</option>
+                        <option value="pixel-art">Pixel Art</option>
+                        <option value="thumbs">Thumbs</option>
+                        <option value="identicon">Identicon</option>
+                        <option value="fun-emoji">Fun Emoji</option>
+                    </select>
+                </div>
                 <button type="submit" class="glassy-cta text-sm mt-2">
                     Create Account
                 </button>

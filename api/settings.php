@@ -17,13 +17,32 @@ function updateProfile(): void {
 
     $name = trim($_POST['name'] ?? '');
     $classId = $_POST['class_id'] ?? null;
+    $avatarText = trim($_POST['avatar_text'] ?? '');
+    $avatarSeed = $avatarText; // keep seed aligned to avatar text
+    $avatarStyle = trim($_POST['avatar_style'] ?? '');
     if ($name === '') jsonResponse(['error' => 'Name required'], 422);
+    if (strlen($avatarSeed) > 50) jsonResponse(['error' => 'Avatar text too long'], 422);
+    if (strlen($avatarText) > 100) jsonResponse(['error' => 'Avatar text too long'], 422);
+    if ($avatarText === '') {
+        $avatarText = null;
+    }
+    if ($avatarSeed === '' || $avatarSeed === null) {
+        $avatarSeed = $user['name'];
+    }
 
-    $stmt = db()->prepare('UPDATE users SET name = ?, class_id = ? WHERE id = ?');
-    $stmt->execute([$name, $classId ?: null, $user['id']]);
+    $allowedStyles = ['avataaars', 'bottts-neutral', 'pixel-art', 'thumbs', 'identicon', 'fun-emoji'];
+    if (!in_array($avatarStyle, $allowedStyles, true)) {
+        $avatarStyle = $user['avatar_style'] ?? 'avataaars';
+    }
 
-    $_SESSION['user']['name'] = $name;
-    $_SESSION['user']['class_id'] = $classId ?: null;
+    $stmt = db()->prepare('UPDATE users SET name = ?, class_id = ?, avatar_seed = ?, avatar_style = ?, avatar_text = ? WHERE id = ?');
+    $stmt->execute([$name, $classId ?: null, $avatarSeed, $avatarStyle, $avatarText, $user['id']]);
+
+    $_SESSION['user']['name']      = $name;
+    $_SESSION['user']['class_id']  = $classId ?: null;
+    $_SESSION['user']['avatar_seed'] = $avatarSeed;
+    $_SESSION['user']['avatar_style'] = $avatarStyle;
+    $_SESSION['user']['avatar_text'] = $avatarText;
 
     jsonResponse(['success' => true]);
 }

@@ -132,6 +132,7 @@ bottomNav('habits');
                             fd.append('habit_id', h.id);
                             fd.append('date', todayStr());
                             fd.append('csrf_token', CSRF);
+                            (window.haptic || (()=>{}))(12);
                             
                             console.log('POST data:', { habit_id: h.id, date: todayStr(), csrf: CSRF });
                             
@@ -172,6 +173,7 @@ bottomNav('habits');
                             const fd = new FormData(); 
                             fd.append('id', h.id); 
                             fd.append('csrf_token', CSRF);
+                            (window.haptic || (()=>{}))(8);
                             
                             console.log('Deleting habit:', { id: h.id, csrf: CSRF });
                             
@@ -259,6 +261,7 @@ bottomNav('habits');
                     habitForm?.addEventListener('submit', async (e) => {
                         e.preventDefault();
                         const fd = new FormData(habitForm);
+                            (window.haptic || (()=>{}))(10);
                         
                         console.log('Creating habit:', { name: fd.get('name'), csrf: fd.get('csrf_token') });
                         
