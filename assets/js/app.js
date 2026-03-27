@@ -121,31 +121,46 @@ document.addEventListener('DOMContentLoaded', () => {
 // PWA: register service worker and capture install prompt
 window.addEventListener('load', () => {
   if ('serviceWorker' in navigator) {
-    const swUrl =
-      new URL(document.baseURI).pathname.replace(/\/[^\/]*$/, '') +
-      '/service-worker.js';
-    navigator.serviceWorker.register(swUrl).catch((err) => {
-      console.error('SW registration failed', err);
+    // Extract base path from current URL, accounting for nested project directories
+    const url = new URL(window.location.href);
+    const pathname = url.pathname;
+    // Remove the current page filename to get the directory path
+    const dirPath = pathname.substring(0, pathname.lastIndexOf('/') + 1);
+    // Service worker must be at the root of the app scope
+    const swUrl = `${dirPath}service-worker.js`;
+
+    navigator.serviceWorker.register(swUrl, {
+      scope: dirPath
+    }).then((registration) => {
+      console.log('Service Worker registered successfully:', registration.scope);
+    }).catch((err) => {
+      console.error('Service Worker registration failed:', err);
     });
   }
 });
 window.addEventListener('beforeinstallprompt', (e) => {
+  console.log('beforeinstallprompt event fired');
   e.preventDefault();
   deferredPrompt = e;
+
   if (manualWaitTimer) {
     clearTimeout(manualWaitTimer);
     manualWaitTimer = null;
   }
+
   if (manualRequestPending) {
+    console.log('Manual install request pending, triggering prompt');
     manualRequestPending = false;
     installBanner?.classList.add('hidden');
     deferredPrompt.prompt();
   } else {
+    console.log('Showing install banner');
     showInstallBanner();
   }
 });
 
 window.addEventListener('appinstalled', () => {
+  console.log('App installed successfully');
   deferredPrompt = null;
   installBanner?.classList.add('hidden');
 });

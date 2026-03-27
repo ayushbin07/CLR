@@ -2,11 +2,13 @@
   "name": "Sanctuary",
   "short_name": "Sanctuary",
   "id": "./",
-  "start_url": "./index.php",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "theme_color": "#0F1F1A",
   "background_color": "#0F1F1A",
+  "orientation": "any",
+  "description": "Deep Work Mode - Focus on what matters",
   "icons": [
     {
       "src": "./assets/icons/app-icon.png",
