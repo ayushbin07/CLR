@@ -12,5 +12,6 @@ export default defineConfig({
         settings: resolve(__dirname, 'settings.html')
       }
     }
-  }
+  },
+  publicDir: 'public'
 });
