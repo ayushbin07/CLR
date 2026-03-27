@@ -1,0 +1,16 @@
+# Ensure service worker is served with correct MIME type
+<Files "service-worker.js">
+    Header set Content-Type "application/javascript; charset=utf-8"
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Service-Worker-Allowed "/"
+</Files>
+
+# Ensure manifest is served with correct MIME type
+<Files "manifest.json">
+    Header set Content-Type "application/manifest+json; charset=utf-8"
+</Files>
+
+# Enable HTTPS redirection on production (comment out for localhost)
+# RewriteEngine On
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
