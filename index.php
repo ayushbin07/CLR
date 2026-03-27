@@ -109,7 +109,7 @@ $csrf = csrfToken();
                         </div>
                     </div>
                 </section>
-                                <section class="lg:col-span-5">
+                                <section id="important-section" class="lg:col-span-5">
                                     <div class="flex items-center justify-between mb-4 px-1">
                                         <h3 class="text-xl font-semibold">Important</h3>
                                     </div>
@@ -325,7 +325,7 @@ $csrf = csrfToken();
                     <div class="todo-row neo-card flex items-center justify-between p-4" data-id="${t.id}">
                         <div class="flex items-center gap-4 pl-1">
                             <button class="custom-checkbox ${checked}" aria-label="Toggle todo" data-id="${t.id}">${checked ? '<span class="material-symbols-outlined text-xs font-bold text-[#0F0F12]">check</span>' : ''}</button>
-                            <div>
+                            <div class="todo-body" data-id="${t.id}">
                                 <h4 class="${titleCls} font-medium text-sm leading-tight">${escapeHtml(t.title)}</h4>
                                 <p class="text-[var(--text-muted)] text-[11px]">Created ${new Date(t.created_at).toLocaleDateString()}</p>
                             </div>
@@ -343,6 +343,16 @@ $csrf = csrfToken();
 
             container.querySelectorAll('.custom-checkbox').forEach(cb => {
                 cb.addEventListener('click', () => toggleTodo(cb.dataset.id));
+            });
+            container.querySelectorAll('.todo-row').forEach(row => {
+                const id = row.dataset.id;
+                row.addEventListener('click', (e) => {
+                    const target = e.target;
+                    if (target.closest('.edit-todo') || target.closest('.delete-todo') || target.closest('.custom-checkbox')) {
+                        return;
+                    }
+                    toggleTodo(id);
+                });
             });
             container.querySelectorAll('.delete-todo').forEach(btn => {
                 btn.addEventListener('click', () => deleteTodo(btn.dataset.id));
@@ -545,6 +555,8 @@ $csrf = csrfToken();
 
     async function loadImportant() {
         const container = document.getElementById('important-list');
+        const section = document.getElementById('important-section');
+        section.classList.remove('hidden');
         container.innerHTML = '<div class="p-6 text-center text-[var(--text-muted)] text-sm">Loading…</div>';
 
         try {
@@ -601,7 +613,8 @@ $csrf = csrfToken();
             const items = [...assignmentItems, ...messItems];
 
             if (!items.length) {
-                container.innerHTML = '<div class="neo-card p-6 text-center text-[var(--text-muted)] text-sm">Nothing important right now.</div>';
+                section.classList.add('hidden');
+                container.innerHTML = '';
                 return;
             }
 
@@ -620,6 +633,8 @@ $csrf = csrfToken();
                 </div>
             `).join('');
         } catch (err) {
+            const section = document.getElementById('important-section');
+            section.classList.remove('hidden');
             container.innerHTML = '<div class="neo-card p-6 text-center text-red-400 text-sm">Failed to load important items.</div>';
             console.error('Important load failed', err);
         }
