@@ -2,7 +2,7 @@
   "name": "Sanctuary",
   "short_name": "Sanctuary",
   "id": "./",
-  "start_url": "./index.php",
+  "start_url": "./login.php",
   "scope": "./",
   "display": "standalone",
   "theme_color": "#0F1F1A",

@@ -155,6 +155,7 @@ bottomNav('settings');
                     </div>
                     <button type="button" id="pwa-install-trigger" class="glassy-cta text-sm">Install</button>
                 </div>
+                <p id="pwa-install-status" class="text-[var(--text-muted)] text-[11px] mt-2 hidden">Checking install readiness…</p>
             </section>
 
             <!-- Danger zone -->
