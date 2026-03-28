@@ -20,10 +20,10 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
 
 <div id="flash" class="hidden fixed top-20 right-6 z-50 px-5 py-3 rounded-xl text-sm font-medium shadow-xl"></div>
 
-<main class="pt-24 px-6 lg:px-12 pb-28 lg:pb-16 max-w-5xl mx-auto">
+<main class="pt-20 sm:pt-24 px-4 sm:px-6 lg:px-12 pb-28 lg:pb-16 max-w-5xl mx-auto">
     <h1 class="text-3xl font-bold mb-10">Admin Panel</h1>
 
-    <div class="grid lg:grid-cols-2 gap-8">
+    <div class="grid lg:grid-cols-2 gap-6 lg:gap-8">
 
         <!-- ===== HERO CARDS ===== -->
         <section class="lg:col-span-2">
@@ -70,13 +70,13 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                                    class="w-full bg-[var(--bg-dark)] border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white outline-none focus:border-[var(--accent-purple)]/50"
                                    placeholder="https://..." />
                         </div>
-                        <div class="grid grid-cols-2 gap-3 items-center">
+                        <div class="grid sm:grid-cols-2 gap-3 items-start">
                             <div>
                                 <label class="block text-xs text-[var(--text-muted)] uppercase tracking-widest mb-1">Order</label>
                                 <input id="hero-order" name="sort_order" type="number" min="1" value="1"
                                        class="w-full bg-[var(--bg-dark)] border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white outline-none focus:border-[var(--accent-purple)]/50" />
                             </div>
-                            <label class="flex items-center gap-2 text-sm text-[var(--text-muted)] mt-5">
+                            <label class="flex items-center gap-2 text-sm text-[var(--text-muted)] sm:mt-5 mt-1">
                                 <input id="hero-active" name="is_active" type="checkbox" class="accent-[var(--accent-purple)]" checked>
                                 Active
                             </label>
@@ -125,14 +125,14 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                 <p class="text-[var(--text-muted)] text-sm">
                     Paste a JSON array of meals. Existing entries for the same date/meal overwrite.
                 </p>
-                <div class="flex items-center gap-3 text-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3 text-sm">
                     <a href="<?= BASE_URL ?>/mess-template.json" class="text-[var(--accent-purple)] font-semibold hover:underline" target="_blank" rel="noopener">Download template</a>
                     <button id="mess-load-template" type="button" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-[var(--text-soft)] hover:bg-white/10">Load into editor</button>
                 </div>
                 <textarea id="mess-import-json" rows="6" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white placeholder:text-[var(--text-muted)] outline-none focus:border-[var(--accent-purple)]/50" placeholder='[{"date":"2026-03-27","meal_type":"breakfast","items":"..."}]'></textarea>
-                <div class="flex gap-3">
+                <div class="flex flex-col sm:flex-row gap-3">
                     <button id="mess-import-submit" type="button" class="flex-1 py-3 rounded-xl bg-[var(--accent-purple)] text-[#0F0F12] font-semibold text-sm hover:opacity-90">Import</button>
-                    <button id="mess-import-clear" type="button" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-[var(--text-soft)] text-sm hover:bg-white/10">Clear</button>
+                    <button id="mess-import-clear" type="button" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-[var(--text-soft)] text-sm hover:bg-white/10 w-full sm:w-auto">Clear</button>
                 </div>
                 <p class="text-[var(--text-muted)] text-xs">Fields: date (YYYY-MM-DD), meal_type (breakfast|lunch|dinner), items (text).</p>
             </div>
@@ -157,7 +157,7 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                         class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[var(--accent-purple)]/50"
                         placeholder="Data Structures"/>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs text-[var(--text-muted)] uppercase tracking-widest mb-2">Room</label>
                         <input type="text" name="room"
@@ -173,7 +173,7 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                         </select>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs text-[var(--text-muted)] uppercase tracking-widest mb-2">Start</label>
                         <input type="time" name="start_time" required
@@ -544,14 +544,14 @@ async function loadTimetable() {
         return;
     }
     ttList.innerHTML = rows.map(r => `
-        <div class="flex items-center justify-between p-3">
-            <div class="text-sm text-[var(--text-soft)]">
-                <span class="font-semibold">${r.subject}</span>
-                <span class="text-[var(--text-muted)] ml-2">${r.room || ''}</span>
-                <span class="text-[var(--text-muted)] ml-3">${r.day_of_week} ${r.start_time}–${r.end_time}</span>
-            </div>
-            <button class="text-[var(--text-muted)] hover:text-red-400 text-sm" data-id="${r.id}">Delete</button>
-        </div>`).join('');
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3">
+                        <div class="text-sm text-[var(--text-soft)] leading-5">
+                            <span class="font-semibold">${r.subject}</span>
+                            <span class="text-[var(--text-muted)] ml-2">${r.room || ''}</span>
+                            <span class="text-[var(--text-muted)] ml-3">${r.day_of_week} ${r.start_time}–${r.end_time}</span>
+                        </div>
+                        <button class="text-[var(--text-muted)] hover:text-red-400 text-sm w-full sm:w-auto text-left sm:text-right" data-id="${r.id}">Delete</button>
+                    </div>`).join('');
 
     ttList.querySelectorAll('button[data-id]').forEach(btn => {
         btn.addEventListener('click', async () => {
