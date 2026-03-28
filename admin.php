@@ -546,11 +546,11 @@ async function loadTimetable() {
     ttList.innerHTML = rows.map(r => `
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3">
                         <div class="text-sm text-[var(--text-soft)] leading-5">
-                            <span class="font-semibold">${r.subject}</span>
-                            <span class="text-[var(--text-muted)] ml-2">${r.room || ''}</span>
-                            <span class="text-[var(--text-muted)] ml-3">${r.day_of_week} ${r.start_time}–${r.end_time}</span>
+                            <span class="font-semibold">${esc(r.subject)}</span>
+                            <span class="text-[var(--text-muted)] ml-2">${esc(r.room || '')}</span>
+                            <span class="text-[var(--text-muted)] ml-3">${esc(r.day_of_week)} ${esc(r.start_time)}–${esc(r.end_time)}</span>
                         </div>
-                        <button class="text-[var(--text-muted)] hover:text-red-400 text-sm w-full sm:w-auto text-left sm:text-right" data-id="${r.id}">Delete</button>
+                        <button class="text-[var(--text-muted)] hover:text-red-400 text-sm w-full sm:w-auto text-left sm:text-right" data-id="${esc(r.id)}">Delete</button>
                     </div>`).join('');
 
     ttList.querySelectorAll('button[data-id]').forEach(btn => {
