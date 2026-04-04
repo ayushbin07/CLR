@@ -145,17 +145,6 @@ bottomNav('settings');
                 </form>
             </section>
 
-                        <!-- PWA install -->
-            <section>
-                <h3 class="text-[11px] uppercase tracking-[0.2em] text-[var(--text-muted)] font-semibold mb-3 ml-1">App</h3>
-                <div class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-5 flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-white font-semibold">Install Sanctuary</p>
-                        <p class="text-[var(--text-muted)] text-xs">Add the app to your device for a fullscreen experience.</p>
-                    </div>
-                    <button type="button" id="pwa-install-trigger" class="glassy-cta text-sm">Install</button>
-                </div>
-            </section>
 
             <!-- Danger zone -->
             <section class="pt-4 text-center lg:text-left pb-8">

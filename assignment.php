@@ -28,8 +28,8 @@ bottomNav('assignment');
         <!-- Filter tabs -->
         <section class="px-6 lg:px-10 mb-8">
             <div class="segmented-control flex items-center max-w-md">
-                <button class="flex-1 py-2 text-sm font-medium segmented-item active text-[var(--accent-purple)]" data-filter="all">All</button>
-                <button class="flex-1 py-2 text-sm font-medium segmented-item text-[var(--text-muted)]" data-filter="pending">Pending</button>
+                <button class="flex-1 py-2 text-sm font-medium segmented-item text-[var(--text-muted)]" data-filter="all">All</button>
+                <button class="flex-1 py-2 text-sm font-medium segmented-item active text-[var(--accent-purple)]" data-filter="pending">Pending</button>
                 <button class="flex-1 py-2 text-sm font-medium segmented-item text-[var(--text-muted)]" data-filter="completed">Completed</button>
             </div>
         </section>
@@ -129,7 +129,7 @@ const BASE     = <?= json_encode(BASE_URL) ?>;
 const CSRF     = <?= json_encode($csrf) ?>;
 const USER_ID  = <?= json_encode($user['id']) ?>;
 const IS_ADMIN = <?= json_encode($user['role'] === 'admin') ?>;
-let currentFilter = 'all';
+let currentFilter = 'pending';
 
 // -----------------------------------------------
 // Load list
@@ -284,6 +284,6 @@ function escHtml(s) {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-loadAssignments();
+loadAssignments('pending');
 </script>
 <?php pageFooter(); ?>

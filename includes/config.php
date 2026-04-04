@@ -21,28 +21,29 @@ date_default_timezone_set('Asia/Kolkata');
 define('APP_NAME', 'Sanctuary');
 
 // Derive BASE_URL from the project folder under the webroot so links work even if the folder name changes.
-$scheme   = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-$host     = $_SERVER['HTTP_HOST'] ?? 'localhost';
-$docRoot  = rtrim(str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT'] ?? ''), '/');
-$project  = str_replace('\\', '/', realpath(__DIR__ . '/..'));
+$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+$docRoot = rtrim(str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT'] ?? ''), '/');
+$project = str_replace('\\', '/', realpath(__DIR__ . '/..'));
 $basePath = $docRoot ? trim(str_replace($docRoot, '', $project), '/') : '';
 // Encode each path segment so spaces/special chars in folder names yield a valid URL.
 $encodedPath = $basePath ? implode('/', array_map('rawurlencode', explode('/', $basePath))) : '';
-$baseUrl  = $encodedPath ? "$scheme://$host/$encodedPath" : "$scheme://$host";
+$baseUrl = $encodedPath ? "$scheme://$host/$encodedPath" : "$scheme://$host";
 define('BASE_URL', $baseUrl);
 
 // -----------------------------------------------
 // PDO connection (singleton)
 // -----------------------------------------------
-function db(): PDO {
+function db(): PDO
+{
     static $pdo = null;
     if ($pdo === null) {
         try {
             $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4";
             $pdo = new PDO($dsn, DB_USER, DB_PASS, [
-                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES   => false,
+                PDO::ATTR_EMULATE_PREPARES => false,
             ]);
             // Keep MySQL session timezone aligned with app timezone to avoid date drift on hosted servers.
             $pdo->exec("SET time_zone = '+05:30'");
@@ -60,8 +61,8 @@ function db(): PDO {
 if (session_status() === PHP_SESSION_NONE) {
     session_set_cookie_params([
         'lifetime' => 86400 * 7,   // 7 days
-        'path'     => '/',
-        'secure'   => false,       // set true in production with HTTPS
+        'path' => '/',
+        'secure' => false,       // set true in production with HTTPS
         'httponly' => true,
         'samesite' => 'Lax',
     ]);
@@ -71,18 +72,21 @@ if (session_status() === PHP_SESSION_NONE) {
 // -----------------------------------------------
 // Auth helpers
 // -----------------------------------------------
-function auth(): array|false {
+function auth(): array|false
+{
     return $_SESSION['user'] ?? false;
 }
 
-function requireAuth(): void {
+function requireAuth(): void
+{
     if (!auth()) {
         header('Location: ' . BASE_URL . '/login.php');
         exit;
     }
 }
 
-function requireAdmin(): void {
+function requireAdmin(): void
+{
     $user = auth();
     if (!$user || $user['role'] !== 'admin') {
         http_response_code(403);
@@ -93,7 +97,8 @@ function requireAdmin(): void {
 // -----------------------------------------------
 // JSON response helper
 // -----------------------------------------------
-function jsonResponse(mixed $data, int $status = 200): never {
+function jsonResponse(mixed $data, int $status = 200): never
+{
     http_response_code($status);
     header('Content-Type: application/json');
     echo json_encode($data);
@@ -103,14 +108,16 @@ function jsonResponse(mixed $data, int $status = 200): never {
 // -----------------------------------------------
 // CSRF helpers
 // -----------------------------------------------
-function csrfToken(): string {
+function csrfToken(): string
+{
     if (empty($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
     return $_SESSION['csrf_token'];
 }
 
-function verifyCsrf(): void {
+function verifyCsrf(): void
+{
     $token = $_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
     if (!hash_equals($_SESSION['csrf_token'] ?? '', $token)) {
         jsonResponse(['error' => 'Invalid CSRF token'], 403);

@@ -121,13 +121,17 @@ $csrf = csrfToken();
                     <div class="flex items-center justify-between mb-4 px-1">
                         <h3 class="text-xl font-semibold">Todo List</h3>
                         <div class="flex items-center gap-2">
-                            <button id="add-todo" class="button neo-press">
-                                <div class="button-outer">
-                                    <div class="button-inner">
-                                        <span class="flex items-center text-sm">
-                                        
-                                            <span>Add</span>
-                                        </span>
+                            <button id="toggle-archive" class="button neo-press" title="Archive">
+                                <div class="button-outer text-[var(--text-soft)]">
+                                    <div class="button-inner flex items-center justify-center w-9 h-9 !min-w-0 !p-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM6.24 5h11.52l.83 1H5.42l.82-1zM5 19V8h14v11H5zm8-5.35l4 3.53v-2.18h-8v2.18l4-3.53zM12 9.5l4 3.53h-2.5v2.82h-3v-2.82H8l4-3.53z"/></svg>
+                                    </div>
+                                </div>
+                            </button>
+                            <button id="add-todo" class="button neo-press" title="Add Todo">
+                                <div class="button-outer text-[var(--text-soft)]">
+                                    <div class="button-inner flex items-center justify-center w-9 h-9 !min-w-0 !p-0">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                                     </div>
                                 </div>
                             </button>
@@ -308,61 +312,120 @@ $csrf = csrfToken();
         heroCardEl.addEventListener('touchcancel', () => { heroDragging = false; }, { passive: true });
     }
 
+    let allTodos = [];
+
     async function loadTodos() {
         const container = document.getElementById('todo-list');
         container.innerHTML = '<div class="p-6 text-center text-[var(--text-muted)] text-sm">Loading…</div>';
         try {
             const res = await fetch(`${BASE}/api/todos.php?action=list`);
-            const todos = await res.json();
-            if (!Array.isArray(todos) || !todos.length) {
-                container.innerHTML = '<div class="p-6 text-center text-[var(--text-muted)] text-sm bg-[var(--card-dark)] rounded-2xl border border-white/5">No todos yet.</div>';
-                return;
-            }
-            container.innerHTML = todos.map(t => {
-                const checked = t.is_completed ? 'checked' : '';
-                const titleCls = t.is_completed ? 'line-through text-[var(--text-muted)]' : 'text-[var(--text-soft)]';
-                return `
-                    <div class="todo-row neo-card flex items-center justify-between p-4" data-id="${t.id}">
-                        <div class="flex items-center gap-4 pl-1">
-                            <button class="custom-checkbox ${checked}" aria-label="Toggle todo" data-id="${t.id}">${checked ? '<span class="material-symbols-outlined text-xs font-bold text-[#0F0F12]">check</span>' : ''}</button>
-                            <div class="todo-body" data-id="${t.id}">
-                                <h4 class="${titleCls} font-medium text-sm leading-tight">${escapeHtml(t.title)}</h4>
-                                <p class="text-[var(--text-muted)] text-[11px]">Created ${new Date(t.created_at).toLocaleDateString()}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <button class="edit-todo p-2 text-[var(--text-muted)] hover:text-[var(--text)]" title="Edit" data-id="${t.id}" data-title="${escapeHtml(t.title)}">
-                                <span class="material-symbols-outlined text-sm">edit</span>
-                            </button>
-                            <button class="delete-todo p-2 text-[var(--text-muted)] hover:text-red-400" title="Delete" data-id="${t.id}">
-                                <span class="material-symbols-outlined text-sm">delete</span>
-                            </button>
-                        </div>
-                    </div>`;
-            }).join('');
-
-            container.querySelectorAll('.custom-checkbox').forEach(cb => {
-                cb.addEventListener('click', () => toggleTodo(cb.dataset.id));
-            });
-            container.querySelectorAll('.todo-row').forEach(row => {
-                const id = row.dataset.id;
-                row.addEventListener('click', (e) => {
-                    const target = e.target;
-                    if (target.closest('.edit-todo') || target.closest('.delete-todo') || target.closest('.custom-checkbox')) {
-                        return;
-                    }
-                    toggleTodo(id);
-                });
-            });
-            container.querySelectorAll('.delete-todo').forEach(btn => {
-                btn.addEventListener('click', () => deleteTodo(btn.dataset.id));
-            });
-            container.querySelectorAll('.edit-todo').forEach(btn => {
-                btn.addEventListener('click', () => editTodo(btn.dataset.id, btn.dataset.title));
-            });
+            allTodos = await res.json();
+            renderTodos();
         } catch (e) {
             container.innerHTML = '<div class="p-6 text-center text-red-400 text-sm bg-[var(--card-dark)] rounded-2xl border border-red-500/30">Failed to load todos.</div>';
         }
+    }
+
+    function createTodoHtml(t) {
+        const checked = t.is_completed ? 'checked' : '';
+        const titleCls = t.is_completed ? 'line-through text-[var(--text-muted)]' : 'text-[var(--text-soft)]';
+        return `
+            <div class="todo-row neo-card flex items-center justify-between p-4" data-id="${t.id}">
+                <div class="flex items-center gap-4 pl-1">
+                    <button class="custom-checkbox ${checked}" aria-label="Toggle todo" data-id="${t.id}">${checked ? '<span class="material-symbols-outlined text-xs font-bold text-[#0F0F12]">check</span>' : ''}</button>
+                    <div class="todo-body" data-id="${t.id}">
+                        <h4 class="${titleCls} font-medium text-sm leading-tight">${escapeHtml(t.title)}</h4>
+                        <p class="text-[var(--text-muted)] text-[11px]">Created ${new Date(t.created_at).toLocaleDateString()}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-1">
+                    <button class="edit-todo p-2 text-[var(--text-muted)] hover:text-[var(--text)]" title="Edit" data-id="${t.id}" data-title="${escapeHtml(t.title)}">
+                        <span class="material-symbols-outlined text-sm">edit</span>
+                    </button>
+                    <button class="delete-todo p-2 text-[var(--text-muted)] hover:text-red-400" title="Delete" data-id="${t.id}">
+                        <span class="material-symbols-outlined text-sm">delete</span>
+                    </button>
+                </div>
+            </div>`;
+    }
+
+    function attachTodoListeners(container) {
+        container.querySelectorAll('.custom-checkbox').forEach(cb => {
+            cb.addEventListener('click', () => toggleTodo(cb.dataset.id));
+        });
+        container.querySelectorAll('.todo-row').forEach(row => {
+            const id = row.dataset.id;
+            row.addEventListener('click', (e) => {
+                const target = e.target;
+                if (target.closest('.edit-todo') || target.closest('.delete-todo') || target.closest('.custom-checkbox')) {
+                    return;
+                }
+                toggleTodo(id);
+            });
+        });
+        container.querySelectorAll('.delete-todo').forEach(btn => {
+            btn.addEventListener('click', () => deleteTodo(btn.dataset.id));
+        });
+        container.querySelectorAll('.edit-todo').forEach(btn => {
+            btn.addEventListener('click', () => editTodo(btn.dataset.id, btn.dataset.title));
+        });
+    }
+
+    function renderTodos() {
+        const container = document.getElementById('todo-list');
+        if (!Array.isArray(allTodos) || !allTodos.length) {
+            container.innerHTML = '<div class="p-6 text-center text-[var(--text-muted)] text-sm bg-[var(--card-dark)] rounded-2xl border border-white/5">No todos yet.</div>';
+        } else {
+            const activeTodos = allTodos.filter(t => t.is_completed == 0);
+            if (!activeTodos.length) {
+                container.innerHTML = '<div class="p-6 text-center text-[var(--text-muted)] text-sm bg-[var(--card-dark)] rounded-2xl border border-white/5">No active tasks.</div>';
+            } else {
+                container.innerHTML = activeTodos.map(createTodoHtml).join('');
+                attachTodoListeners(container);
+            }
+        }
+
+        const archiveList = document.getElementById('archive-modal-list');
+        if (archiveList) {
+            const completedTodos = allTodos.filter(t => t.is_completed == 1);
+            if (!completedTodos.length) {
+                archiveList.innerHTML = '<div class="p-6 text-center text-[var(--text-muted)] text-sm">Archive is empty.</div>';
+            } else {
+                archiveList.innerHTML = completedTodos.map(createTodoHtml).join('');
+                attachTodoListeners(archiveList);
+            }
+        }
+    }
+
+    function showArchiveModal() {
+        const existing = document.getElementById('archive-modal-wrapper');
+        if (existing) existing.remove();
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md';
+        wrapper.id = 'archive-modal-wrapper';
+        wrapper.innerHTML = `
+            <div class="max-w-md w-full max-h-[80vh] flex flex-col bg-[var(--surface-2)] border border-[var(--border-subtle)] rounded-2xl shadow-[0_24px_50px_rgba(15,23,42,0.2)] overflow-hidden">
+                <div class="px-5 pt-5 pb-3 flex justify-between items-center border-b border-[var(--border-subtle)]">
+                    <h3 class="text-base font-semibold text-[var(--text-soft)]">Archived Tasks</h3>
+                    <button class="text-[var(--text-muted)] hover:text-white" data-action="close">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </button>
+                </div>
+                <div class="p-4 overflow-y-auto space-y-3" id="archive-modal-list">
+                    <!-- renderTodos will fill this -->
+                </div>
+            </div>`;
+
+        const close = () => wrapper.remove();
+        wrapper.addEventListener('click', (e) => {
+            if (e.target === wrapper) close();
+        });
+        wrapper.querySelector('[data-action="close"]').addEventListener('click', close);
+        document.body.appendChild(wrapper);
+
+        // Fill data
+        renderTodos();
     }
 
     function refreshTodos() {
@@ -641,6 +704,7 @@ $csrf = csrfToken();
     }
 
     document.getElementById('add-todo').addEventListener('click', addTodo);
+    document.getElementById('toggle-archive').addEventListener('click', showArchiveModal);
     bindHeroDrag();
     refreshTodos();
     loadImportant();
