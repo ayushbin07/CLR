@@ -30,10 +30,15 @@ function topNav(string $activePage): void {
 }
 
 function sidebar(string $activePage): void {
-    $user = auth();
-    $seed = htmlspecialchars($user['avatar_text'] ?? $user['avatar_seed'] ?? ($user['name'] ?? 'User'));
+    $user  = auth();
+    $seed  = htmlspecialchars($user['avatar_text'] ?? $user['avatar_seed'] ?? ($user['name'] ?? 'User'));
     $style = htmlspecialchars($user['avatar_style'] ?? 'avataaars');
-    $base = BASE_URL;
+    $base  = BASE_URL;
+    $dicebearUrl = "https://api.dicebear.com/7.x/{$style}/svg?seed={$seed}";
+    $avatarPath  = $user['avatar_path'] ?? null;
+    $sidebarAvatar = $avatarPath
+        ? htmlspecialchars($base . '/' . $avatarPath . '?v=' . time())
+        : $dicebearUrl;
     $pages = [
         'index'      => ['home',        'Home',        'index.php'],
         'assignment' => ['assignment',  'Assignments', 'assignment.php'],
@@ -51,8 +56,9 @@ function sidebar(string $activePage): void {
 <aside class="sidebar w-64 fixed left-0 top-0 h-screen bg-[var(--card-dark)] border-r border-[var(--border-subtle)] p-6 flex-col hidden lg:flex z-40">
     <div class="mb-8 px-2 flex items-center gap-3">
         <div class="w-10 h-10 rounded-full overflow-hidden border border-white/10 relative group">
-            <img src="https://api.dicebear.com/7.x/{$style}/svg?seed={$seed}" alt="Avatar" class="w-full h-full object-cover">
-            <a href="{$base}/settings.php#avatar" class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black/40 text-white text-xs">
+            <img src="{$sidebarAvatar}" alt="Avatar" class="w-full h-full object-cover"
+                onerror="this.onerror=null;this.src='{$dicebearUrl}'">
+            <a href="{$base}/settings.php" class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black/40 text-white text-xs">
                 <span class="material-symbols-outlined text-[16px]">edit</span>
             </a>
         </div>
