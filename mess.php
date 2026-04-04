@@ -19,12 +19,8 @@ bottomNav('mess');
                 <h1 class="text-3xl lg:text-4xl font-bold tracking-tight mb-1">Mess Today</h1>
                 <p class="text-[var(--text-muted)] text-sm lg:text-base"><?= $today ?></p>
             </div>
-            <button id="toggle-archive" class="button neo-press" title="Archive">
-                <div class="button-outer text-[var(--text-soft)]">
-                    <div class="button-inner flex items-center justify-center w-10 h-10 !min-w-0 !p-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM6.24 5h11.52l.83 1H5.42l.82-1zM5 19V8h14v11H5zm8-5.35l4 3.53v-2.18h-8v2.18l4-3.53zM12 9.5l4 3.53h-2.5v2.82h-3v-2.82H8l4-3.53z"/></svg>
-                    </div>
-                </div>
+            <button id="toggle-archive" class="glassy-plus !w-11 !h-11 lg:!w-10 lg:!h-10 !p-0 rounded-xl focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)] focus-visible:outline-none" title="Archive">
+                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM6.24 5h11.52l.83 1H5.42l.82-1zM5 19V8h14v11H5zm8-5.35l4 3.53v-2.18h-8v2.18l4-3.53zM12 9.5l4 3.53h-2.5v2.82h-3v-2.82H8l4-3.53z"/></svg>
             </button>
         </header>
 

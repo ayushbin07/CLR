@@ -61,7 +61,7 @@ bottomNav('settings');
                                 </div>
                             </div>
                         </div>
-                        <button type="button" id="edit-profile-btn" class="w-10 h-10 shrink-0 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors">
+                        <button type="button" id="edit-profile-btn" class="w-11 h-11 shrink-0 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50">
                             <span id="edit-profile-icon" class="material-symbols-outlined text-[var(--text-soft)] text-xl">edit</span>
                         </button>
                     </div>
@@ -90,8 +90,8 @@ bottomNav('settings');
                                 <label class="block text-xs text-[var(--text-muted)] uppercase tracking-widest mb-2">Avatar Text</label>
                                 <div class="flex gap-3 items-center flex-wrap">
                                     <input type="text" name="avatar_text" id="avatar-text" value="<?= htmlspecialchars($avatarText) ?>" maxlength="100"
-                                        class="flex-1 min-w-[180px] bg-[var(--bg-dark)] border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none mt-1 focus:border-[var(--accent-purple)]/50"/>
-                                    <button type="button" class="px-3 py-3 rounded-xl bg-[var(--bg-dark)] border border-white/10 text-white text-sm hover:bg-white/5 transition-all mt-1" id="avatar-random">
+                                        class="flex-1 min-w-[180px] bg-[var(--bg-dark)] border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none mt-1 focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50 focus:border-[var(--accent-purple)]/50"/>
+                                    <button type="button" class="px-3 py-3 rounded-xl bg-[var(--bg-dark)] border border-white/10 text-white text-sm hover:bg-white/5 transition-all mt-1 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50" id="avatar-random">
                                         Shuffle
                                     </button>
                                 </div>
@@ -111,7 +111,7 @@ bottomNav('settings');
                             </div>
                         </div>
 
-                        <button type="submit" class="glassy-cta text-sm w-full py-3 mt-4">
+                        <button type="submit" class="glassy-cta text-sm w-full py-3 mt-4 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50">
                             Save Profile
                         </button>
                     </form>
@@ -122,7 +122,7 @@ bottomNav('settings');
             <section>
                 <h3 class="text-[11px] uppercase tracking-[0.2em] text-[var(--text-muted)] font-semibold mb-3 ml-1">Security</h3>
                 <div class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-2 sm:p-3">
-                    <button type="button" id="toggle-password-btn" class="w-full flex items-center justify-between text-left p-3 sm:p-4 rounded-[18px] hover:bg-white/5 transition-colors group">
+                    <button type="button" id="toggle-password-btn" class="w-full flex items-center justify-between text-left p-3 sm:p-4 rounded-[18px] hover:bg-white/5 transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50">
                         <div class="flex items-center gap-4">
                             <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors">
                                 <span class="material-symbols-outlined text-[var(--text-soft)]">lock</span>
@@ -155,7 +155,7 @@ bottomNav('settings');
                                 class="w-full bg-[var(--bg-dark)] border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[var(--accent-purple)]/50"
                                 placeholder="Repeat new password"/>
                         </div>
-                        <button type="submit" class="glassy-cta text-sm w-full py-3 mt-2">
+                        <button type="submit" class="glassy-cta text-sm w-full py-3 mt-2 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50">
                             Update Password
                         </button>
                     </form>
@@ -166,7 +166,7 @@ bottomNav('settings');
             <!-- Danger zone -->
             <section class="pt-4 text-center lg:text-left pb-8">
                 <a href="<?= BASE_URL ?>/api/auth.php?action=logout"
-                   class="inline-block text-[#FF453A] font-semibold text-base px-8 py-2 hover:opacity-80 active:scale-95 transition-all bg-[#FF453A]/10 rounded-xl">
+                   class="inline-block text-[#FF453A] font-semibold text-base px-8 py-3 min-h-[44px] hover:opacity-80 active:scale-95 transition-all bg-[#FF453A]/10 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF453A]/50">
                     Log Out
                 </a>
             </section>

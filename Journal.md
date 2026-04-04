@@ -34,3 +34,7 @@ During this session, we focused on refining the mobile-responsiveness and reduci
   * Merged the static Profile Details section and the Profile Edit Form into a single unified card component, activated by a sleek pencil (edit) icon.
   * Refactored the "Change Password" section into an elegant, collapsed-by-default accordion toggle.
   * Regained button styling consistency across the settings forms by applying the standard `glassy-cta` design system class.
+* **A11y and UX Enhancements**:
+  * Implemented strict Fitts's Law compliance by ensuring minimum 44px touch targets on all interactive elements across `index.php`, `admin.php`, and `settings.php`.
+  * Added uniform `focus-visible` rings (`focus-visible:ring-[var(--accent-purple)]/50`) to all buttons, inputs, selects, and textareas for robust keyboard navigability.
+  * Replaced custom JavaScript drag-to-scroll behaviors with native CSS Scroll Snapping (`snap-x snap-mandatory`), severely enhancing mobile scroll performance.

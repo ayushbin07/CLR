@@ -1490,3 +1490,71 @@ textarea:focus {
     height: 190px;
   }
 }
+
+/* --- MICRO-INTERACTIONS & ANIMATIONS (Based on animation-guide.md) --- */
+
+/* 1. Global Transitions & Easing */
+/* Applying standard fast transition (150ms ease-out) to interactive elements for immediate feedback */
+.glassy-cta, .glassy-plus, .neo-press, .class-card, .neo-card, .meal-card, .reaction-btn {
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out, opacity 150ms ease-out, background 150ms ease-out;
+  will-change: transform, opacity;
+}
+
+/* 2. Hover Effects: Signal interactivity with slight lift */
+.glassy-cta:hover, .glassy-plus:hover, .neo-press:hover, .reaction-btn:hover {
+  transform: translateY(-2px);
+}
+.class-card:hover, .neo-card:hover:not(:empty) {
+  transform: translateY(-3px);
+}
+
+/* 3. Active States: Pressed feeling */
+.glassy-cta:active, .glassy-plus:active, .neo-press:active, .reaction-btn:active {
+  transform: scale(0.95);
+  transition: transform 50ms ease-in; /* Faster enter-press */
+}
+.class-card:active, .neo-card:active {
+  transform: scale(0.98);
+  transition: transform 50ms ease-in;
+}
+
+/* 4. Page Transitions & Progressive Reveal */
+/* Slide & Fade in for standard entering elements */
+@keyframes fade-slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Main wrapper entry transition */
+.main-content {
+  animation: fade-slide-up 400ms ease-out forwards;
+}
+
+/* Stagger utility for lists */
+.animate-entrance {
+  opacity: 0;
+  animation: fade-slide-up 350ms ease-out forwards;
+}
+.animate-entrance:nth-child(1) { animation-delay: 50ms; }
+.animate-entrance:nth-child(2) { animation-delay: 100ms; }
+.animate-entrance:nth-child(3) { animation-delay: 150ms; }
+.animate-entrance:nth-child(4) { animation-delay: 200ms; }
+.animate-entrance:nth-child(5) { animation-delay: 250ms; }
+.animate-entrance:nth-child(n+6) { animation-delay: 300ms; }
+
+/* 5. Accessibility: Respect Reduced Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+    transform: none !important;
+  }
+}

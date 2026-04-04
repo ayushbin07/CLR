@@ -30,11 +30,11 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
                 <h2 class="text-xl font-semibold">Home Hero Cards</h2>
                 <div class="flex flex-wrap items-center gap-2">
-                    <button id="hero-add" class="glassy-plus glassy-plus-pill text-sm flex items-center" aria-label="Add card">
+                    <button id="hero-add" class="glassy-plus glassy-plus-pill text-sm flex items-center min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50" aria-label="Add card">
                         <span class="material-symbols-outlined text-[18px]">add</span>
                         <span>Add Card</span>
                     </button>
-                    <button id="hero-refresh" class="glassy-cta ghost text-sm w-auto">
+                    <button id="hero-refresh" class="glassy-cta ghost text-sm w-auto min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50">
                         <span class="material-symbols-outlined text-[16px]">refresh</span> Refresh
                     </button>
                 </div>
@@ -82,8 +82,8 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                             </label>
                         </div>
                         <div class="flex justify-end gap-2 pt-2">
-                            <button type="button" id="hero-cancel" class="glassy-cta ghost text-sm w-auto">Reset</button>
-                            <button type="submit" class="glassy-cta text-sm w-auto">Save Card</button>
+                            <button type="button" id="hero-cancel" class="glassy-cta ghost text-sm w-auto min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50">Reset</button>
+                            <button type="submit" class="glassy-cta text-sm w-auto min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50">Save Card</button>
                         </div>
                     </form>
                 </div>
@@ -94,7 +94,7 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
         <section class="min-w-0">
             <div class="flex flex-wrap items-center justify-between gap-y-2 mb-4">
                 <h2 class="text-xl font-semibold">Today's Mess Menu</h2>
-                <button id="mess-form-toggle" class="glassy-cta ghost text-xs px-3 py-1 flex items-center gap-1 w-auto"><span class="material-symbols-outlined text-sm">expand_more</span> Toggle</button>
+                <button id="mess-form-toggle" class="glassy-cta ghost text-xs px-3 py-1 flex items-center gap-1 w-auto min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50"><span class="material-symbols-outlined text-sm">expand_more</span> Toggle</button>
             </div>
             <form id="mess-form" class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-4 sm:p-6 space-y-4 hidden">
                 <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
@@ -119,7 +119,7 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                         class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none focus:border-[var(--accent-purple)]/50 resize-none"
                         placeholder="Idli, Sambar, Coconut Chutney…"></textarea>
                 </div>
-                <button type="submit" class="glassy-cta text-sm">Save Menu</button>
+                <button type="submit" class="glassy-cta text-sm min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50">Save Menu</button>
             </form>
         </section>
 
@@ -127,7 +127,7 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
         <section class="min-w-0">
             <div class="flex flex-wrap items-center justify-between gap-y-2 mb-4">
                 <h2 class="text-xl font-semibold">Bulk Import Mess Menu</h2>
-                <button id="mess-import-toggle" class="glassy-cta ghost text-xs px-3 py-1 flex items-center gap-1 w-auto"><span class="material-symbols-outlined text-sm">expand_more</span> Toggle</button>
+                <button id="mess-import-toggle" class="glassy-cta ghost text-xs px-3 py-1 flex items-center gap-1 w-auto min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50"><span class="material-symbols-outlined text-sm">expand_more</span> Toggle</button>
             </div>
             <div id="mess-import-container" class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-4 sm:p-6 space-y-4 hidden">
                 <p class="text-[var(--text-muted)] text-sm">
@@ -135,12 +135,12 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                 </p>
                 <div class="flex flex-col sm:flex-row sm:items-center gap-3 text-sm">
                     <a href="<?= BASE_URL ?>/mess-template.json" class="text-[var(--accent-purple)] font-semibold hover:underline" target="_blank" rel="noopener">Download template</a>
-                    <button id="mess-load-template" type="button" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-[var(--text-soft)] hover:bg-white/10">Load into editor</button>
+                    <button id="mess-load-template" type="button" class="px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-[var(--text-soft)] hover:bg-white/10 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50">Load into editor</button>
                 </div>
                 <textarea id="mess-import-json" rows="6" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white placeholder:text-[var(--text-muted)] outline-none focus:border-[var(--accent-purple)]/50" placeholder='[{"date":"2026-03-27","meal_type":"lunch_international","items":"..."}]'></textarea>
                 <div class="flex flex-col sm:flex-row gap-3">
-                    <button id="mess-import-submit" type="button" class="flex-1 py-3 rounded-xl bg-[var(--accent-purple)] text-[#0F0F12] font-semibold text-sm hover:opacity-90">Import</button>
-                    <button id="mess-import-clear" type="button" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-[var(--text-soft)] text-sm hover:bg-white/10 w-full sm:w-auto">Clear</button>
+                    <button id="mess-import-submit" type="button" class="flex-1 py-3 rounded-xl bg-[var(--accent-purple)] text-[#0F0F12] font-semibold text-sm hover:opacity-90 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50">Import</button>
+                    <button id="mess-import-clear" type="button" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-[var(--text-soft)] text-sm hover:bg-white/10 w-full sm:w-auto min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50">Clear</button>
                 </div>
                 <p class="text-[var(--text-muted)] text-xs">Fields: date (YYYY-MM-DD), meal_type (breakfast|lunch|lunch_international|snacks|dinner), items (text).</p>
             </div>
@@ -150,7 +150,7 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
         <section class="min-w-0">
             <div class="flex flex-wrap items-center justify-between gap-y-2 mb-4">
                 <h2 class="text-xl font-semibold">Add Timetable Slot</h2>
-                <button id="timetable-form-toggle" class="glassy-cta ghost text-xs px-3 py-1 flex items-center gap-1 w-auto"><span class="material-symbols-outlined text-sm">expand_more</span> Toggle</button>
+                <button id="timetable-form-toggle" class="glassy-cta ghost text-xs px-3 py-1 flex items-center gap-1 w-auto min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50"><span class="material-symbols-outlined text-sm">expand_more</span> Toggle</button>
             </div>
             <form id="timetable-form" class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-4 sm:p-6 space-y-4 hidden">
                 <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
@@ -204,7 +204,7 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
         <section class="lg:col-span-2 min-w-0">
             <div class="flex flex-wrap items-center justify-between gap-y-2 mb-4">
                 <h2 class="text-xl font-semibold">Bulk Import Timetable (JSON)</h2>
-                <button id="tt-import-toggle" class="glassy-cta ghost text-xs px-3 py-1 flex items-center gap-1 w-auto"><span class="material-symbols-outlined text-sm">expand_more</span> Toggle</button>
+                <button id="tt-import-toggle" class="glassy-cta ghost text-xs px-3 py-1 flex items-center gap-1 w-auto min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50"><span class="material-symbols-outlined text-sm">expand_more</span> Toggle</button>
             </div>
             <div id="tt-import-container" class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-4 sm:p-6 hidden">
                 <p class="text-[var(--text-muted)] text-sm mb-4">
@@ -215,7 +215,7 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                 <textarea id="json-import" rows="6"
                     class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white font-mono outline-none focus:border-[var(--accent-purple)]/50 resize-y"
                     placeholder='[{"class_id":1,"subject":"Math","room":"101","day_of_week":"Mon","start_time":"09:00","end_time":"10:30"}]'></textarea>
-                <button id="json-import-btn" class="mt-4 glassy-cta text-sm w-auto">Import JSON</button>
+                <button id="json-import-btn" class="mt-4 glassy-cta text-sm w-auto min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50">Import JSON</button>
                 <div class="mt-4 bg-white/5 border border-white/10 rounded-xl p-4 text-[12px] text-[var(--text-muted)] space-y-2">
                     <div class="flex items-center justify-between">
                         <span class="font-semibold text-[var(--text-soft)]">Copy-ready sample</span>
@@ -234,7 +234,7 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
         <section class="lg:col-span-2 min-w-0">
             <div class="flex flex-wrap items-center justify-between gap-y-2 mb-4">
                 <h2 class="text-xl font-semibold">Manage Timetable (Admin)</h2>
-                <button id="tt-manage-toggle" class="glassy-cta ghost text-xs px-3 py-1 flex items-center gap-1 w-auto"><span class="material-symbols-outlined text-sm">expand_more</span> Toggle</button>
+                <button id="tt-manage-toggle" class="glassy-cta ghost text-xs px-3 py-1 flex items-center gap-1 w-auto min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50"><span class="material-symbols-outlined text-sm">expand_more</span> Toggle</button>
             </div>
             <div id="tt-manage-container" class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-4 sm:p-6 space-y-6 hidden">
                 <div class="grid md:grid-cols-3 gap-4">
@@ -256,8 +256,8 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                         </select>
                     </div>
                     <div class="flex items-end gap-2">
-                        <button id="tt-load" class="glassy-cta ghost text-sm flex-1">Load Slots</button>
-                        <button id="tt-clear-day" class="glassy-cta text-sm w-auto" title="Replace slots for selected scope">Replace</button>
+                        <button id="tt-load" class="glassy-cta ghost text-sm flex-1 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50">Load Slots</button>
+                        <button id="tt-clear-day" class="glassy-cta text-sm w-auto min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)]/50" title="Replace slots for selected scope">Replace</button>
                     </div>
                 </div>
 

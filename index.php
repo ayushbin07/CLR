@@ -121,19 +121,11 @@ $csrf = csrfToken();
                     <div class="flex items-center justify-between mb-4 px-1">
                         <h3 class="text-xl font-semibold">Todo List</h3>
                         <div class="flex items-center gap-2">
-                            <button id="toggle-archive" class="button neo-press" title="Archive">
-                                <div class="button-outer text-[var(--text-soft)]">
-                                    <div class="button-inner flex items-center justify-center w-9 h-9 !min-w-0 !p-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM6.24 5h11.52l.83 1H5.42l.82-1zM5 19V8h14v11H5zm8-5.35l4 3.53v-2.18h-8v2.18l4-3.53zM12 9.5l4 3.53h-2.5v2.82h-3v-2.82H8l4-3.53z"/></svg>
-                                    </div>
-                                </div>
+                            <button id="toggle-archive" class="glassy-plus !w-11 !h-11 lg:!w-10 lg:!h-10 !p-0 rounded-xl focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)] focus-visible:outline-none" title="Archive">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM6.24 5h11.52l.83 1H5.42l.82-1zM5 19V8h14v11H5zm8-5.35l4 3.53v-2.18h-8v2.18l4-3.53zM12 9.5l4 3.53h-2.5v2.82h-3v-2.82H8l4-3.53z"/></svg>
                             </button>
-                            <button id="add-todo" class="button neo-press" title="Add Todo">
-                                <div class="button-outer text-[var(--text-soft)]">
-                                    <div class="button-inner flex items-center justify-center w-9 h-9 !min-w-0 !p-0">
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                                    </div>
-                                </div>
+                            <button id="add-todo" class="glassy-plus !w-11 !h-11 lg:!w-10 lg:!h-10 !p-0 rounded-xl focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)] focus-visible:outline-none" title="Add Todo">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                             </button>
                         </div>
                     </div>
@@ -147,7 +139,7 @@ $csrf = csrfToken();
                 <section class="lg:col-span-7">
                     <h3 class="text-xl font-semibold mb-4 px-1">Today's Classes</h3>
                     <div class="relative">
-                        <div id="classes-container" class="no-scrollbar flex gap-4 overflow-x-auto px-1 pb-4 lg:grid lg:grid-cols-3 lg:auto-rows-fr lg:gap-6 lg:gap-y-8 lg:overflow-visible lg:px-1 lg:pb-2"></div>
+                        <div id="classes-container" class="no-scrollbar flex gap-4 overflow-x-auto snap-x snap-mandatory px-1 pb-4 lg:grid lg:grid-cols-3 lg:auto-rows-fr lg:gap-6 lg:gap-y-8 lg:overflow-visible lg:px-1 lg:pb-2"></div>
                     </div>
                 </section>
             </div>
@@ -339,10 +331,10 @@ $csrf = csrfToken();
                     </div>
                 </div>
                 <div class="flex items-center gap-1">
-                    <button class="edit-todo p-2 text-[var(--text-muted)] hover:text-[var(--text)]" title="Edit" data-id="${t.id}" data-title="${escapeHtml(t.title)}">
+                    <button class="edit-todo p-3 -m-1 text-[var(--text-muted)] hover:text-[var(--text)] focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)] focus-visible:outline-none rounded-lg" title="Edit" data-id="${t.id}" data-title="${escapeHtml(t.title)}">
                         <span class="material-symbols-outlined text-sm">edit</span>
                     </button>
-                    <button class="delete-todo p-2 text-[var(--text-muted)] hover:text-red-400" title="Delete" data-id="${t.id}">
+                    <button class="delete-todo p-3 -m-1 text-[var(--text-muted)] hover:text-red-400 focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:outline-none rounded-lg" title="Delete" data-id="${t.id}">
                         <span class="material-symbols-outlined text-sm">delete</span>
                     </button>
                 </div>
@@ -374,11 +366,11 @@ $csrf = csrfToken();
     function renderTodos() {
         const container = document.getElementById('todo-list');
         if (!Array.isArray(allTodos) || !allTodos.length) {
-            container.innerHTML = '<div class="p-6 text-center text-[var(--text-muted)] text-sm bg-[var(--card-dark)] rounded-2xl border border-white/5">No todos yet.</div>';
+            container.innerHTML = '<div class="neo-card p-4 flex items-center justify-center text-[var(--text-muted)] text-sm">No todos yet.</div>';
         } else {
             const activeTodos = allTodos.filter(t => t.is_completed == 0);
             if (!activeTodos.length) {
-                container.innerHTML = '<div class="p-6 text-center text-[var(--text-muted)] text-sm bg-[var(--card-dark)] rounded-2xl border border-white/5">No active tasks.</div>';
+                container.innerHTML = '<div class="neo-card p-4 flex items-center justify-center text-[var(--text-muted)] text-sm">No active tasks.</div>';
             } else {
                 container.innerHTML = activeTodos.map(createTodoHtml).join('');
                 attachTodoListeners(container);
@@ -389,7 +381,7 @@ $csrf = csrfToken();
         if (archiveList) {
             const completedTodos = allTodos.filter(t => t.is_completed == 1);
             if (!completedTodos.length) {
-                archiveList.innerHTML = '<div class="p-6 text-center text-[var(--text-muted)] text-sm">Archive is empty.</div>';
+                archiveList.innerHTML = '<div class="neo-card p-4 flex items-center justify-center text-[var(--text-muted)] text-sm">Archive is empty.</div>';
             } else {
                 archiveList.innerHTML = completedTodos.map(createTodoHtml).join('');
                 attachTodoListeners(archiveList);
@@ -408,7 +400,7 @@ $csrf = csrfToken();
             <div class="max-w-md w-full max-h-[80vh] flex flex-col bg-[var(--surface-2)] border border-[var(--border-subtle)] rounded-2xl shadow-[0_24px_50px_rgba(15,23,42,0.2)] overflow-hidden">
                 <div class="px-5 pt-5 pb-3 flex justify-between items-center border-b border-[var(--border-subtle)]">
                     <h3 class="text-base font-semibold text-[var(--text-soft)]">Archived Tasks</h3>
-                    <button class="text-[var(--text-muted)] hover:text-white" data-action="close">
+                    <button class="text-[var(--text-muted)] hover:text-white p-2 focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)] rounded-lg outline-none -mr-2" data-action="close">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
                     </button>
                 </div>
@@ -484,19 +476,19 @@ $csrf = csrfToken();
 
     async function loadClasses() {
         const container = document.getElementById('classes-container');
-        container.innerHTML = '<div class="flex-none w-[200px] h-[200px] p-5 rounded-[20px] border border-white/5 bg-[var(--card-dark)] text-[var(--text-muted)] text-sm">Loading today\'s classes…</div>';
+        container.innerHTML = '<div class="neo-card flex-none w-[200px] h-[200px] p-5 rounded-[20px] flex items-center justify-center text-center text-[var(--text-muted)] text-sm ml-2 overflow-hidden">Loading today\'s classes…</div>';
         try {
             const res = await fetch(`${BASE}/api/home.php?action=timetable`);
             const classes = await res.json();
             if (!Array.isArray(classes) || !classes.length) {
-                container.innerHTML = '<div class="flex-none w-[200px] h-[200px] p-5 rounded-[20px] border border-white/5 bg-[var(--card-dark)] text-[var(--text-muted)] text-sm">No classes scheduled for today.</div>';
+                container.innerHTML = '<div class="neo-card flex-none w-[200px] h-[200px] p-5 rounded-[20px] flex items-center justify-center text-center text-[var(--text-muted)] text-sm ml-2 overflow-hidden">No classes scheduled for today.</div>';
                 return;
             }
             container.innerHTML = classes.map((c, idx) => {
                 const icon = CLASS_ICONS[idx % CLASS_ICONS.length];
                 const room = c.room ? `<p class="text-[var(--text-muted)] text-[11px] flex items-center gap-1 mt-2"><span class="material-symbols-outlined text-[14px]">location_on</span>${escapeHtml(c.room)}</p>` : '';
                 return `
-                <div class="neo-card class-card flex-shrink-0 w-[220px] lg:w-full h-full p-4 rounded-[18px] flex flex-col">
+                <div class="neo-card class-card flex-shrink-0 w-[220px] lg:w-full h-full p-4 rounded-[18px] flex flex-col snap-start">
                     <div class="class-card-icon w-9 h-9 rounded-2xl flex items-center justify-center mb-2">
                         <span class="material-symbols-outlined text-[18px]">${icon}</span>
                     </div>
@@ -567,8 +559,8 @@ $csrf = csrfToken();
                         class="w-full bg-white/70 border border-[var(--border-subtle)] rounded-xl px-4 py-3 text-sm text-[var(--text)] outline-none focus:border-[var(--accent-strong)]/60 focus:ring-2 focus:ring-[var(--accent)]/20" />
                 </div>
                 <div class="flex justify-end gap-2 px-5 pb-4">
-                    <button class="glassy-cta ghost w-auto text-sm px-4 py-2" data-action="cancel">${escapeHtml(cancelLabel)}</button>
-                    <button class="glassy-cta w-auto text-sm px-4 py-2" data-action="confirm">${escapeHtml(confirmLabel)}</button>
+                    <button class="glassy-cta ghost w-auto text-sm px-4 py-2 focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)] outline-none" data-action="cancel">${escapeHtml(cancelLabel)}</button>
+                    <button class="glassy-cta w-auto text-sm px-4 py-2 focus-visible:ring-2 focus-visible:ring-[var(--accent-purple)] outline-none" data-action="confirm">${escapeHtml(confirmLabel)}</button>
                 </div>
             </div>`;
 
@@ -717,44 +709,8 @@ $csrf = csrfToken();
     loadClasses();
     loadHeroCards();
 
-    // Enable drag-to-scroll on classes container
-    (() => {
-        const scroller = document.getElementById('classes-container');
-        let isDown = false;
-        let startX = 0;
-        let scrollLeft = 0;
-
-        const start = (clientX) => {
-            isDown = true;
-            startX = clientX;
-            scrollLeft = scroller.scrollLeft;
-        };
-        const move = (clientX, evt) => {
-            if (!isDown) return;
-            if (evt?.type === 'mousemove') evt.preventDefault();
-            const walk = clientX - startX;
-            scroller.scrollLeft = scrollLeft - walk;
-        };
-        const end = () => { isDown = false; };
-
-        scroller.addEventListener('mousedown', (e) => start(e.clientX));
-        scroller.addEventListener('mousemove', (e) => move(e.clientX, e));
-        ['mouseleave','mouseup'].forEach(ev => scroller.addEventListener(ev, end));
-
-        const scrollBy = 220;
-        const leftBtn = document.getElementById('classes-left');
-        const rightBtn = document.getElementById('classes-right');
-        const updateBtns = () => {
-            if (!leftBtn || !rightBtn) return;
-            const max = scroller.scrollWidth - scroller.clientWidth;
-            leftBtn.style.display = scroller.scrollLeft > 4 ? 'flex' : 'none';
-            rightBtn.style.display = scroller.scrollLeft < max - 4 ? 'flex' : 'none';
-        };
-        leftBtn?.addEventListener('click', () => { scroller.scrollBy({ left: -scrollBy, behavior: 'smooth' }); setTimeout(updateBtns, 200); });
-        rightBtn?.addEventListener('click', () => { scroller.scrollBy({ left: scrollBy, behavior: 'smooth' }); setTimeout(updateBtns, 200); });
-        scroller.addEventListener('scroll', updateBtns, { passive:true });
-        setTimeout(updateBtns, 300);
-    })();
+    // Removed drag-to-scroll block in favor of native CSS scroll snapping (`snap-x snap-mandatory`)
+    // for significantly smoother mobile performance (Doherty Threshold).
     </script>
 </body>
 </html>
