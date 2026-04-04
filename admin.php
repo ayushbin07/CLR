@@ -26,7 +26,7 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
     <div class="grid lg:grid-cols-2 gap-6 lg:gap-8">
 
         <!-- ===== HERO CARDS ===== -->
-        <section class="lg:col-span-2">
+        <section class="lg:col-span-2 min-w-0">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
                 <h2 class="text-xl font-semibold">Home Hero Cards</h2>
                 <div class="flex flex-wrap items-center gap-2">
@@ -39,9 +39,9 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                     </button>
                 </div>
             </div>
-            <div class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-6 space-y-5">
+            <div class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-4 sm:p-6 space-y-5">
                 <div id="hero-cards" class="grid sm:grid-cols-2 gap-4"></div>
-                <div class="bg-white/5 border border-white/10 rounded-[18px] p-4">
+                <div id="hero-form-container" class="hidden bg-white/5 border border-white/10 rounded-[18px] p-4">
                     <h3 class="text-sm font-semibold text-[var(--text-soft)] mb-3">Edit / Add Card</h3>
                     <form id="hero-form" class="space-y-3">
                         <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
@@ -91,9 +91,12 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
         </section>
 
         <!-- ===== MESS MENU ===== -->
-        <section>
-            <h2 class="text-xl font-semibold mb-4">Today's Mess Menu</h2>
-            <form id="mess-form" class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-6 space-y-4">
+        <section class="min-w-0">
+            <div class="flex flex-wrap items-center justify-between gap-y-2 mb-4">
+                <h2 class="text-xl font-semibold">Today's Mess Menu</h2>
+                <button id="mess-form-toggle" class="glassy-cta ghost text-xs px-3 py-1 flex items-center gap-1 w-auto"><span class="material-symbols-outlined text-sm">expand_more</span> Toggle</button>
+            </div>
+            <form id="mess-form" class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-4 sm:p-6 space-y-4 hidden">
                 <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
                 <div>
                     <label class="block text-xs text-[var(--text-muted)] uppercase tracking-widest mb-2">Date</label>
@@ -121,9 +124,12 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
         </section>
 
         <!-- ===== MESS BULK IMPORT ===== -->
-        <section>
-            <h2 class="text-xl font-semibold mb-4">Bulk Import Mess Menu</h2>
-            <div class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-6 space-y-4">
+        <section class="min-w-0">
+            <div class="flex flex-wrap items-center justify-between gap-y-2 mb-4">
+                <h2 class="text-xl font-semibold">Bulk Import Mess Menu</h2>
+                <button id="mess-import-toggle" class="glassy-cta ghost text-xs px-3 py-1 flex items-center gap-1 w-auto"><span class="material-symbols-outlined text-sm">expand_more</span> Toggle</button>
+            </div>
+            <div id="mess-import-container" class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-4 sm:p-6 space-y-4 hidden">
                 <p class="text-[var(--text-muted)] text-sm">
                     Paste a JSON array of meals. Existing entries for the same date/meal overwrite.
                 </p>
@@ -141,9 +147,12 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
         </section>
 
         <!-- ===== TIMETABLE ===== -->
-        <section>
-            <h2 class="text-xl font-semibold mb-4">Add Timetable Slot</h2>
-            <form id="timetable-form" class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-6 space-y-4">
+        <section class="min-w-0">
+            <div class="flex flex-wrap items-center justify-between gap-y-2 mb-4">
+                <h2 class="text-xl font-semibold">Add Timetable Slot</h2>
+                <button id="timetable-form-toggle" class="glassy-cta ghost text-xs px-3 py-1 flex items-center gap-1 w-auto"><span class="material-symbols-outlined text-sm">expand_more</span> Toggle</button>
+            </div>
+            <form id="timetable-form" class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-4 sm:p-6 space-y-4 hidden">
                 <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
                 <div>
                     <label class="block text-xs text-[var(--text-muted)] uppercase tracking-widest mb-2">Class</label>
@@ -192,9 +201,12 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
         </section>
 
         <!-- ===== JSON IMPORT ===== -->
-        <section class="lg:col-span-2">
-            <h2 class="text-xl font-semibold mb-4">Bulk Import Timetable (JSON)</h2>
-            <div class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-6">
+        <section class="lg:col-span-2 min-w-0">
+            <div class="flex flex-wrap items-center justify-between gap-y-2 mb-4">
+                <h2 class="text-xl font-semibold">Bulk Import Timetable (JSON)</h2>
+                <button id="tt-import-toggle" class="glassy-cta ghost text-xs px-3 py-1 flex items-center gap-1 w-auto"><span class="material-symbols-outlined text-sm">expand_more</span> Toggle</button>
+            </div>
+            <div id="tt-import-container" class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-4 sm:p-6 hidden">
                 <p class="text-[var(--text-muted)] text-sm mb-4">
                     Paste a JSON array of timetable slots. Each object needs:
                     <code class="text-[var(--accent-purple)] bg-white/5 px-1 py-0.5 rounded text-xs">class_id, subject, room, day_of_week, start_time, end_time</code>
@@ -219,9 +231,12 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
         </section>
 
         <!-- ===== MANAGE / REPLACE TIMETABLE ===== -->
-        <section class="lg:col-span-2">
-            <h2 class="text-xl font-semibold mb-4">Manage Timetable (Admin)</h2>
-            <div class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-6 space-y-6">
+        <section class="lg:col-span-2 min-w-0">
+            <div class="flex flex-wrap items-center justify-between gap-y-2 mb-4">
+                <h2 class="text-xl font-semibold">Manage Timetable (Admin)</h2>
+                <button id="tt-manage-toggle" class="glassy-cta ghost text-xs px-3 py-1 flex items-center gap-1 w-auto"><span class="material-symbols-outlined text-sm">expand_more</span> Toggle</button>
+            </div>
+            <div id="tt-manage-container" class="bg-[var(--card-dark)] rounded-[24px] border border-white/5 p-4 sm:p-6 space-y-6 hidden">
                 <div class="grid md:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs text-[var(--text-muted)] uppercase tracking-widest mb-2">Class</label>
@@ -411,6 +426,7 @@ document.getElementById('copy-tt-sample').addEventListener('click', async () => 
 
 // Hero cards management
 const heroCardsWrap   = document.getElementById('hero-cards');
+const heroFormContainer = document.getElementById('hero-form-container');
 const heroForm        = document.getElementById('hero-form');
 const heroIdInput     = document.getElementById('hero-id');
 const heroTitleInput  = document.getElementById('hero-title');
@@ -424,6 +440,7 @@ let heroCardsData = [];
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 function setHeroForm(card = null) {
+    heroFormContainer.classList.remove('hidden');
     if (card) {
         heroIdInput.value    = card.id || '';
         heroTitleInput.value = card.title || '';
@@ -463,12 +480,12 @@ async function loadHeroCardsAdmin() {
                     </div>
                     <div class="flex items-center justify-between mt-3 gap-2">
                         <span class="text-[11px] text-white/60">#${c.id}</span>
-                        <div class="flex items-center gap-1">
-                            <button type="button" data-edit="${idx}" class="px-3 py-1.5 rounded-lg bg-white/10 text-white text-xs font-semibold flex items-center gap-1 hover:bg-white/20">
+                        <div class="flex flex-wrap items-center gap-2 mt-2 w-full">
+                            <button type="button" data-edit="${idx}" class="flex-1 sm:flex-none justify-center px-3 py-2 sm:py-1.5 rounded-lg bg-white/10 text-white text-xs font-semibold flex items-center gap-1 hover:bg-white/20">
                                 <span class="material-symbols-outlined text-sm">edit</span>
                                 Edit
                             </button>
-                            <button type="button" data-delete="${c.id}" class="px-3 py-1.5 rounded-lg bg-red-500/15 text-red-200 text-xs font-semibold flex items-center gap-1 hover:bg-red-500/30">
+                            <button type="button" data-delete="${c.id}" class="flex-1 sm:flex-none justify-center px-3 py-2 sm:py-1.5 rounded-lg bg-red-500/15 text-red-200 text-xs font-semibold flex items-center gap-1 hover:bg-red-500/30">
                                 <span class="material-symbols-outlined text-sm">delete</span>
                                 Delete
                             </button>
@@ -526,7 +543,10 @@ heroForm.addEventListener('submit', async e => {
 
 document.getElementById('hero-add').addEventListener('click', () => setHeroForm(null));
 document.getElementById('hero-refresh').addEventListener('click', loadHeroCardsAdmin);
-document.getElementById('hero-cancel').addEventListener('click', () => setHeroForm(null));
+document.getElementById('hero-cancel').addEventListener('click', () => {
+    setHeroForm(null);
+    heroFormContainer.classList.add('hidden');
+});
 
 loadHeroCardsAdmin();
 
@@ -546,13 +566,13 @@ async function loadTimetable() {
         return;
     }
     ttList.innerHTML = rows.map(r => `
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3">
-                        <div class="text-sm text-[var(--text-soft)] leading-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3">
+                        <div class="text-sm text-[var(--text-soft)] leading-5 flex flex-wrap items-center gap-2">
                             <span class="font-semibold">${esc(r.subject)}</span>
-                            <span class="text-[var(--text-muted)] ml-2">${esc(r.room || '')}</span>
-                            <span class="text-[var(--text-muted)] ml-3">${esc(r.day_of_week)} ${esc(r.start_time)}–${esc(r.end_time)}</span>
+                            <span class="text-[var(--text-muted)] bg-white/5 px-2 py-0.5 rounded text-xs">${esc(r.room || 'No Room')}</span>
+                            <span class="text-[var(--text-muted)] bg-white/5 px-2 py-0.5 rounded text-xs">${esc(r.day_of_week)} ${esc(r.start_time)}–${esc(r.end_time)}</span>
                         </div>
-                        <button class="text-[var(--text-muted)] hover:text-red-400 text-sm w-full sm:w-auto text-left sm:text-right" data-id="${esc(r.id)}">Delete</button>
+                        <button class="text-red-400 hover:text-white bg-red-500/10 hover:bg-red-500/80 px-3 py-2 sm:py-1.5 rounded-lg text-xs font-medium w-full sm:w-auto transition-colors" data-id="${esc(r.id)}">Delete</button>
                     </div>`).join('');
 
     ttList.querySelectorAll('button[data-id]').forEach(btn => {
@@ -591,6 +611,26 @@ document.getElementById('tt-clear-day').addEventListener('click', async e => {
     }
     loadTimetable();
 });
+
+// Generic Toggle Setup
+const makeToggle = (btnId, containerId) => {
+    const btn = document.getElementById(btnId);
+    const container = document.getElementById(containerId);
+    if (!btn || !container) return;
+    btn.addEventListener('click', () => {
+        container.classList.toggle('hidden');
+        const icon = btn.querySelector('.material-symbols-outlined');
+        if(icon) {
+            icon.textContent = container.classList.contains('hidden') ? 'expand_more' : 'expand_less';
+        }
+    });
+};
+makeToggle('mess-form-toggle', 'mess-form');
+makeToggle('mess-import-toggle', 'mess-import-container');
+makeToggle('timetable-form-toggle', 'timetable-form');
+makeToggle('tt-import-toggle', 'tt-import-container');
+makeToggle('tt-manage-toggle', 'tt-manage-container');
+
 </script>
 </body>
 </html>
