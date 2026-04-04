@@ -110,15 +110,7 @@ HTML;
 function pageFooter(): void {
     $base = BASE_URL;
     echo <<<HTML
-<div id="pwa-install-banner" class="fixed bottom-4 right-4 z-50 hidden">
-    <div class="rounded-2xl bg-[var(--card-dark)] border border-[var(--border-subtle)] shadow-2xl shadow-black/40 px-4 py-3 flex items-center gap-3 max-w-xs">
-        <div class="text-sm text-white font-semibold">Install Sanctuary?</div>
-        <div class="flex items-center gap-2 ml-auto">
-            <button id="pwa-install-dismiss" class="text-[var(--text-muted)] text-xs hover:text-white transition">Later</button>
-            <button id="pwa-install-btn" class="px-3 py-1.5 rounded-lg bg-[var(--accent-purple)] text-[var(--text-dark)] text-xs font-semibold shadow-lg shadow-[var(--accent-purple)]/40">Install</button>
-        </div>
-    </div>
-</div>
+
 <script src="{$base}/assets/js/app.js"></script>
 </body>
 </html>

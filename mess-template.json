@@ -11,6 +11,16 @@
   },
   {
     "date": "2026-03-27",
+    "meal_type": "lunch_international",
+    "items": "Spaghetti Aglio e Olio, Garlic Bread, Fresh Garden Salad"
+  },
+  {
+    "date": "2026-03-27",
+    "meal_type": "snacks",
+    "items": "Samosa, Mint Chutney, Masala Chai"
+  },
+  {
+    "date": "2026-03-27",
     "meal_type": "dinner",
     "items": "Home-style Chicken Curry, Veg Pulao, Chapati, Fresh Green Salad & Gulab Jamun"
   }

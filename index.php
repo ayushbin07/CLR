@@ -651,6 +651,8 @@ $csrf = csrfToken();
             const mealWindows = {
                 breakfast: { label: '07:00 AM - 08:50 AM', start: '07:00', end: '08:50' },
                 lunch: { label: '12:00 PM - 02:00 PM', start: '12:00', end: '14:00' },
+                lunch_international: { label: '12:00 PM - 02:00 PM', start: '12:00', end: '14:00' },
+                snacks: { label: '04:30 PM - 06:00 PM', start: '16:30', end: '18:00' },
                 dinner: { label: '07:00 PM - 08:30 PM', start: '19:00', end: '20:30' }
             };
 
@@ -665,12 +667,16 @@ $csrf = csrfToken();
             const activeMealType = activeMeal ? activeMeal[0] : null;
 
             const messItems = Array.isArray(messMenu) && activeMealType
-                ? messMenu.filter(m => m.meal_type === activeMealType).map(m => ({
-                    kind: 'mess',
-                    title: m.meal_type ? m.meal_type.charAt(0).toUpperCase() + m.meal_type.slice(1) : 'Meal',
-                    detail: m.items,
-                    meta: mealWindows[m.meal_type]?.label || ''
-                }))
+                ? messMenu.filter(m => m.meal_type === activeMealType).map(m => {
+                    let title = m.meal_type ? m.meal_type.replace(/_/g, ' ') : 'Meal';
+                    title = title.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                    return {
+                        kind: 'mess',
+                        title: title,
+                        detail: m.items,
+                        meta: mealWindows[m.meal_type]?.label || ''
+                    };
+                })
                 : [];
 
             const items = [...assignmentItems, ...messItems];

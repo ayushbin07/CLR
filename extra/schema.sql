@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS timetable (
 CREATE TABLE IF NOT EXISTS mess_menu (
     id INT AUTO_INCREMENT PRIMARY KEY,
     date DATE NOT NULL,
-    meal_type ENUM('breakfast','lunch','dinner') NOT NULL,
+    meal_type ENUM('breakfast','lunch','lunch_international','snacks','dinner') NOT NULL,
     items TEXT NOT NULL,
     UNIQUE KEY unique_meal (date, meal_type)
 );
@@ -158,6 +158,8 @@ INSERT IGNORE INTO timetable (class_id, subject, room, day_of_week, start_time, 
 INSERT IGNORE INTO mess_menu (date, meal_type, items) VALUES
 (CURDATE(), 'breakfast', 'Masala Dosa, Sambar, Coconut Chutney, Seasonal Fruit & Milk'),
 (CURDATE(), 'lunch', 'Paneer Butter Masala, Jeera Rice, Dal Tadka, Butter Naan & Roasted Papad'),
+(CURDATE(), 'lunch_international', 'Spaghetti Aglio e Olio, Garlic Bread, Fresh Garden Salad'),
+(CURDATE(), 'snacks', 'Samosa, Mint Chutney, Masala Chai'),
 (CURDATE(), 'dinner', 'Home-style Chicken Curry, Veg Pulao, Chapati, Fresh Green Salad & Gulab Jamun');
 
 -- Seed hero cards

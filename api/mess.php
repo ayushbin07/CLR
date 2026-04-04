@@ -8,6 +8,7 @@ $action = $_GET['action'] ?? '';
 
 match (true) {
     $method === 'GET'  && $action === 'today'  => todayMenu(),
+    $method === 'GET'  && $action === 'all'    => allMenu(),
     $method === 'POST' && $action === 'react'  => reactMenu(),
     $method === 'POST' && $action === 'menu'   => saveMenu(),
     $method === 'POST' && $action === 'import' => importMenu(),
@@ -23,9 +24,22 @@ function todayMenu(): void {
             (SELECT mr.reaction FROM mess_reactions mr WHERE mr.mess_id = mm.id AND mr.user_id = ? LIMIT 1) AS my_reaction
         FROM mess_menu mm
         WHERE mm.date = ?
-        ORDER BY FIELD(meal_type, 'breakfast','lunch','dinner')";
+        ORDER BY FIELD(meal_type, 'breakfast','lunch','lunch_international','snacks','dinner')";
     $stmt = db()->prepare($sql);
     $stmt->execute([$userId, $today]);
+    jsonResponse($stmt->fetchAll());
+}
+
+function allMenu(): void {
+    $userId = auth()['id'];
+    $sql = "SELECT mm.*,
+            (SELECT COUNT(*) FROM mess_reactions mr WHERE mr.mess_id = mm.id AND mr.reaction = 'like')    AS likes,
+            (SELECT COUNT(*) FROM mess_reactions mr WHERE mr.mess_id = mm.id AND mr.reaction = 'dislike') AS dislikes,
+            (SELECT mr.reaction FROM mess_reactions mr WHERE mr.mess_id = mm.id AND mr.user_id = ? LIMIT 1) AS my_reaction
+        FROM mess_menu mm
+        ORDER BY mm.date DESC, FIELD(meal_type, 'breakfast','lunch','lunch_international','snacks','dinner')";
+    $stmt = db()->prepare($sql);
+    $stmt->execute([$userId]);
     jsonResponse($stmt->fetchAll());
 }
 
@@ -59,7 +73,7 @@ function saveMenu(): void {
     $mealType  = $_POST['meal_type'] ?? '';
     $items     = trim($_POST['items'] ?? '');
 
-    if (!in_array($mealType, ['breakfast','lunch','dinner'], true)) {
+    if (!in_array($mealType, ['breakfast','lunch','lunch_international','snacks','dinner'], true)) {
         jsonResponse(['error' => 'Invalid meal type'], 422);
     }
     if (!$items) jsonResponse(['error' => 'Items required'], 422);
@@ -92,7 +106,7 @@ function importMenu(): void {
         $date     = $row['date'] ?? null;
         $mealType = $row['meal_type'] ?? '';
         $items    = trim($row['items'] ?? '');
-        if (!$date || !in_array($mealType, ['breakfast','lunch','dinner'], true) || !$items) {
+        if (!$date || !in_array($mealType, ['breakfast','lunch','lunch_international','snacks','dinner'], true) || !$items) {
             continue;
         }
         $stmt->execute([$date, $mealType, $items]);

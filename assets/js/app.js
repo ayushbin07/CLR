@@ -14,18 +14,9 @@ window.haptic = function (pattern = 10) {
 };
 
 let deferredPrompt = null;
-let installBanner = null;
-let installBtn = null;
-let installDismiss = null;
 let manualInstallBtn = null;
 let manualRequestPending = false;
 let manualWaitTimer = null;
-
-function showInstallBanner() {
-  if (!deferredPrompt || !installBanner) return;
-  installBanner.classList.remove('hidden');
-  sessionStorage.removeItem('pwaPrompt');
-}
 
 document.addEventListener('DOMContentLoaded', () => {
   // Checkbox toggles
@@ -71,26 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  installBanner = document.getElementById('pwa-install-banner');
-  installBtn = document.getElementById('pwa-install-btn');
-  installDismiss = document.getElementById('pwa-install-dismiss');
   manualInstallBtn = document.getElementById('pwa-install-trigger');
-
-  installBtn?.addEventListener('click', async () => {
-    if (!deferredPrompt) return;
-    installBanner?.classList.add('hidden');
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    sessionStorage.removeItem('pwaPrompt');
-  });
-
-  installDismiss?.addEventListener('click', () => {
-    installBanner?.classList.add('hidden');
-    deferredPrompt = null;
-    sessionStorage.removeItem('pwaPrompt');
-  });
-
   manualInstallBtn?.addEventListener('click', async () => {
     if (!deferredPrompt) {
       manualRequestPending = true; // queue until the prompt event arrives
@@ -103,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     try {
-      installBanner?.classList.add('hidden');
       deferredPrompt.prompt();
       const choice = await deferredPrompt.userChoice;
       if (choice?.outcome === 'accepted') {
@@ -115,7 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  showInstallBanner();
 });
 
 // PWA: register service worker and capture install prompt
@@ -151,16 +121,11 @@ window.addEventListener('beforeinstallprompt', (e) => {
   if (manualRequestPending) {
     console.log('Manual install request pending, triggering prompt');
     manualRequestPending = false;
-    installBanner?.classList.add('hidden');
     deferredPrompt.prompt();
-  } else {
-    console.log('Showing install banner');
-    showInstallBanner();
   }
 });
 
 window.addEventListener('appinstalled', () => {
   console.log('App installed successfully');
   deferredPrompt = null;
-  installBanner?.classList.add('hidden');
 });

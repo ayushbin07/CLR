@@ -105,6 +105,8 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                     <select name="meal_type" class="w-full bg-[var(--bg-dark)] border border-white/10 rounded-xl px-4 py-3 text-sm text-white outline-none">
                         <option value="breakfast">Breakfast</option>
                         <option value="lunch">Lunch</option>
+                        <option value="lunch_international">Lunch International</option>
+                        <option value="snacks">Snacks</option>
                         <option value="dinner">Dinner</option>
                     </select>
                 </div>
@@ -129,12 +131,12 @@ $classes = db()->query('SELECT * FROM classes ORDER BY name')->fetchAll();
                     <a href="<?= BASE_URL ?>/mess-template.json" class="text-[var(--accent-purple)] font-semibold hover:underline" target="_blank" rel="noopener">Download template</a>
                     <button id="mess-load-template" type="button" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-[var(--text-soft)] hover:bg-white/10">Load into editor</button>
                 </div>
-                <textarea id="mess-import-json" rows="6" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white placeholder:text-[var(--text-muted)] outline-none focus:border-[var(--accent-purple)]/50" placeholder='[{"date":"2026-03-27","meal_type":"breakfast","items":"..."}]'></textarea>
+                <textarea id="mess-import-json" rows="6" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm text-white placeholder:text-[var(--text-muted)] outline-none focus:border-[var(--accent-purple)]/50" placeholder='[{"date":"2026-03-27","meal_type":"lunch_international","items":"..."}]'></textarea>
                 <div class="flex flex-col sm:flex-row gap-3">
                     <button id="mess-import-submit" type="button" class="flex-1 py-3 rounded-xl bg-[var(--accent-purple)] text-[#0F0F12] font-semibold text-sm hover:opacity-90">Import</button>
                     <button id="mess-import-clear" type="button" class="px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-[var(--text-soft)] text-sm hover:bg-white/10 w-full sm:w-auto">Clear</button>
                 </div>
-                <p class="text-[var(--text-muted)] text-xs">Fields: date (YYYY-MM-DD), meal_type (breakfast|lunch|dinner), items (text).</p>
+                <p class="text-[var(--text-muted)] text-xs">Fields: date (YYYY-MM-DD), meal_type (breakfast|lunch|lunch_international|snacks|dinner), items (text).</p>
             </div>
         </section>
 
